@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useRef } from 'react';
-import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
+import { Alert, Linking, Pressable, ScrollView, Share, Text, View } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFavorites } from '../../contexts/FavoritesContext';
@@ -36,6 +36,18 @@ export default function ParkDetailsScreen() {
 
   const favorite = isFavorite(park.id);
 
+  const handleShare = async () => {
+    if (!park) return;
+    try {
+      await Share.share({
+        message: `Check out ${park.name}! Find out more here: ${park.contact.website}`,
+        title: `Share ${park.name}`,
+      });
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
+
   const initialRegion = {
     latitude: park.coordinate.latitude,
     longitude: park.coordinate.longitude,
@@ -52,6 +64,7 @@ export default function ParkDetailsScreen() {
   const favoriteIconColor = favorite 
     ? getColor(effectiveTheme === 'dark' ? 'burnt-400' : 'burnt-600') 
     : getColor(effectiveTheme === 'dark' ? 'charcoal-400' : 'charcoal-600');
+  const shareIconColor = getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600');
   
   const mapMarkerBorderColor = effectiveTheme === 'dark' ? getColor('saffron-400') : getColor('saffron-600');
   // Directions button might need specific color if not using Tailwind classes for all states
@@ -116,9 +129,14 @@ export default function ParkDetailsScreen() {
           <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-persian-700 dark:border-persian-500">
             <View className="flex-row justify-between items-center mb-2">
               <Text className="text-xl font-semibold text-persian-700 dark:text-persian-400">About</Text>
-              <Pressable onPress={() => toggleFavorite(park.id)} className="p-2">
-                <Ionicons name={favorite ? "heart" : "heart-outline"} size={28} color={favoriteIconColor} />
-              </Pressable>
+              <View className="flex-row items-center">
+                <Pressable onPress={handleShare} className="p-2 ml-2">
+                  <Ionicons name="share-outline" size={26} color={shareIconColor} />
+                </Pressable>
+                <Pressable onPress={() => toggleFavorite(park.id)} className="p-2 ml-1">
+                  <Ionicons name={favorite ? "heart" : "heart-outline"} size={28} color={favoriteIconColor} />
+                </Pressable>
+              </View>
             </View>
             <Text className="text-base text-charcoal-700 dark:text-charcoal-300 leading-relaxed">{park.description}</Text>
           </View>

@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, Share, Text, View } from 'react-native';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { Park } from '../data/parks';
@@ -30,10 +30,23 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
     router.push(`/park/${park.id}`);
   };
 
+  const handleShare = async () => {
+    if (!park) return;
+    try {
+      await Share.share({
+        message: `Check out ${park.name}! Find out more here: ${park.contact.website}`,
+        title: `Share ${park.name}`,
+      });
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
+
   const closeIconColor = effectiveTheme === 'dark' ? getColor('charcoal-300') : getColor('charcoal-600');
   const heartIconColor = favorite 
     ? getColor(effectiveTheme === 'dark' ? 'burnt-400' : 'burnt-500') 
     : getColor(effectiveTheme === 'dark' ? 'charcoal-400' : 'charcoal-600');
+  const shareIconColor = getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600');
 
   return (
     <View className="flex-1 bg-white dark:bg-charcoal-900 rounded-t-3xl">
@@ -43,16 +56,21 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
           <Pressable onPress={onClose} className="p-2">
             <Ionicons name="close" size={24} color={closeIconColor} />
           </Pressable>
-          <Pressable 
-            onPress={() => toggleFavorite(park.id)}
-            className="p-2"
-          >
-            <Ionicons
-              name={favorite ? "heart" : "heart-outline"}
-              size={24}
-              color={heartIconColor}
-            />
-          </Pressable>
+          <View className="flex-row items-center">
+            <Pressable onPress={handleShare} className="p-2">
+              <Ionicons name="share-outline" size={24} color={shareIconColor} />
+            </Pressable>
+            <Pressable 
+              onPress={() => toggleFavorite(park.id)}
+              className="p-2 ml-1"
+            >
+              <Ionicons
+                name={favorite ? "heart" : "heart-outline"}
+                size={24}
+                color={heartIconColor}
+              />
+            </Pressable>
+          </View>
         </View>
         <Text className="text-2xl font-bold text-charcoal-900 dark:text-charcoal-100 mt-2">{park.name}</Text>
       </View>

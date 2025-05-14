@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, Share, Text, TouchableOpacity, View } from 'react-native';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { PARKS } from '../data/parks';
@@ -19,6 +19,18 @@ export default function FavoritesList() {
   const { favorites, toggleFavorite } = useFavorites();
   const router = useRouter();
   const { effectiveTheme } = useTheme();
+  
+  const handleShare = async (park: typeof PARKS[0]) => {
+    if (!park) return;
+    try {
+      await Share.share({
+        message: `Check out ${park.name}! Find out more here: ${park.contact.website}`,
+        title: `Share ${park.name}`,
+      });
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
   
   // Get the full park objects for favorite IDs
   const favoriteParks = PARKS.filter(park => favorites.includes(park.id));
@@ -52,6 +64,7 @@ export default function FavoritesList() {
   }
 
   const heartIconColor = getColor(effectiveTheme === 'dark' ? 'burnt-400' : 'burnt-500');
+  const shareIconColor = getColor(effectiveTheme === 'dark' ? 'charcoal-400' : 'charcoal-600');
 
   return (
     <ScrollView className="flex-1">
@@ -75,20 +88,37 @@ export default function FavoritesList() {
                 ))}
               </View>
             </View>
-            <TouchableOpacity
-              onPress={(e) => {
-                e.stopPropagation();
-                toggleFavorite(park.id);
-              }}
-              className="p-2 justify-center"
-              activeOpacity={0.7}
-            >
-              <Ionicons
-                name="heart"
-                size={24}
-                color={heartIconColor}
-              />
-            </TouchableOpacity>
+            {/* Icons Column */}
+            <View className="justify-start items-center w-12"> 
+              <TouchableOpacity
+                onPress={(e) => {
+                  e.stopPropagation();
+                  handleShare(park);
+                }}
+                className="p-2 items-center"
+                activeOpacity={0.7}
+              >
+                <Ionicons
+                  name="share-outline"
+                  size={24}
+                  color={shareIconColor}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite(park.id);
+                }}
+                className="p-2 items-center mt-1"
+                activeOpacity={0.7}
+              >
+                <Ionicons
+                  name="heart"
+                  size={24}
+                  color={heartIconColor}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         </TouchableOpacity>
       ))}
