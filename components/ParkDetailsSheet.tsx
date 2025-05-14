@@ -1,11 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Alert, Pressable, ScrollView, Share, Text, View } from 'react-native';
+import { Alert, ScrollView, Share, Text, View } from 'react-native';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { Park } from '../data/parks';
 import tailwindConfig from '../tailwind.config.js';
+import AnimatedPressable from './AnimatedPressable';
+import FavoriteHeartIcon from './FavoriteHeartIcon';
 
 // Helper to get color from Tailwind config
 const getColor = (colorName: string) => {
@@ -24,7 +26,6 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
   const router = useRouter();
   const { isFavorite, toggleFavorite } = useFavorites();
   const { effectiveTheme } = useTheme();
-  const favorite = isFavorite(park.id);
 
   const handleViewFullDetails = () => {
     router.push(`/park/${park.id}`);
@@ -43,9 +44,6 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
   };
 
   const closeIconColor = effectiveTheme === 'dark' ? getColor('charcoal-300') : getColor('charcoal-600');
-  const heartIconColor = favorite 
-    ? getColor(effectiveTheme === 'dark' ? 'burnt-400' : 'burnt-500') 
-    : getColor(effectiveTheme === 'dark' ? 'charcoal-400' : 'charcoal-600');
   const shareIconColor = getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600');
 
   return (
@@ -53,23 +51,16 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
       {/* Header */}
       <View className="p-4 border-b border-gray-200 dark:border-charcoal-700">
         <View className="flex-row justify-between items-center">
-          <Pressable onPress={onClose} className="p-2">
+          <AnimatedPressable onPress={onClose} className="p-2" scaleTo={0.9}>
             <Ionicons name="close" size={24} color={closeIconColor} />
-          </Pressable>
+          </AnimatedPressable>
           <View className="flex-row items-center">
-            <Pressable onPress={handleShare} className="p-2">
+            <AnimatedPressable onPress={handleShare} className="p-2" scaleTo={0.9}>
               <Ionicons name="share-outline" size={24} color={shareIconColor} />
-            </Pressable>
-            <Pressable 
-              onPress={() => toggleFavorite(park.id)}
-              className="p-2 ml-1"
-            >
-              <Ionicons
-                name={favorite ? "heart" : "heart-outline"}
-                size={24}
-                color={heartIconColor}
-              />
-            </Pressable>
+            </AnimatedPressable>
+            <View className="p-2 ml-1">
+              <FavoriteHeartIcon parkId={park.id} size={24} />
+            </View>
           </View>
         </View>
         <Text className="text-2xl font-bold text-charcoal-900 dark:text-charcoal-100 mt-2">{park.name}</Text>
@@ -144,12 +135,12 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
 
       {/* Footer */}
       <View className="p-4 border-t border-gray-200 dark:border-charcoal-700">
-        <Pressable
+        <AnimatedPressable
           onPress={handleViewFullDetails}
           className="bg-persian-800 dark:bg-persian-600 py-3 rounded-xl"
         >
           <Text className="text-white dark:text-persian-100 text-center font-semibold">View Full Details</Text>
-        </Pressable>
+        </AnimatedPressable>
       </View>
     </View>
   );

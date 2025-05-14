@@ -3,7 +3,10 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Linking, Modal, Pressable, ScrollView, Share, Text, View } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import AnimatedPressable from '../../components/AnimatedPressable';
+import FavoriteHeartIcon from '../../components/FavoriteHeartIcon';
 import { useFavorites } from '../../contexts/FavoritesContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { PARKS } from '../../data/parks';
@@ -99,6 +102,45 @@ export default function ParkDetailsScreen() {
   // State for forecast details modal
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDetailedForecast, setSelectedDetailedForecast] = useState<ForecastPeriod | null>(null);
+
+  // Define AnimatedForecastTile component here
+  const AnimatedForecastTile = ({ summary, index, onPressTile, currentTheme }: { summary: DailyForecastSummary, index: number, onPressTile: (period: ForecastPeriod) => void, currentTheme: string | undefined }) => {
+    const opacity = useSharedValue(0);
+    const translateX = useSharedValue(20); // Initial offset for slide-in effect
+
+    const animatedStyle = useAnimatedStyle(() => {
+      return {
+        opacity: opacity.value,
+        transform: [{ translateX: translateX.value }],
+      };
+    });
+
+    useEffect(() => {
+      opacity.value = withDelay(index * 120, withTiming(1, { duration: 450 }));
+      translateX.value = withDelay(index * 120, withTiming(0, { duration: 450 }));
+    }, [index, opacity, translateX]);
+
+    return (
+      <Animated.View style={animatedStyle}>
+        <Pressable 
+          className="items-center bg-charcoal-50 dark:bg-charcoal-700 rounded-lg p-3 w-28 shadow active:opacity-70"
+          onPress={() => onPressTile(summary.representativePeriod)}
+        >
+          <Text className="font-semibold text-charcoal-800 dark:text-charcoal-100 text-sm">{summary.dayName}</Text>
+          <Ionicons 
+            name={summary.iconName as any}
+            size={36}
+            color={getColor(currentTheme === 'dark' ? 'charcoal-200' : 'charcoal-700')}
+            style={{ marginVertical: 4 }}
+          />
+          <Text className="text-charcoal-900 dark:text-charcoal-50 font-bold text-base">
+            {summary.highTemp !== null ? `${summary.highTemp}°` : '--'}
+            <Text className="font-medium text-charcoal-600 dark:text-charcoal-300">{summary.lowTemp !== null ? ` / ${summary.lowTemp}°` : ' / --'}</Text>
+          </Text>
+        </Pressable>
+      </Animated.View>
+    );
+  };
 
   useEffect(() => {
     if (park) {
@@ -282,8 +324,6 @@ export default function ParkDetailsScreen() {
     );
   }
 
-  const favorite = isFavorite(park.id);
-
   const handleShare = async () => {
     if (!park) return;
     try {
@@ -309,9 +349,6 @@ export default function ParkDetailsScreen() {
   };
 
   // Define colors for props not directly stylable with Tailwind dark: prefix
-  const favoriteIconColor = favorite 
-    ? getColor(effectiveTheme === 'dark' ? 'burnt-400' : 'burnt-600') 
-    : getColor(effectiveTheme === 'dark' ? 'charcoal-400' : 'charcoal-600');
   const shareIconColor = getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600');
   
   const mapMarkerBorderColor = effectiveTheme === 'dark' ? getColor('saffron-400') : getColor('saffron-600');
@@ -321,11 +358,13 @@ export default function ParkDetailsScreen() {
     <View className="flex-1 bg-charcoal-50 dark:bg-charcoal-950">
       {/* Header */}
       <View className="bg-persian-800 dark:bg-charcoal-800 px-6 pb-3" style={{ paddingTop: insets.top + 8 }}>
-        <View className="absolute left-4" style={{ top: insets.top + 8}}>
-          <Pressable onPress={() => router.back()} className="p-2">
-            <Ionicons name="arrow-back" size={24} color={getColor(effectiveTheme === 'dark' ? 'persian-100' : 'charcoal-50')} />
-          </Pressable>
-        </View>
+        <AnimatedPressable
+          onPress={() => router.back()}
+          className="p-2 absolute left-4"
+          style={{ top: insets.top + 8}}
+        >
+          <Ionicons name="arrow-back" size={24} color={getColor(effectiveTheme === 'dark' ? 'persian-100' : 'charcoal-50')} />
+        </AnimatedPressable>
         <View className="items-center justify-center">
           <Text className="text-2xl font-bold text-white dark:text-white">{park.name}</Text>
           <Text className="text-base text-persian-200 dark:text-charcoal-300 mt-1">State Park</Text>
@@ -341,13 +380,13 @@ export default function ParkDetailsScreen() {
           <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-saffron-700 dark:border-saffron-400">
             <View className="flex-row justify-between items-center mb-2">
               <Text className="text-xl font-semibold text-saffron-700 dark:text-saffron-400">Location</Text>
-              <Pressable
+              <AnimatedPressable
                 onPress={openDirections}
                 className="bg-saffron-700 dark:bg-saffron-500 px-3 py-2 rounded-lg flex-row items-center shadow-sm"
               >
-                <Ionicons name="navigate" size={16} color="white" /> 
+                <Ionicons name="navigate" size={16} color="white" />
                 <Text className="text-white dark:text-saffron-100 font-medium ml-2 text-sm">Directions</Text>
-              </Pressable>
+              </AnimatedPressable>
             </View>
             <View className="h-48 rounded-md overflow-hidden">
               <MapView
@@ -428,25 +467,21 @@ export default function ParkDetailsScreen() {
           <View className="p-6 pt-0 pb-0">
             <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-emerald-500 dark:border-emerald-400">
               <Text className="text-xl font-semibold text-emerald-600 dark:text-emerald-400 mb-3">Upcoming Forecast</Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} className="-mx-2">
+              <ScrollView 
+                horizontal 
+                showsHorizontalScrollIndicator={false} 
+                className="-mx-2" // Retain -mx-2 for the ScrollView
+                contentContainerStyle={{ paddingHorizontal: 0 }} // No extra padding if items provide their own margin
+              >
                 {dailySummaries.map((summary, index) => (
-                  <Pressable
-                    key={index} 
-                    className="items-center bg-charcoal-50 dark:bg-charcoal-700 rounded-lg p-3 mx-2 w-28 shadow active:opacity-70"
-                    onPress={() => handleOpenForecastModal(summary.representativePeriod)}
-                  >
-                    <Text className="font-semibold text-charcoal-800 dark:text-charcoal-100 text-sm">{summary.dayName}</Text>
-                    <Ionicons 
-                      name={summary.iconName as any}
-                      size={36}
-                      color={getColor(effectiveTheme === 'dark' ? 'charcoal-200' : 'charcoal-700')}
-                      style={{ marginVertical: 4 }}
+                  <View key={summary.date.toISOString()} className="mx-2"> {/* Wrapper for spacing and key */}
+                    <AnimatedForecastTile
+                      summary={summary}
+                      index={index}
+                      onPressTile={handleOpenForecastModal}
+                      currentTheme={effectiveTheme}
                     />
-                    <Text className="text-charcoal-900 dark:text-charcoal-50 font-bold text-base">
-                      {summary.highTemp !== null ? `${summary.highTemp}°` : '--'}
-                      <Text className="font-medium text-charcoal-600 dark:text-charcoal-300">{summary.lowTemp !== null ? ` / ${summary.lowTemp}°` : ' / --'}</Text>
-                    </Text>
-                  </Pressable>
+                  </View>
                 ))}
               </ScrollView>
             </View>
@@ -468,9 +503,12 @@ export default function ParkDetailsScreen() {
               <View className="bg-white dark:bg-charcoal-800 rounded-xl p-5 shadow-xl w-full max-w-md">
                 <View className="flex-row justify-between items-center mb-3">
                   <Text className="text-xl font-bold text-charcoal-900 dark:text-charcoal-100 flex-1 mr-2" numberOfLines={1}>{selectedDetailedForecast.name}</Text>
-                  <Pressable onPress={() => { setModalVisible(false); setSelectedDetailedForecast(null); }} className="p-1">
+                  <AnimatedPressable
+                    onPress={() => { setModalVisible(false); setSelectedDetailedForecast(null); }}
+                    className="p-1"
+                  >
                     <Ionicons name="close-circle" size={28} color={getColor(effectiveTheme === 'dark' ? 'charcoal-400' : 'charcoal-600')} />
-                  </Pressable>
+                  </AnimatedPressable>
                 </View>
 
                 <ScrollView style={{ maxHeight: '70%' }}>{/* ScrollView for modal content */}
@@ -526,12 +564,12 @@ export default function ParkDetailsScreen() {
                   </View>
                 </ScrollView>{/* End of ScrollView for modal content */}
 
-                <Pressable 
+                <AnimatedPressable
                   className="bg-persian-600 dark:bg-persian-500 py-3 rounded-lg mt-4 active:opacity-80"
                   onPress={() => { setModalVisible(false); setSelectedDetailedForecast(null); }}
                 >
                   <Text className="text-white text-center font-semibold">Close</Text>
-                </Pressable>
+                </AnimatedPressable>
               </View>
             </View>
           </Modal>
@@ -544,12 +582,10 @@ export default function ParkDetailsScreen() {
             <View className="flex-row justify-between items-center mb-2">
               <Text className="text-xl font-semibold text-persian-700 dark:text-persian-400">About</Text>
               <View className="flex-row items-center">
-                <Pressable onPress={handleShare} className="p-2 ml-2">
+                <AnimatedPressable onPress={handleShare} className="p-2 ml-2">
                   <Ionicons name="share-outline" size={26} color={shareIconColor} />
-                </Pressable>
-                <Pressable onPress={() => toggleFavorite(park.id)} className="p-2 ml-1">
-                  <Ionicons name={favorite ? "heart" : "heart-outline"} size={28} color={favoriteIconColor} />
-                </Pressable>
+                </AnimatedPressable>
+                {park && <FavoriteHeartIcon parkId={park.id} size={28} />}
               </View>
             </View>
             <Text className="text-base text-charcoal-700 dark:text-charcoal-300 leading-relaxed">{park.description}</Text>
