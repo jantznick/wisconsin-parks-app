@@ -11,30 +11,33 @@ export default function HomeScreen() {
   return (
     <View className="flex-1 bg-charcoal-50">
       {/* Sticky Header */}
-      <View className="bg-persian-800 px-6" style={{ paddingTop: insets.top + 16 }}>
+      <View className="bg-persian-800 px-6 pb-3" style={{ paddingTop: insets.top + 8 }}>
         <Text className="text-2xl font-bold text-white">Wisconsin Parks</Text>
-        <Text className="text-base text-persian-100">Your favorite parks</Text>
+        <Text className="text-base text-persian-200">Your favorite parks</Text>
       </View>
 
-      <ScrollView className="flex-1">
+      <ScrollView 
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: insets.bottom + 75 }}
+      >
         <View className="p-6">
           {/* Map Section */}
-          <View className="bg-white rounded-xl p-4 shadow-sm mb-4">
-            <Text className="text-xl font-semibold text-charcoal-900 mb-2">Explore Parks</Text>
-            <View className="h-80 rounded-xl overflow-hidden">
+          <View className="bg-white rounded-xl p-4 shadow-lg mb-6 border-l-4 border-saffron-700">
+            <Text className="text-xl font-semibold text-saffron-700 mb-2">Explore Parks</Text>
+            <View className="h-80 rounded-md overflow-hidden">
               <WisconsinMap parks={PARKS} />
             </View>
           </View>
 
           {/* Featured Section */}
-          <View className="bg-white rounded-xl p-4 shadow-sm mb-4">
-            <Text className="text-xl font-semibold text-charcoal-900">Featured Parks</Text>
-            <Text className="text-persian-800 mt-2">Explore our most popular destinations</Text>
+          <View className="bg-white rounded-xl p-4 shadow-lg mb-6 border-l-4 border-sandy-600">
+            <Text className="text-xl font-semibold text-sandy-600">Featured Parks</Text>
+            <Text className="text-persian-700 mt-1 font-medium">Explore our most popular destinations</Text>
           </View>
 
           {/* Favorites Section */}
-          <View className="bg-white rounded-xl p-4 shadow-sm">
-            <Text className="text-xl font-semibold text-charcoal-900 mb-4">My Favorites</Text>
+          <View className="bg-white rounded-xl p-4 shadow-lg border-l-4 border-burnt-600">
+            <Text className="text-xl font-semibold text-burnt-600 mb-4">My Favorites</Text>
             <View className="min-h-[200]">
               <FavoritesList />
             </View>
