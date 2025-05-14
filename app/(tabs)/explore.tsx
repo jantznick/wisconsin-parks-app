@@ -28,6 +28,7 @@ export default function ExploreScreen() {
 	const [accessibleOnly, setAccessibleOnly] = useState<boolean>(false);
 	// State for collapsible sections
 	const [activitiesExpanded, setActivitiesExpanded] = useState(false);
+	const [showAllActivitiesButton, setShowAllActivitiesButton] = useState(false); // New state for toggling all activities view
 	const [facilitiesExpanded, setFacilitiesExpanded] = useState(false);
 	const [feeExpanded, setFeeExpanded] = useState(false);
 	const [amenitiesExpanded, setAmenitiesExpanded] = useState(false);
@@ -70,7 +71,7 @@ export default function ExploreScreen() {
 		if (feeFilter === 'free') {
 			parks = parks.filter(park => !park.entranceFee || park.entranceFee.daily === 0 || park.entranceFee.daily === null);
 		} else if (feeFilter === 'paid') {
-			parks = parks.filter(park => park.entranceFee && park.entranceFee.daily > 0);
+			parks = parks.filter(park => park.entranceFee && typeof park.entranceFee.daily === 'number' && park.entranceFee.daily > 0);
 		}
 
 		// Filter by dog-friendly
@@ -173,44 +174,93 @@ export default function ExploreScreen() {
 							</Pressable>
 							{activitiesExpanded && (
 								<View className="px-4 pb-4 pt-0">
-									<ScrollView 
-										horizontal 
-										showsHorizontalScrollIndicator={false}
-										className="flex-row py-1"
-									>
-										{categories.map((category) => {
-											const isSelected = selectedCategories.includes(category);
-											return (
-												<View
-													key={category}
-													className={`rounded-lg px-3 py-2 mr-2 shadow-sm ${isSelected
-														? 'bg-saffron-700 dark:bg-saffron-500'
-														: 'bg-sandy-100 dark:bg-charcoal-700'
-													}`}
-													onTouchEnd={() => toggleCategory(category)}
-												>
-													<View className="flex-row items-center">
-														<Text
-															className={`${isSelected
-																? 'text-white dark:text-white'
-																: 'text-sandy-700 dark:text-sandy-300'
+									{showAllActivitiesButton ? (
+										<View className="flex-row flex-wrap py-1">
+											{categories.map((category) => {
+												const isSelected = selectedCategories.includes(category);
+												return (
+													<View
+														key={category}
+														className={`rounded-lg px-3 py-2 mr-2 mb-2 shadow-sm ${isSelected
+															? 'bg-saffron-700 dark:bg-saffron-500'
+															: 'bg-sandy-100 dark:bg-charcoal-700'
+														}`}
+														onTouchEnd={() => toggleCategory(category)}
+													>
+														<View className="flex-row items-center">
+															<Text
+																className={`${isSelected
+																	? 'text-white dark:text-white'
+																	: 'text-sandy-700 dark:text-sandy-300'
 															}`}
-														>
-															{category}
-														</Text>
-														<Text
-															className={`ml-2 text-xs ${isSelected
-																? 'text-saffron-100 dark:text-saffron-200'
-																: 'text-sandy-600 dark:text-sandy-400'
+															>
+																{category}
+															</Text>
+															<Text
+																className={`ml-2 text-xs ${isSelected
+																	? 'text-saffron-100 dark:text-saffron-200'
+																	: 'text-sandy-600 dark:text-sandy-400'
 															}`}
-														>
-															({getCategoryCount(category)})
-														</Text>
+															>
+																({getCategoryCount(category)})
+															</Text>
+														</View>
 													</View>
-												</View>
-											);
-										})}
-									</ScrollView>
+												);
+											})}
+										</View>
+									) : (
+										<ScrollView 
+											horizontal 
+											showsHorizontalScrollIndicator={false}
+											className="flex-row py-1"
+										>
+											{categories.map((category) => {
+												const isSelected = selectedCategories.includes(category);
+												return (
+													<View
+														key={category}
+														className={`rounded-lg px-3 py-2 mr-2 shadow-sm ${isSelected
+															? 'bg-saffron-700 dark:bg-saffron-500'
+															: 'bg-sandy-100 dark:bg-charcoal-700'
+														}`}
+														onTouchEnd={() => toggleCategory(category)}
+													>
+														<View className="flex-row items-center">
+															<Text
+																className={`${isSelected
+																	? 'text-white dark:text-white'
+																	: 'text-sandy-700 dark:text-sandy-300'
+															}`}
+															>
+																{category}
+															</Text>
+															<Text
+																className={`ml-2 text-xs ${isSelected
+																	? 'text-saffron-100 dark:text-saffron-200'
+																	: 'text-sandy-600 dark:text-sandy-400'
+															}`}
+															>
+																({getCategoryCount(category)})
+															</Text>
+														</View>
+													</View>
+												);
+											})}
+										</ScrollView>
+									)}
+									{/* Toggle button for showing all activities */}
+									{categories.length > 5 && ( // Only show if there are enough items to warrant expanding
+										<Pressable 
+											onPress={() => setShowAllActivitiesButton(!showAllActivitiesButton)} 
+											className="py-2 mt-2 flex-row items-center justify-center"
+										>
+											<Ionicons 
+												name={showAllActivitiesButton ? "chevron-up" : "chevron-down"} 
+												size={18} 
+												color={getColor(effectiveTheme === 'dark' ? 'saffron-300' : 'saffron-700')} />
+										</Pressable>
+									)}
 								</View>
 							)}
 						</View>
