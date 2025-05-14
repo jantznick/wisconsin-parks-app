@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, Linking, Modal, Pressable, ScrollView, Share, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Linking, Modal, Pressable, ScrollView, Share, Text, TouchableOpacity, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AnimatedPressable from '../../components/AnimatedPressable';
@@ -122,6 +123,26 @@ export default function ParkDetailsScreen() {
   // State for forecast details modal
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedDetailedForecast, setSelectedDetailedForecast] = useState<ForecastPeriod | null>(null);
+
+  // Reservation Input State
+  const [selectedStartDate, setSelectedStartDate] = useState<Date | undefined>(undefined);
+  const [selectedEndDate, setSelectedEndDate] = useState<Date | undefined>(undefined);
+  const [selectedEquipment, setSelectedEquipment] = useState<string>('');
+  const [isStartDatePickerVisible, setIsStartDatePickerVisible] = useState<boolean>(false);
+  const [isEndDatePickerVisible, setIsEndDatePickerVisible] = useState<boolean>(false);
+  const [isEquipmentPickerVisible, setIsEquipmentPickerVisible] = useState<boolean>(false);
+
+  const equipmentOptions = [
+    "Tent",
+    "Truck Camper",
+    "Pop-Up",
+    "Trailer/RV up to 20'",
+    "Trailer/RV up to 25'",
+    "Trailer/RV up to 30'",
+    "Trailer/RV up to 35'",
+    "Trailer/RV 35+'",
+    "Other",
+  ];
 
   // Define AnimatedForecastTile component here
   const AnimatedForecastTile = ({ summary, index, onPressTile, currentTheme }: { summary: DailyForecastSummary, index: number, onPressTile: (period: ForecastPeriod) => void, currentTheme: string | undefined }) => {
@@ -345,6 +366,43 @@ export default function ParkDetailsScreen() {
     setModalVisible(true);
   };
 
+  const showStartDatePicker = () => setIsStartDatePickerVisible(true);
+  const hideStartDatePicker = () => setIsStartDatePickerVisible(false);
+  const showEndDatePicker = () => {
+    if (!selectedStartDate) {
+      Alert.alert("Select Check-in", "Please select a check-in date first.");
+      return;
+    }
+    setIsEndDatePickerVisible(true);
+  };
+  const hideEndDatePicker = () => setIsEndDatePickerVisible(false);
+
+  const handleConfirmStartDate = (date: Date) => {
+    setSelectedStartDate(date);
+    hideStartDatePicker();
+    // If selectedEndDate is before or same as new startDate, reset endDate
+    if (selectedEndDate && selectedEndDate <= date) {
+      setSelectedEndDate(undefined);
+    }
+  };
+
+  const handleConfirmEndDate = (date: Date) => {
+    setSelectedEndDate(date);
+    hideEndDatePicker();
+  };
+
+  const formatDateForDisplay = (date: Date | undefined): string => {
+    if (!date) return "Select a date";
+    return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+  };
+
+  const formatDateForUrl = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   if (!park) {
     return (
       <View className="flex-1 items-center justify-center bg-charcoal-50 dark:bg-charcoal-950">
@@ -368,6 +426,74 @@ export default function ParkDetailsScreen() {
   const openDirections = () => {
     const url = `https://www.google.com/maps/dir/?api=1&destination=${park.coordinate.latitude},${park.coordinate.longitude}&travelmode=driving`;
     Linking.openURL(url);
+  };
+
+  const openReservationLink = () => {
+    if (!selectedStartDate) {
+      Alert.alert("Missing Information", "Please select a check-in date.");
+      return;
+    }
+    if (!selectedEndDate) {
+      Alert.alert("Missing Information", "Please select a check-out date.");
+      return;
+    }
+    if (selectedEndDate <= selectedStartDate) {
+      Alert.alert("Invalid Dates", "Check-out date must be after the check-in date.");
+      return;
+    }
+
+    // --- Placeholder Equipment ID Mapping ---
+    // YOU WILL NEED TO REPLACE THIS WITH ACTUAL IDs from the reservation system
+    let equipmentId = -32768; // Default or "Tent"
+    let subEquipmentId = -32767; // Default or "Tent"
+
+    if (selectedEquipment === "Truck Camper") {
+      equipmentId = -32766; // Example, replace with actual
+      subEquipmentId = -32765; // Example, replace with actual
+    } else if (selectedEquipment === "Pop-Up") {
+      equipmentId = -32764; // Example, replace with actual
+      subEquipmentId = -32763; // Example, replace with actual
+    } else if (selectedEquipment.startsWith("Trailer/RV")) {
+      // This is a simplified example. You'll need a more robust mapping for different RV sizes.
+      equipmentId = -32762; // Example for general Trailer/RV
+      subEquipmentId = -32761; // Example for general Trailer/RV
+    }
+    // Add more mappings for other equipmentOptions as needed
+
+    const startDateStr = formatDateForUrl(selectedStartDate);
+    const endDateStr = formatDateForUrl(selectedEndDate);
+    
+    const nights = Math.round((selectedEndDate.getTime() - selectedStartDate.getTime()) / (1000 * 60 * 60 * 24));
+    if (nights <= 0) {
+        Alert.alert("Invalid Dates", "Number of nights must be at least 1.");
+        return;
+    }
+
+    const now = new Date();
+    const searchTime = `${formatDateForUrl(now)}T${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}.${now.getMilliseconds().toString().padStart(3, '0')}`;
+
+    const params = new URLSearchParams({
+      resourceLocationId: "-2147483648",
+      mapId: "-2147483494",
+      searchTabGroupId: "0",
+      bookingCategoryId: "0",
+      startDate: startDateStr,
+      endDate: endDateStr,
+      nights: nights.toString(),
+      isReserving: "true",
+      equipmentId: equipmentId.toString(),
+      subEquipmentId: subEquipmentId.toString(),
+      peopleCapacityCategoryCounts: "[[-32768,null,1,null]]", // Using example value
+      searchTime: searchTime,
+      flexibleSearch: "[false,false,null,1]", // Using example value
+    });
+
+    const reservationUrl = `https://wisconsin.goingtocamp.com/create-booking/results?${params.toString()}`;
+
+    Linking.openURL(reservationUrl).catch(err => {
+      console.error("Failed to open URL:", err);
+      Alert.alert("Error", "Could not open the reservation website. Ensure you have selected a date and equipment type.");
+    });
   };
 
   // Define colors for props not directly stylable with Tailwind dark: prefix
@@ -402,9 +528,83 @@ export default function ParkDetailsScreen() {
         className="flex-1"
         contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
       >
+
+        {/* Content Sections */}
+        <View className="p-6">
+
+
+          {/* Reservations Card */}
+          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-emerald-600 dark:border-emerald-400">
+            <Text className="text-xl font-semibold text-emerald-600 dark:text-emerald-400 mb-4">Plan Your Stay</Text>
+            
+            {/* Date Inputs Container */}
+            <View className="flex-row justify-between mb-4">
+              {/* Check-in Date Input */}
+              <View className="flex-1 mr-2">
+                <Text className="text-sm font-medium text-charcoal-700 dark:text-charcoal-300 mb-1">Check-in</Text>
+                <Pressable onPress={showStartDatePicker}>
+                  <View className="bg-charcoal-50 dark:bg-charcoal-700 p-3 rounded-md flex-row justify-between items-center">
+                    <Text className={`text-base ${selectedStartDate ? 'text-charcoal-800 dark:text-charcoal-100' : 'text-charcoal-400 dark:text-charcoal-500'}`}>
+                      {formatDateForDisplay(selectedStartDate)}
+                    </Text>
+                    <Ionicons name="calendar-outline" size={20} color={getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-500')} />
+                  </View>
+                </Pressable>
+              </View>
+
+              {/* Check-out Date Input */}
+              <View className="flex-1 ml-2">
+                <Text className="text-sm font-medium text-charcoal-700 dark:text-charcoal-300 mb-1">Check-out</Text>
+                <Pressable onPress={showEndDatePicker} disabled={!selectedStartDate}>
+                  <View className={`bg-charcoal-50 dark:bg-charcoal-700 p-3 rounded-md flex-row justify-between items-center ${!selectedStartDate ? 'opacity-50' : ''}`}>
+                    <Text className={`text-base ${selectedEndDate ? 'text-charcoal-800 dark:text-charcoal-100' : 'text-charcoal-400 dark:text-charcoal-500'}`}>
+                      {formatDateForDisplay(selectedEndDate)}
+                    </Text>
+                    <Ionicons name="calendar-outline" size={20} color={getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-500')} />
+                  </View>
+                </Pressable>
+              </View>
+            </View>
+
+            <DateTimePickerModal
+              isVisible={isStartDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirmStartDate}
+              onCancel={hideStartDatePicker}
+              minimumDate={new Date()}
+            />
+            <DateTimePickerModal
+              isVisible={isEndDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirmEndDate}
+              onCancel={hideEndDatePicker}
+              minimumDate={selectedStartDate ? new Date(new Date(selectedStartDate).setDate(selectedStartDate.getDate() + 1)) : new Date() }
+            />
+
+            {/* Equipment Input */}
+            <View className="mb-4">
+              <Text className="text-sm font-medium text-charcoal-700 dark:text-charcoal-300 mb-1">Equipment</Text>
+              <Pressable onPress={() => setIsEquipmentPickerVisible(true)}>
+                <View className="bg-charcoal-50 dark:bg-charcoal-700 p-3 rounded-md flex-row justify-between items-center">
+                  <Text className={`text-base ${selectedEquipment ? 'text-charcoal-800 dark:text-charcoal-100' : 'text-charcoal-400 dark:text-charcoal-500'}`}>
+                    {selectedEquipment || "Select equipment type"}
+                  </Text>
+                  <Ionicons name="chevron-down" size={20} color={getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-500')} />
+                </View>
+              </Pressable>
+            </View>
+
+            <AnimatedPressable
+              onPress={openReservationLink}
+              className="bg-emerald-600 dark:bg-emerald-500 px-4 py-3 rounded-lg flex-row items-center justify-center shadow-md active:opacity-80"
+            >
+              <Text className="text-white dark:text-emerald-50 font-semibold text-base">Open Reservation Link</Text>
+              <Ionicons name="exit-outline" size={20} color="white" style={{ marginLeft: 8 }}/>
+            </AnimatedPressable>
+          </View>
+
         {/* Map Panel */}
-        <View className="p-6 pb-0">
-          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-saffron-700 dark:border-saffron-400">
+		<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-saffron-700 dark:border-saffron-400">
             <View className="flex-row justify-between items-center mb-2">
               <Text className="text-xl font-semibold text-saffron-700 dark:text-saffron-400">Location</Text>
               <AnimatedPressable
@@ -436,12 +636,55 @@ export default function ParkDetailsScreen() {
               </MapView>
             </View>
           </View>
-        </View>
+
+
+          {/* About */}
+          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-persian-700 dark:border-persian-500">
+            <View className="flex-row justify-between items-center mb-2">
+              <Text className="text-xl font-semibold text-persian-700 dark:text-persian-400">About</Text>
+              <View className="flex-row items-center">
+                <AnimatedPressable onPress={handleShare} className="p-2 ml-2">
+                  <Ionicons name="share-outline" size={26} color={shareIconColor} />
+                </AnimatedPressable>
+                {park && <FavoriteHeartIcon parkId={park.id} size={28} />}
+              </View>
+            </View>
+            <Text className="text-base text-charcoal-700 dark:text-charcoal-300 leading-relaxed">{park.description}</Text>
+          </View>
+
+          {/* Hours */}
+          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-sandy-600 dark:border-sandy-400">
+            <Text className="text-xl font-semibold text-sandy-600 dark:text-sandy-400 mb-2">Hours</Text>
+            <Text className="text-charcoal-700 dark:text-charcoal-300">{park.hours.open} – {park.hours.close}</Text>
+          </View>
+
+          {/* Activities */}
+          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-burnt-600 dark:border-burnt-400">
+            <Text className="text-xl font-semibold text-burnt-600 dark:text-burnt-400 mb-3">Activities</Text>
+            <View className="flex-row flex-wrap gap-2">
+              {park.activities.map((activity, index) => (
+                <View key={index} className="bg-burnt-100 dark:bg-charcoal-700 px-3 py-1.5 rounded-full shadow-sm">
+                  <Text className="text-burnt-700 dark:text-burnt-300 font-medium text-sm">{activity}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Facilities */}
+          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-saffron-700 dark:border-saffron-400">
+            <Text className="text-xl font-semibold text-saffron-700 dark:text-saffron-400 mb-3">Facilities</Text>
+            <View className="flex-row flex-wrap gap-2">
+              {park.facilities.map((facility, index) => (
+                <View key={index} className="bg-saffron-100 dark:bg-charcoal-700 px-3 py-1.5 rounded-full shadow-sm">
+                  <Text className="text-saffron-700 dark:text-saffron-300 font-medium text-sm">{facility}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
 
         {/* Weather Section - Conditionally render if coordinates are valid */}
         {parkCoordinateIsValid && (
-          <View className="p-6">
-            <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-blue-500 dark:border-blue-400">
+            <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-blue-500 dark:border-blue-400">
               <Text className="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-3">Current Weather</Text>
               {loadingWeather && (
                 <View className="flex-row items-center justify-center py-4">
@@ -489,13 +732,11 @@ export default function ParkDetailsScreen() {
                   <Text className="text-charcoal-700 dark:text-charcoal-300 py-4 text-center">Weather data not available.</Text>
               )}
             </View>
-          </View>
         )}
 
         {/* Extended Forecast Section - Conditionally render if coordinates are valid */}
         {parkCoordinateIsValid && dailySummaries.length > 0 && (
-          <View className="p-6 pt-0 pb-0">
-            <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-emerald-500 dark:border-emerald-400">
+            <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-emerald-500 dark:border-emerald-400">
               <Text className="text-xl font-semibold text-emerald-600 dark:text-emerald-400 mb-3">Upcoming Forecast</Text>
               <ScrollView 
                 horizontal 
@@ -515,7 +756,6 @@ export default function ParkDetailsScreen() {
                 ))}
               </ScrollView>
             </View>
-          </View>
         )}
 
         {/* Detailed Forecast Modal - Already implicitly conditional on dailySummaries/selectedDetailedForecast */}
@@ -615,52 +855,6 @@ export default function ParkDetailsScreen() {
           </Modal>
         )}
 
-        {/* Content Sections */}
-        <View className="p-6">
-          {/* About */}
-          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-persian-700 dark:border-persian-500">
-            <View className="flex-row justify-between items-center mb-2">
-              <Text className="text-xl font-semibold text-persian-700 dark:text-persian-400">About</Text>
-              <View className="flex-row items-center">
-                <AnimatedPressable onPress={handleShare} className="p-2 ml-2">
-                  <Ionicons name="share-outline" size={26} color={shareIconColor} />
-                </AnimatedPressable>
-                {park && <FavoriteHeartIcon parkId={park.id} size={28} />}
-              </View>
-            </View>
-            <Text className="text-base text-charcoal-700 dark:text-charcoal-300 leading-relaxed">{park.description}</Text>
-          </View>
-
-          {/* Hours */}
-          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-sandy-600 dark:border-sandy-400">
-            <Text className="text-xl font-semibold text-sandy-600 dark:text-sandy-400 mb-2">Hours</Text>
-            <Text className="text-charcoal-700 dark:text-charcoal-300">{park.hours.open} – {park.hours.close}</Text>
-          </View>
-
-          {/* Activities */}
-          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-burnt-600 dark:border-burnt-400">
-            <Text className="text-xl font-semibold text-burnt-600 dark:text-burnt-400 mb-3">Activities</Text>
-            <View className="flex-row flex-wrap gap-2">
-              {park.activities.map((activity, index) => (
-                <View key={index} className="bg-burnt-100 dark:bg-charcoal-700 px-3 py-1.5 rounded-full shadow-sm">
-                  <Text className="text-burnt-700 dark:text-burnt-300 font-medium text-sm">{activity}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-
-          {/* Facilities */}
-          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-saffron-700 dark:border-saffron-400">
-            <Text className="text-xl font-semibold text-saffron-700 dark:text-saffron-400 mb-3">Facilities</Text>
-            <View className="flex-row flex-wrap gap-2">
-              {park.facilities.map((facility, index) => (
-                <View key={index} className="bg-saffron-100 dark:bg-charcoal-700 px-3 py-1.5 rounded-full shadow-sm">
-                  <Text className="text-saffron-700 dark:text-saffron-300 font-medium text-sm">{facility}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-
           {/* Fees */}
           <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-persian-700 dark:border-persian-500">
             <Text className="text-xl font-semibold text-persian-700 dark:text-persian-400 mb-2">Entrance Fees</Text>
@@ -694,6 +888,55 @@ export default function ParkDetailsScreen() {
               <Text key={index} className="text-charcoal-700 dark:text-charcoal-300">• {closure}</Text>
             ))}
           </View>
+
+          {/* Equipment Picker Modal */}
+          {isEquipmentPickerVisible && (
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={isEquipmentPickerVisible}
+              onRequestClose={() => setIsEquipmentPickerVisible(false)}
+            >
+              <Pressable 
+                className="flex-1 justify-end bg-black/50" // Use Tailwind for backdrop
+                onPress={() => setIsEquipmentPickerVisible(false)} // Close modal on backdrop press
+              >
+                <Pressable 
+                  className="w-full bg-white dark:bg-charcoal-800 rounded-t-2xl pt-5 pb-safe" // Use Tailwind, pb-safe for bottom safe area
+                  onPress={() => { /* Prevent closing modal when pressing inside the content */}}
+                >
+                  <Text className="text-lg font-semibold text-center mb-2 text-charcoal-900 dark:text-charcoal-100 px-5">Select Equipment Type</Text>
+                  <View className="h-px bg-charcoal-200 dark:bg-charcoal-700 mb-3" />{/* Separator Line */}
+                  <ScrollView style={{ maxHeight: 300 }} contentContainerStyle={{ paddingBottom: 10 }}>
+                    {equipmentOptions.map((option, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => {
+                          setSelectedEquipment(option);
+                          setIsEquipmentPickerVisible(false);
+                        }}
+                        className="px-5 py-3.5 flex-row items-center" // Increased padding for better touch
+                      >
+                        <Ionicons 
+                          name={selectedEquipment === option ? "radio-button-on-outline" : "radio-button-off-outline"} 
+                          size={22} 
+                          color={getColor(effectiveTheme === 'dark' ? (selectedEquipment === option ? 'persian-400' : 'charcoal-400') : (selectedEquipment === option ? 'persian-600' : 'charcoal-500'))} 
+                          style={{ marginRight: 12 }}
+                        />
+                        <Text className="text-base text-charcoal-800 dark:text-charcoal-200 flex-1">{option}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                  <TouchableOpacity
+                    onPress={() => setIsEquipmentPickerVisible(false)}
+                    className="mt-3 mb-3 py-3 bg-charcoal-200 dark:bg-charcoal-700 rounded-lg mx-5 active:opacity-75"
+                  >
+                    <Text className="text-charcoal-800 dark:text-charcoal-100 text-center font-semibold text-base">Cancel</Text>
+                  </TouchableOpacity>
+                </Pressable>
+              </Pressable>
+            </Modal>
+          )}
         </View>
       </ScrollView>
     </View>
