@@ -1,21 +1,9 @@
-import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Alert, ScrollView, Share, Text, View } from 'react-native';
-import { useFavorites } from '../contexts/FavoritesContext';
-import { useTheme } from '../contexts/ThemeContext';
 import { Park } from '../data/parks';
-import tailwindConfig from '../tailwind.config.js';
 import AnimatedPressable from './AnimatedPressable';
-import FavoriteHeartIcon from './FavoriteHeartIcon';
-
-// Helper to get color from Tailwind config
-const getColor = (colorName: string) => {
-  // @ts-ignore
-  const [theme, shade] = colorName.split('-');
-  // @ts-ignore
-  return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
-};
+import SharedParkHeader from './SharedParkHeader';
 
 interface ParkDetailsSheetProps {
   park: Park;
@@ -24,8 +12,6 @@ interface ParkDetailsSheetProps {
 
 export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProps) {
   const router = useRouter();
-  const { isFavorite, toggleFavorite } = useFavorites();
-  const { effectiveTheme } = useTheme();
 
   const handleViewFullDetails = () => {
     router.push(`/park/${park.id}`);
@@ -43,28 +29,14 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
     }
   };
 
-  const closeIconColor = effectiveTheme === 'dark' ? getColor('charcoal-300') : getColor('charcoal-600');
-  const shareIconColor = getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600');
-
   return (
-    <View className="flex-1 bg-white dark:bg-charcoal-900 rounded-t-3xl">
-      {/* Header */}
-      <View className="p-4 border-b border-gray-200 dark:border-charcoal-700">
-        <View className="flex-row justify-between items-center">
-          <AnimatedPressable onPress={onClose} className="p-2" scaleTo={0.9}>
-            <Ionicons name="close" size={24} color={closeIconColor} />
-          </AnimatedPressable>
-          <View className="flex-row items-center">
-            <AnimatedPressable onPress={handleShare} className="p-2" scaleTo={0.9}>
-              <Ionicons name="share-outline" size={24} color={shareIconColor} />
-            </AnimatedPressable>
-            <View className="p-2 ml-1">
-              <FavoriteHeartIcon parkId={park.id} size={24} />
-            </View>
-          </View>
-        </View>
-        <Text className="text-2xl font-bold text-charcoal-900 dark:text-charcoal-100 mt-2">{park.name}</Text>
-      </View>
+    <View className="flex-1 bg-white dark:bg-charcoal-900 rounded-t-3xl overflow-hidden">
+      <SharedParkHeader 
+        park={park}
+        leftIconName="close"
+        onLeftIconPress={onClose}
+        onSharePress={handleShare}
+      />
 
       {/* Content */}
       <ScrollView className="flex-1 p-4">

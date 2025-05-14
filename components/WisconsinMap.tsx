@@ -125,11 +125,11 @@ export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
             return null; // Do not render a marker if coordinates are invalid
           }
           return (
-            <ParkMarker
-              key={park.id}
-              park={park}
-              onPress={() => handleMarkerPress(park)}
-            />
+          <ParkMarker
+            key={park.id}
+            park={park}
+            onPress={() => handleMarkerPress(park)}
+          />
           );
         })}
       </MapView>

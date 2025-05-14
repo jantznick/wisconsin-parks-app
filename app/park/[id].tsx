@@ -7,8 +7,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AnimatedPressable from '../../components/AnimatedPressable';
-import FavoriteHeartIcon from '../../components/FavoriteHeartIcon';
 import ParkMarker from '../../components/ParkMarker';
+import SharedParkHeader from '../../components/SharedParkHeader';
 import { useFavorites } from '../../contexts/FavoritesContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { PARKS } from '../../data/parks';
@@ -496,33 +496,16 @@ export default function ParkDetailsScreen() {
     });
   };
 
-  // Define colors for props not directly stylable with Tailwind dark: prefix
-  const shareIconColor = getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600');
-  
   return (
     <View className="flex-1 bg-charcoal-50 dark:bg-charcoal-950">
-      {/* Header */}
-      <View 
-        className="bg-persian-800 dark:bg-charcoal-800 px-4 pb-3 flex-row items-center justify-between"
-        style={{ paddingTop: insets.top + 8 }}
-      >
-        <AnimatedPressable
-          onPress={() => router.back()}
-          className="p-2" // Removed absolute, left-4. Positioning via flex parent.
-          // style={{ top: insets.top + 8}} // Removed explicit top style
-        >
-          <Ionicons name="arrow-back" size={24} color={getColor(effectiveTheme === 'dark' ? 'persian-100' : 'charcoal-50')} />
-        </AnimatedPressable>
-        
-        <View className="flex-1 items-center justify-center">
-          <Text className="text-2xl font-bold text-white dark:text-white text-center">{park.name}</Text>
-          <Text className="text-base text-persian-200 dark:text-charcoal-300 mt-1">State Park</Text>
-        </View>
-        
-        {/* Spacer view to balance the back button for title centering */}
-        <View className="w-10 h-10" /> {/* Width approx. same as back button area (p-2 + icon) */} 
-
-      </View>
+      <SharedParkHeader 
+        park={park}
+        leftIconName="arrow-back"
+        onLeftIconPress={() => router.back()}
+        onSharePress={handleShare}
+        safeAreaTopInset={insets.top + 8} // Pass the calculated safe area top inset
+        // containerClassName can be omitted if no extra styling is needed for the root View of SharedParkHeader
+      />
 
       <ScrollView 
         className="flex-1"
@@ -642,12 +625,7 @@ export default function ParkDetailsScreen() {
           <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-persian-700 dark:border-persian-500">
             <View className="flex-row justify-between items-center mb-2">
               <Text className="text-xl font-semibold text-persian-700 dark:text-persian-400">About</Text>
-              <View className="flex-row items-center">
-                <AnimatedPressable onPress={handleShare} className="p-2 ml-2">
-                  <Ionicons name="share-outline" size={26} color={shareIconColor} />
-                </AnimatedPressable>
-                {park && <FavoriteHeartIcon parkId={park.id} size={28} />}
-              </View>
+              {/* Icons removed from here */}
             </View>
             <Text className="text-base text-charcoal-700 dark:text-charcoal-300 leading-relaxed">{park.description}</Text>
           </View>

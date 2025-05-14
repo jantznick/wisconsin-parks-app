@@ -1,47 +1,47 @@
 export interface Park {
-	id: string;
-	name: string;
-	coordinate: {
+  id: string;
+  name: string;
+  coordinate: {
 	  latitude: number | null; // Changed from number
 	  longitude: number | null; // Changed from number
-	};
-	description: string;
-	activities: string[];
-	hours: {
-	  open: string;
-	  close: string;
+  };
+  description: string;
+  activities: string[];
+  hours: {
+    open: string;
+    close: string;
 	  text_description?: string; // Added
-	};
-	contact: {
-	  phone: string;
-	  email: string;
-	  website: string;
-	};
-	facilities: string[];
-	entranceFee: {
+  };
+  contact: {
+    phone: string;
+    email: string;
+    website: string;
+  };
+  facilities: string[];
+  entranceFee: {
 	  daily: number | null; // Changed from number
 	  annual: number | null; // Changed from number
 	  text_description?: string; // Added
-	};
-	parking: {
+  };
+  parking: {
 	  totalSpaces: number | null; // Changed from number
 	  isFree: boolean | null; // Changed from boolean
-	};
-	rules: string[];
-	seasonalInfo: {
-	  bestTimeToVisit: string;
-	  seasonalClosures: string[];
-	};
+  };
+  rules: string[];
+  seasonalInfo: {
+    bestTimeToVisit: string;
+    seasonalClosures: string[];
+  };
 	isDogFriendly: boolean | null; // Changed from boolean
 	isAccessible: boolean | null; // Changed from boolean
 	image_from_listing?: string | null; // Added
 	downloaded_image_path?: string | null; // Added
 	info_url: string; // Added
 	recreation_url: string; // Added
-  }
+}
 
 export const PARKS: Park[] = [
-    {
+  {
         "id": "400",
         "name": "400 State Trail",
         "coordinate": {
