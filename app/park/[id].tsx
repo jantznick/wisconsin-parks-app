@@ -294,7 +294,7 @@ export default function ParkDetailsScreen() {
               })
               .filter(summary => summary !== null) as DailyForecastSummary[];
             
-            setDailySummaries(summaries.slice(0, 5)); // Limit to 5 days
+            setDailySummaries(summaries); 
 
           } else {
             throw new Error("No forecast periods found.");
