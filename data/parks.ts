@@ -30,6 +30,8 @@ export interface Park {
     bestTimeToVisit: string;
     seasonalClosures: string[];
   };
+  isDogFriendly: boolean;
+  isAccessible: boolean;
 }
 
 export const PARKS: Park[] = [
@@ -70,6 +72,8 @@ export const PARKS: Park[] = [
       bestTimeToVisit: 'May through October',
       seasonalClosures: ['Some facilities closed in winter'],
     },
+    isDogFriendly: true,
+    isAccessible: true,
   },
   {
     id: '2',
@@ -108,6 +112,8 @@ export const PARKS: Park[] = [
       bestTimeToVisit: 'June through September',
       seasonalClosures: ['Golf course closed in winter'],
     },
+    isDogFriendly: true,
+    isAccessible: false,
   },
   {
     id: '3',
@@ -146,5 +152,7 @@ export const PARKS: Park[] = [
       bestTimeToVisit: 'May through October',
       seasonalClosures: ['Some trails closed in winter'],
     },
+    isDogFriendly: false,
+    isAccessible: true,
   },
 ]; 
