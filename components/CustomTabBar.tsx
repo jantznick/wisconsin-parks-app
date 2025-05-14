@@ -4,6 +4,16 @@ import React from 'react';
 import { Dimensions, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../contexts/ThemeContext'; // Import useTheme
+import tailwindConfig from '../tailwind.config.js'; // Import Tailwind config
+
+// Helper to get color from Tailwind config
+const getColor = (colorName: string) => {
+  // @ts-ignore
+  const [theme, shade] = colorName.split('-');
+  // @ts-ignore
+  return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
+};
 
 interface TabBarIconProps {
   name: keyof typeof Ionicons.glyphMap; // More specific type for icon names
@@ -27,6 +37,7 @@ const TAB_BAR_BOTTOM_OFFSET = 8; // Space from safe area bottom to the TabBar
 export default function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
   const numTabs = state.routes.length;
+  const { effectiveTheme } = useTheme();
 
   // Calculate individual tab width inside the pill
   const tabWidth = (width - (TAB_BAR_MARGIN_HORIZONTAL * 2) - (PILL_HORIZONTAL_PADDING * 2)) / numTabs;
@@ -53,14 +64,14 @@ export default function CustomTabBar({ state, descriptors, navigation }: BottomT
       }}
     >
       <View 
-        className="flex-row bg-white rounded-full shadow-lg items-center"
+        className="flex-row bg-white dark:bg-charcoal-800 rounded-full shadow-lg items-center"
         style={{
           paddingHorizontal: PILL_HORIZONTAL_PADDING,
           height: '100%', // Pill takes full height of its container
         }}
       >
         <Animated.View
-          className="absolute bg-persian-800 rounded-full" // This is the sliding indicator
+          className="absolute bg-persian-800 dark:bg-persian-600 rounded-full" // This is the sliding indicator
           style={[
             animatedIndicatorStyle,
             {
@@ -100,7 +111,9 @@ export default function CustomTabBar({ state, descriptors, navigation }: BottomT
             iconName = isFocused ? 'compass' : 'compass-outline';
           }
           
-          const iconColor = isFocused ? 'white' : '#264653';
+          const activeColor = effectiveTheme === 'dark' ? getColor('charcoal-50') : 'white';
+          const inactiveColor = effectiveTheme === 'dark' ? getColor('charcoal-400') : getColor('charcoal-600');
+          const iconColor = isFocused ? activeColor : inactiveColor;
 
           return (
             <TouchableOpacity

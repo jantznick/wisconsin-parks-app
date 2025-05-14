@@ -1,4 +1,4 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -6,16 +6,18 @@ import 'react-native-reanimated';
 import DraggableBottomSheet from '../components/DraggableBottomSheet';
 import { FavoritesProvider } from '../contexts/FavoritesContext';
 import { SelectedParkProvider, useSelectedPark } from '../contexts/SelectedParkContext';
+import { ThemeProvider as CustomThemeProvider, useTheme } from '../contexts/ThemeContext';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 
-function RootLayoutNav() {
+// This component will be rendered by CustomThemeProvider, so it can use useTheme()
+function AppNavigation() {
+  const { effectiveTheme } = useTheme(); // Get our app's effective theme
   const { selectedPark, setSelectedPark } = useSelectedPark();
 
   return (
-    <ThemeProvider value={useColorScheme() === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    <NavigationThemeProvider value={effectiveTheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
         <Stack.Screen 
           name="park/[id]" 
           options={{ 
@@ -33,7 +35,7 @@ function RootLayoutNav() {
           onClose={() => setSelectedPark(null)}
         />
       )}
-    </ThemeProvider>
+    </NavigationThemeProvider>
   );
 }
 
@@ -50,7 +52,9 @@ export default function RootLayout() {
   return (
     <FavoritesProvider>
       <SelectedParkProvider>
-        <RootLayoutNav />
+        <CustomThemeProvider>
+          <AppNavigation />
+        </CustomThemeProvider>
       </SelectedParkProvider>
     </FavoritesProvider>
   );

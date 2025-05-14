@@ -4,11 +4,23 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import FavoritesList from '../../components/FavoritesList';
+import { useTheme } from '../../contexts/ThemeContext';
 import { PARKS } from '../../data/parks';
+import tailwindConfig from '../../tailwind.config.js'; // Import Tailwind config
+
+// Helper to get color from Tailwind config (simplified)
+// In a real scenario, you might have a more robust way or directly use palette names if props allow
+const getColor = (colorName: string) => {
+  const [theme, shade] = colorName.split('-');
+  // @ts-ignore
+  return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
+};
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { theme, setTheme, effectiveTheme } = useTheme();
+
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredParks, setFilteredParks] = useState<typeof PARKS>([]);
 
@@ -27,21 +39,43 @@ export default function HomeScreen() {
     setFilteredParks(results);
   }, [searchQuery]);
 
+  const toggleTheme = () => {
+    if (theme === 'light') setTheme('dark');
+    else if (theme === 'dark') setTheme('system');
+    else setTheme('light');
+  };
+
   const renderSearchResultItem = ({ item }: { item: typeof PARKS[0] }) => (
     <TouchableOpacity 
-      className="px-4 py-3 border-b border-charcoal-200"
+      className="px-4 py-3 border-b border-charcoal-200 dark:border-charcoal-700"
       onPress={() => router.push(`/park/${item.id}`)}
     >
-      <Text className="text-charcoal-800 text-base font-semibold">{item.name}</Text>
+      <Text className="text-charcoal-800 dark:text-charcoal-100 text-base font-semibold">{item.name}</Text>
     </TouchableOpacity>
   );
 
+  // Define colors based on theme for props that don't accept Tailwind classes directly
+  const placeholderColor = effectiveTheme === 'dark' ? getColor('charcoal-300') : getColor('charcoal-400');
+  const searchIconColor = effectiveTheme === 'dark' ? getColor('charcoal-300') : getColor('charcoal-500');
+  const headerIconColor = effectiveTheme === 'dark' ? getColor('persian-100') : getColor('charcoal-50'); // charcoal-50 is white
+
   return (
-    <View className="flex-1 bg-charcoal-50">
-      {/* Sticky Header */}
-      <View className="bg-persian-800 px-6 pb-3" style={{ paddingTop: insets.top + 8 }}>
-        <Text className="text-2xl font-bold text-white">Wisconsin Parks</Text>
-        <Text className="text-base text-persian-200">Your favorite parks</Text>
+    <View className="flex-1 bg-charcoal-50 dark:bg-charcoal-950">
+      {/* Sticky Header with Theme Toggle */}
+      <View className="bg-persian-800 dark:bg-charcoal-800 px-6 pb-3" style={{ paddingTop: insets.top + 8 }}>
+        <View className="flex-row justify-between items-center">
+          <View>
+            <Text className="text-2xl font-bold text-white dark:text-white">Wisconsin Parks</Text>
+            <Text className="text-base text-persian-200 dark:text-charcoal-300">Your favorite parks</Text>
+          </View>
+          <TouchableOpacity onPress={toggleTheme} className="p-2">
+            <Ionicons 
+              name={theme === 'system' ? 'cog-outline' : (effectiveTheme === 'dark' ? 'moon' : 'sunny')} 
+              size={24} 
+              color={headerIconColor} // Use themed color
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView 
@@ -52,23 +86,23 @@ export default function HomeScreen() {
         <View className="p-6">
           {/* Search Bar Card */}
           <View 
-            className={`bg-white p-3 shadow-lg border-l-4 border-persian-700 ${isDropdownVisible ? 'rounded-t-xl' : 'rounded-xl mb-6'}`}
+            className={`bg-white dark:bg-charcoal-800 p-3 shadow-lg border-l-4 border-persian-700 dark:border-persian-500 ${isDropdownVisible ? 'rounded-t-xl' : 'rounded-xl mb-6'}`}
           >
-            <View className="flex-row items-center bg-charcoal-100 rounded-lg px-3 py-2.5">
-              <Ionicons name="search" size={20} color="#7D96A5" />
+            <View className="flex-row items-center bg-charcoal-100 dark:bg-charcoal-700 rounded-lg px-3 py-2.5">
+              <Ionicons name="search" size={20} color={searchIconColor} /> {/* Use themed color */}
               <TextInput
                 placeholder="Search for a park..."
-                placeholderTextColor="#97ABB7"
+                placeholderTextColor={placeholderColor} // Use themed color
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-                className="flex-1 ml-2 text-charcoal-800 text-base"
+                className="flex-1 ml-2 text-charcoal-800 dark:text-charcoal-100 text-base"
               />
             </View>
           </View>
 
           {/* Search Results Dropdown */}
           {isDropdownVisible && (
-            <View className="bg-white rounded-b-xl shadow-md mb-6 max-h-64 overflow-hidden">
+            <View className="bg-white dark:bg-charcoal-800 rounded-b-xl shadow-md mb-6 max-h-64 overflow-hidden">
               {filteredParks.length > 0 ? (
                 <FlatList
                   data={filteredParks}
@@ -77,20 +111,20 @@ export default function HomeScreen() {
                   nestedScrollEnabled
                 />
               ) : (
-                <Text className="p-4 text-charcoal-600 text-center">No parks found matching your search.</Text>
+                <Text className="p-4 text-charcoal-600 dark:text-charcoal-400 text-center">No parks found matching your search.</Text>
               )}
             </View>
           )}
 
           {/* Featured Section */}
-          <View className="bg-white rounded-xl p-4 shadow-lg mb-6 border-l-4 border-sandy-600">
-            <Text className="text-xl font-semibold text-sandy-600">Featured Parks</Text>
-            <Text className="text-persian-700 mt-1 font-medium">Explore our most popular destinations</Text>
+          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-sandy-600 dark:border-sandy-400">
+            <Text className="text-xl font-semibold text-sandy-600 dark:text-sandy-400">Featured Parks</Text>
+            <Text className="text-persian-700 dark:text-persian-400 mt-1 font-medium">Explore our most popular destinations</Text>
           </View>
 
           {/* Favorites Section */}
-          <View className="bg-white rounded-xl p-4 shadow-lg border-l-4 border-burnt-600">
-            <Text className="text-xl font-semibold text-burnt-600 mb-4">My Favorites</Text>
+          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-burnt-600 dark:border-burnt-400">
+            <Text className="text-xl font-semibold text-burnt-600 dark:text-burnt-400 mb-4">My Favorites</Text>
             <View className="min-h-[200]">
               <FavoritesList />
             </View>
