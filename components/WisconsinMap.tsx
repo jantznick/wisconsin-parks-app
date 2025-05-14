@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { useSelectedPark } from '../contexts/SelectedParkContext';
 import { Park } from '../data/parks';
 import ParkMarker from './ParkMarker';
 
@@ -23,6 +24,7 @@ interface WisconsinMapProps {
 
 export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
   const mapRef = useRef<MapView>(null);
+  const { setSelectedPark } = useSelectedPark();
 
   const handleMarkerPress = (park: Park) => {
     if (mapRef.current) {
@@ -37,6 +39,7 @@ export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
         longitudeDelta: INITIAL_REGION.longitudeDelta,
       }, 500);
     }
+    setSelectedPark(park);
   };
 
   return (
