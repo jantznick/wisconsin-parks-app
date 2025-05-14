@@ -6,18 +6,16 @@ import {
 	GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import Animated, {
-	Extrapolate,
-	interpolate,
 	useAnimatedStyle,
 	useSharedValue,
-	withSpring,
+	withSpring
 } from 'react-native-reanimated';
 import { Park } from '../data/parks';
 import ParkDetailsSheet from './ParkDetailsSheet';
 
-const SHEET_HEIGHT = 400;
 const MIN_SHEET_HEIGHT = 200;
-const MAX_SHEET_HEIGHT = 600;
+const INITIAL_SHEET_HEIGHT = 400;
+const MAX_SHEET_HEIGHT = 700;
 
 interface DraggableBottomSheetProps {
   park: Park;
@@ -25,40 +23,34 @@ interface DraggableBottomSheetProps {
 }
 
 export default function DraggableBottomSheet({ park, onClose }: DraggableBottomSheetProps) {
-  const translateY = useSharedValue(0);
-  const context = useSharedValue({ y: 0 });
+  const height = useSharedValue(INITIAL_SHEET_HEIGHT);
+  const context = useSharedValue({ height: MIN_SHEET_HEIGHT });
 
   const gesture = Gesture.Pan()
     .onStart(() => {
-      context.value = { y: translateY.value };
+      context.value = { height: height.value };
     })
     .onUpdate((event) => {
       // Calculate new height based on drag
-      const newHeight = context.value.y + event.translationY;
+      const newHeight = context.value.height - event.translationY;
       
       // Constrain the height between MIN and MAX
-      if (newHeight > -MAX_SHEET_HEIGHT && newHeight < -MIN_SHEET_HEIGHT) {
-        translateY.value = newHeight;
+      if (newHeight >= MIN_SHEET_HEIGHT && newHeight <= MAX_SHEET_HEIGHT) {
+        height.value = newHeight;
       }
     })
     .onEnd(() => {
       // Snap to either MIN or MAX height
-      if (translateY.value < -(MIN_SHEET_HEIGHT + MAX_SHEET_HEIGHT) / 2) {
-        translateY.value = withSpring(-MAX_SHEET_HEIGHT);
+      if (height.value > (MIN_SHEET_HEIGHT + MAX_SHEET_HEIGHT) / 2) {
+        height.value = withSpring(MAX_SHEET_HEIGHT);
       } else {
-        translateY.value = withSpring(-MIN_SHEET_HEIGHT);
+        height.value = withSpring(MIN_SHEET_HEIGHT);
       }
     });
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [{ translateY: translateY.value }],
-      height: interpolate(
-        -translateY.value,
-        [MIN_SHEET_HEIGHT, MAX_SHEET_HEIGHT],
-        [MIN_SHEET_HEIGHT, MAX_SHEET_HEIGHT],
-        Extrapolate.CLAMP
-      ),
+      height: height.value,
     };
   });
 
