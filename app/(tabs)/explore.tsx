@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import WisconsinMap from '../../components/WisconsinMap';
 import { PARKS } from '../../data/parks';
 
@@ -60,11 +60,15 @@ export default function ExploreScreen() {
               </Pressable>
             )}
           </View>
-          <View className="flex-row flex-wrap mt-2">
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            className="flex-row"
+          >
             {categories.map((category) => (
               <View
                 key={category}
-                className={`rounded-lg px-3 py-2 mr-2 mb-2 ${
+                className={`rounded-lg px-3 py-2 mr-2 ${
                   selectedCategories.includes(category)
                     ? 'bg-persian-800'
                     : 'bg-saffron-100'
@@ -93,7 +97,7 @@ export default function ExploreScreen() {
                 </View>
               </View>
             ))}
-          </View>
+          </ScrollView>
         </View>
 
         <View className="flex-1 bg-white rounded-xl p-4 shadow-sm">
