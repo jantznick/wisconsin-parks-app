@@ -1,120 +1,78 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { Callout, Marker } from 'react-native-maps';
+import { useFavorites } from '../contexts/FavoritesContext';
+import { Park } from '../data/parks';
 
 interface ParkMarkerProps {
-  park: {
-    id: string;
-    name: string;
-    coordinate: {
-      latitude: number;
-      longitude: number;
-    };
-    description?: string;
-    activities?: string[];
-  };
+  park: Park;
+  onPress?: () => void;
 }
 
-export default function ParkMarker({ park }: ParkMarkerProps) {
+export default function ParkMarker({ park, onPress }: ParkMarkerProps) {
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favorite = isFavorite(park.id);
+
+  const handleFavoritePress = () => {
+    console.log('Favorite button pressed for park:', park.id);
+    toggleFavorite(park.id);
+  };
+
+  const renderCallout = () => (
+    <TouchableHighlight
+      activeOpacity={1} 
+      onPress={(e) => {
+        // e.stopPropagation();
+        console.log('Callout pressed');
+      }}
+    >
+      <View className="w-[200px] p-3 bg-white rounded-lg shadow-md">
+        <View className="flex-row justify-between items-center mb-1">
+          <Text className="text-base font-bold text-charcoal-900 flex-1 mr-2">{park.name}</Text>
+          <TouchableOpacity
+            onPress={(e) => {
+              // e.stopPropagation();
+              console.log('Heart button pressed');
+              handleFavoritePress();
+            }}
+            className="p-2 -m-2"
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name={favorite ? "heart" : "heart-outline"}
+              size={24}
+              color={favorite ? "#FF3B30" : "#8E8E93"}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text className="text-sm text-charcoal-600 mb-2" numberOfLines={2}>
+          {park.description}
+        </Text>
+        <View className="flex-row flex-wrap gap-1">
+          {park.activities?.map((activity, index) => (
+            <View key={index} className="bg-blue-50 px-2 py-1 rounded-xl">
+              <Text className="text-xs text-blue-600">{activity}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+    </TouchableHighlight>
+  );
+
   return (
     <Marker
       coordinate={park.coordinate}
       title={park.name}
+      description={park.description}
+      onPress={onPress}
     >
-      <View style={styles.markerContainer}>
-        <View style={styles.marker}>
-          <Text style={styles.markerText}>🌲</Text>
-        </View>
+      <View className="bg-white p-2 rounded-full border-2 border-blue-500 shadow-md">
+        <Text className="text-xl">🌲</Text>
       </View>
       <Callout tooltip>
-        <View style={styles.calloutContainer}>
-          <Text style={styles.calloutTitle}>{park.name}</Text>
-          <View style={styles.divider} />
-          <Text style={styles.calloutDescription}>
-            {park.description || 'Wisconsin State Park'}
-          </Text>
-          {park.activities && (
-            <View style={styles.activitiesContainer}>
-              {park.activities.map((activity, index) => (
-                <View key={index} style={styles.activityTag}>
-                  <Text style={styles.activityText}>{activity}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-        </View>
+        {renderCallout()}
       </Callout>
     </Marker>
   );
-}
-
-const styles = StyleSheet.create({
-  markerContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  marker: {
-    backgroundColor: '#2a9d8f', // persian-800
-    padding: 8,
-    borderRadius: 20,
-    borderWidth: 2,
-    borderColor: 'white',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  markerText: {
-    fontSize: 16,
-  },
-  calloutContainer: {
-    width: 200,
-    padding: 12,
-    backgroundColor: 'white',
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  calloutTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#264653', // charcoal-900
-    marginBottom: 4,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: '#e9c46a', // saffron
-    marginVertical: 8,
-  },
-  calloutDescription: {
-    fontSize: 14,
-    color: '#2a9d8f', // persian-800
-    marginBottom: 8,
-  },
-  activitiesContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 4,
-  },
-  activityTag: {
-    backgroundColor: '#f4a261', // sandy
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  activityText: {
-    fontSize: 12,
-    color: 'white',
-    fontWeight: '500',
-  },
-}); 
+} 

@@ -1,6 +1,6 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import MapView from 'react-native-maps';
+import React, { useRef } from 'react';
+import { View } from 'react-native';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Park } from '../data/parks';
 import ParkMarker from './ParkMarker';
 
@@ -18,14 +18,33 @@ const INITIAL_REGION = {
 };
 
 interface WisconsinMapProps {
-  parks: Park[];
+  parks?: Park[];
 }
 
 export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
+  const mapRef = useRef<MapView>(null);
+
+  const handleMarkerPress = (park: Park) => {
+    if (mapRef.current) {
+      // Calculate the new latitude to position the marker 25% down from the top
+      // We do this by adjusting the latitude based on the current delta
+      const newLatitude = park.coordinate.latitude + (INITIAL_REGION.latitudeDelta * 0.25);
+      
+      mapRef.current.animateToRegion({
+        latitude: newLatitude,
+        longitude: park.coordinate.longitude,
+        latitudeDelta: INITIAL_REGION.latitudeDelta,
+        longitudeDelta: INITIAL_REGION.longitudeDelta,
+      }, 500);
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <View className="flex-1">
       <MapView
-        style={styles.map}
+        ref={mapRef}
+        provider={PROVIDER_GOOGLE}
+        className="flex-1"
         initialRegion={INITIAL_REGION}
         showsUserLocation
         showsCompass
@@ -33,21 +52,13 @@ export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
         showsMyLocationButton
       >
         {parks.map((park) => (
-          <ParkMarker key={park.id} park={park} />
+          <ParkMarker
+            key={park.id}
+            park={park}
+            onPress={() => handleMarkerPress(park)}
+          />
         ))}
       </MapView>
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    overflow: 'hidden',
-    borderRadius: 12,
-  },
-  map: {
-    width: '100%',
-    height: '100%',
-  },
-}); 
+} 
