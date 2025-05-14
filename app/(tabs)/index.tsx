@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { FlatList, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomHeader from '../../components/CustomHeader'; // Import the new header
 import FavoritesList from '../../components/FavoritesList';
@@ -43,7 +43,10 @@ export default function HomeScreen() {
   const renderSearchResultItem = ({ item }: { item: typeof PARKS[0] }) => (
     <TouchableOpacity 
       className="px-4 py-3 border-b border-charcoal-200 dark:border-charcoal-700"
-      onPress={() => router.push(`/park/${item.id}`)}
+      onPress={() => {
+        router.push(`/park/${item.id}`);
+        setSearchQuery(''); // Clear search query on selection
+      }}
     >
       <Text className="text-charcoal-800 dark:text-charcoal-100 text-base font-semibold">{item.name}</Text>
     </TouchableOpacity>
@@ -78,6 +81,11 @@ export default function HomeScreen() {
                 onChangeText={setSearchQuery}
                 className="flex-1 ml-2 text-charcoal-800 dark:text-charcoal-100 text-base"
               />
+              {searchQuery.length > 0 && (
+                <Pressable onPress={() => setSearchQuery('')} className="p-1 ml-1">
+                  <Ionicons name="close-circle" size={20} color={searchIconColor} />
+                </Pressable>
+              )}
             </View>
           </View>
 
