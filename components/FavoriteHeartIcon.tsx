@@ -18,7 +18,6 @@ const getColor = (colorName: string) => {
 interface FavoriteHeartIconProps {
   parkId: string;
   size?: number;
-  // We can add other style props if needed later
 }
 
 export default function FavoriteHeartIcon({ parkId, size = 24 }: FavoriteHeartIconProps) {
@@ -48,7 +47,6 @@ export default function FavoriteHeartIcon({ parkId, size = 24 }: FavoriteHeartIc
 
   const handlePress = async () => {
     await toggleFavorite(parkId);
-    // Animation is handled by the useEffect watching 'favorite'
   };
 
   const iconColor = favorite
@@ -56,7 +54,7 @@ export default function FavoriteHeartIcon({ parkId, size = 24 }: FavoriteHeartIc
     : getColor(effectiveTheme === 'dark' ? 'charcoal-400' : 'charcoal-600');
 
   return (
-    <Pressable onPress={handlePress} className="p-1"> {/* Added some padding for easier press */}
+    <Pressable onPress={handlePress} className="p-1">
       <Animated.View style={[animatedHeartStyle]}>
         <Ionicons
           name={favorite ? "heart" : "heart-outline"}

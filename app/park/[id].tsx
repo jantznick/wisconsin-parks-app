@@ -536,34 +536,44 @@ export default function ParkDetailsScreen() {
 
                   <View className="border-t border-gray-200 dark:border-charcoal-700 pt-3">
                     {selectedDetailedForecast.probabilityOfPrecipitation && selectedDetailedForecast.probabilityOfPrecipitation.value !== null && (
-                      <Text className="text-sm text-charcoal-700 dark:text-charcoal-300 mb-1">
-                        <Ionicons name="umbrella-outline" size={16} style={{ marginRight: 4 }} /> 
-                        Precipitation: {selectedDetailedForecast.probabilityOfPrecipitation.value}%
-                      </Text>
+                      <View className="flex-row items-center mb-1">
+                        <Ionicons name="umbrella-outline" size={16} color={getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-700')} style={{ marginRight: 6 }} /> 
+                        <Text className="text-sm text-charcoal-700 dark:text-charcoal-300">
+                          Precipitation: {selectedDetailedForecast.probabilityOfPrecipitation.value}%
+                        </Text>
+                      </View>
                     )}
                     {selectedDetailedForecast.windSpeed && (
-                      <Text className="text-sm text-charcoal-700 dark:text-charcoal-300 mb-1">
-                        <Ionicons name="flag-outline" size={16} style={{ marginRight: 4 }} /> 
-                        Wind: {selectedDetailedForecast.windSpeed} {selectedDetailedForecast.windDirection || ''}
-                      </Text>
+                      <View className="flex-row items-center mb-1">
+                        <Ionicons name="flag-outline" size={16} color={getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-700')} style={{ marginRight: 6 }} /> 
+                        <Text className="text-sm text-charcoal-700 dark:text-charcoal-300">
+                          Wind: {selectedDetailedForecast.windSpeed} {selectedDetailedForecast.windDirection || ''}
+                        </Text>
+                      </View>
                     )}
                     {selectedDetailedForecast.relativeHumidity && selectedDetailedForecast.relativeHumidity.value !== null && (
-                      <Text className="text-sm text-charcoal-700 dark:text-charcoal-300 mb-1">
-                        <Ionicons name="water-outline" size={16} style={{ marginRight: 4 }} /> 
-                        Humidity: {selectedDetailedForecast.relativeHumidity.value}%
-                      </Text>
+                       <View className="flex-row items-center mb-1">
+                        <Ionicons name="water-outline" size={16} color={getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-700')} style={{ marginRight: 6 }} /> 
+                        <Text className="text-sm text-charcoal-700 dark:text-charcoal-300">
+                          Humidity: {selectedDetailedForecast.relativeHumidity.value}%
+                        </Text>
+                      </View>
                     )}
                     {selectedDetailedForecast.dewpoint && selectedDetailedForecast.dewpoint.value !== null && (
-                      <Text className="text-sm text-charcoal-700 dark:text-charcoal-300 mb-1">
-                        <Ionicons name="thermometer-outline" size={16} style={{ marginRight: 4 }} />
-                        Dewpoint: {selectedDetailedForecast.dewpoint.value}°{selectedDetailedForecast.temperatureUnit} 
-                      </Text>
+                      <View className="flex-row items-center mb-1">
+                        <Ionicons name="thermometer-outline" size={16} color={getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-700')} style={{ marginRight: 6 }} />
+                        <Text className="text-sm text-charcoal-700 dark:text-charcoal-300">
+                          Dewpoint: {selectedDetailedForecast.dewpoint.value}°{selectedDetailedForecast.temperatureUnit} 
+                        </Text>
+                      </View>
                     )}
                     {selectedDetailedForecast.temperatureTrend && (
-                      <Text className="text-sm text-charcoal-700 dark:text-charcoal-300">
-                        <Ionicons name={selectedDetailedForecast.temperatureTrend === 'falling' ? "arrow-down-outline" : "arrow-up-outline"} size={16} style={{ marginRight: 4 }} /> 
-                        Temperature is {selectedDetailedForecast.temperatureTrend}
-                      </Text>
+                      <View className="flex-row items-center">
+                        <Ionicons name={selectedDetailedForecast.temperatureTrend === 'falling' ? "arrow-down-outline" : "arrow-up-outline"} size={16} color={getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-700')} style={{ marginRight: 6 }} /> 
+                        <Text className="text-sm text-charcoal-700 dark:text-charcoal-300">
+                          Temperature is {selectedDetailedForecast.temperatureTrend}
+                        </Text>
+                      </View>
                     )}
                   </View>
                 </ScrollView>{/* End of ScrollView for modal content */}
