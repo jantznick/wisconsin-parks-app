@@ -1,0 +1,107 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../contexts/ThemeContext';
+import tailwindConfig from '../tailwind.config.js';
+
+// Helper to get color from Tailwind config
+const getColor = (colorName: string) => {
+  const [themeShade, ...rest] = colorName.split('-');
+  const shade = rest.join('-');
+  // @ts-ignore
+  return tailwindConfig.theme.extend.colors[themeShade]?.[shade] || '#000000';
+};
+
+interface ThemeOptionProps {
+  title: string;
+  currentThemeSelection: string | null | undefined;
+  buttonRepresents: 'light' | 'dark' | 'system';
+  onPress: () => void;
+  iconName: React.ComponentProps<typeof Ionicons>['name'];
+  effectiveTheme: string;
+}
+
+const ThemeOptionButton = ({ title, currentThemeSelection, buttonRepresents, onPress, iconName, effectiveTheme }: ThemeOptionProps) => {
+  const isSelected = (buttonRepresents === 'system' && currentThemeSelection === null) || 
+                     (buttonRepresents !== 'system' && currentThemeSelection === buttonRepresents);
+  
+  const bgColor = isSelected 
+    ? (effectiveTheme === 'dark' ? 'bg-persian-600' : 'bg-persian-500') 
+    : (effectiveTheme === 'dark' ? 'bg-charcoal-700' : 'bg-charcoal-100');
+  const textColor = isSelected 
+    ? (effectiveTheme === 'dark' ? 'text-white' : 'text-white') 
+    : (effectiveTheme === 'dark' ? 'text-charcoal-200' : 'text-charcoal-700');
+  const iconColor = isSelected 
+    ? (getColor(effectiveTheme === 'dark' ? 'persian-100' : 'persian-50')) 
+    : (getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600'));
+
+  return (
+    <TouchableOpacity 
+      onPress={onPress} 
+      className={`flex-row items-center p-4 rounded-lg shadow-sm mb-3 ${bgColor}`}
+    >
+      <Ionicons name={iconName} size={24} color={iconColor} />
+      <Text className={`ml-4 text-lg font-medium ${textColor}`}>{title}</Text>
+      {isSelected && (
+        <Ionicons name="checkmark-circle" size={24} color={getColor(effectiveTheme === 'dark' ? 'persian-50' : 'persian-100')} className="ml-auto" />
+      )}
+    </TouchableOpacity>
+  );
+};
+
+export default function SettingsScreen() {
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const { theme, setTheme, effectiveTheme } = useTheme();
+
+  const headerCloseIconColor = effectiveTheme === 'dark' ? getColor('persian-100') : getColor('charcoal-50');
+
+  return (
+    <View 
+      className="flex-1 bg-charcoal-50 dark:bg-charcoal-950"
+    >
+      {/* Header */}
+      <View 
+        className="flex-row items-center justify-between px-4 py-3 bg-persian-800 dark:bg-charcoal-800"
+        style={{ paddingTop: insets.top }}
+      >
+        <Text className="text-xl font-bold text-white dark:text-white">Settings</Text>
+        <Pressable onPress={() => router.back()} className="p-2">
+          <Ionicons name="close" size={28} color={headerCloseIconColor} />
+        </Pressable>
+      </View>
+
+      {/* Content */}
+      <View className="p-6">
+        <Text className="text-lg font-semibold text-charcoal-800 dark:text-charcoal-200 mb-4">Appearance</Text>
+        
+        <ThemeOptionButton 
+          title="Light Mode"
+          currentThemeSelection={theme}
+          buttonRepresents="light"
+          onPress={() => setTheme('light')}
+          iconName="sunny-outline"
+          effectiveTheme={effectiveTheme}
+        />
+        <ThemeOptionButton 
+          title="Dark Mode"
+          currentThemeSelection={theme}
+          buttonRepresents="dark"
+          onPress={() => setTheme('dark')}
+          iconName="moon-outline"
+          effectiveTheme={effectiveTheme}
+        />
+        <ThemeOptionButton 
+          title="System Default"
+          currentThemeSelection={theme}
+          buttonRepresents="system"
+          onPress={() => setTheme('system')}
+          iconName="cog-outline"
+          effectiveTheme={effectiveTheme}
+        />
+      </View>
+    </View>
+  );
+} 

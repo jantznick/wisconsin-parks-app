@@ -25,6 +25,12 @@ function AppNavigation() {
             presentation: 'modal',
           }} 
         />
+        <Stack.Screen 
+          name="settings"
+          options={{ 
+            headerShown: false
+          }} 
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />

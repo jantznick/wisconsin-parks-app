@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -19,13 +20,8 @@ interface CustomHeaderProps {
 
 export default function CustomHeader({ title, subtitle }: CustomHeaderProps) {
   const insets = useSafeAreaInsets();
-  const { theme, setTheme, effectiveTheme } = useTheme();
-
-  const toggleTheme = () => {
-    if (theme === 'light') setTheme('dark');
-    else if (theme === 'dark') setTheme('system');
-    else setTheme('light');
-  };
+  const { theme, effectiveTheme } = useTheme();
+  const router = useRouter();
 
   const headerIconColor = effectiveTheme === 'dark' ? getColor('persian-100') : getColor('charcoal-50');
 
@@ -39,9 +35,9 @@ export default function CustomHeader({ title, subtitle }: CustomHeaderProps) {
           <Text className="text-2xl font-bold text-white dark:text-white">{title}</Text>
           <Text className="text-base text-persian-200 dark:text-charcoal-300">{subtitle}</Text>
         </View>
-        <TouchableOpacity onPress={toggleTheme} className="p-2">
+        <TouchableOpacity onPress={() => router.push('/settings')} className="p-2">
           <Ionicons 
-            name={theme === 'system' ? 'cog-outline' : (effectiveTheme === 'dark' ? 'moon' : 'sunny')} 
+            name="settings-outline"
             size={24} 
             color={headerIconColor}
           />
