@@ -72,6 +72,14 @@ export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
 
   const handleMarkerPress = (park: Park) => {
     if (mapRef.current) {
+      // Check for valid coordinates before animating
+      if (typeof park.coordinate?.latitude !== 'number' || 
+          typeof park.coordinate?.longitude !== 'number') {
+        console.warn(`Park "${park.name}" has invalid coordinates, cannot animate to it.`);
+        setSelectedPark(park); // Still select the park to show its details, even if we can't animate
+        return;
+      }
+
       // Use a more focused delta when animating to a marker
       const markerFocusDelta = USER_LOCATION_ZOOM_DELTA; 
       const newLatitude = park.coordinate.latitude + (markerFocusDelta.latitudeDelta * 0.25); // Adjust for marker visibility
@@ -109,13 +117,21 @@ export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
         showsScale
         showsMyLocationButton
       >
-        {parks.map((park) => (
-          <ParkMarker
-            key={park.id}
-            park={park}
-            onPress={() => handleMarkerPress(park)}
-          />
-        ))}
+        {parks.map((park) => {
+          // Check for valid coordinates before rendering ParkMarker
+          if (typeof park.coordinate?.latitude !== 'number' || 
+              typeof park.coordinate?.longitude !== 'number') {
+            console.warn(`Park "${park.name}" (ID: ${park.id}) has missing or invalid coordinates. Not rendering marker.`);
+            return null; // Do not render a marker if coordinates are invalid
+          }
+          return (
+            <ParkMarker
+              key={park.id}
+              park={park}
+              onPress={() => handleMarkerPress(park)}
+            />
+          );
+        })}
       </MapView>
     </View>
   );

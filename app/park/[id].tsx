@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Linking, Modal, Pressable, ScrollView, Share, Text, View } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AnimatedPressable from '../../components/AnimatedPressable';
@@ -94,6 +94,25 @@ export default function ParkDetailsScreen() {
 
   const park = PARKS.find(p => p.id === id);
 
+  // Determine initial map region
+  const parkCoordinateIsValid = park && 
+    typeof park.coordinate?.latitude === 'number' && 
+    typeof park.coordinate?.longitude === 'number';
+
+  const initialRegion: Region = parkCoordinateIsValid
+  ? {
+      latitude: park.coordinate.latitude as number, // Cast, check is done by parkCoordinateIsValid
+      longitude: park.coordinate.longitude as number, // Cast, check is done by parkCoordinateIsValid
+      latitudeDelta: 0.0922, // Standard delta
+      longitudeDelta: 0.0421,
+    }
+  : { // Fallback to Wisconsin center or a predefined default
+      latitude: 44.5,
+      longitude: -89.5,
+      latitudeDelta: 5,
+      longitudeDelta: 5,
+    };
+
   // Weather state
   const [weatherForecast, setWeatherForecast] = useState<ForecastPeriod | null>(null);
   const [loadingWeather, setLoadingWeather] = useState<boolean>(true);
@@ -146,6 +165,15 @@ export default function ParkDetailsScreen() {
   useEffect(() => {
     if (park) {
       const fetchWeather = async () => {
+        // Guard against missing coordinates for weather API call
+        if (!parkCoordinateIsValid) { // Use the pre-calculated boolean
+          setLoadingWeather(false);
+          setWeatherError("Park location coordinates are not available to fetch weather.");
+          setWeatherForecast(null);
+          setDailySummaries([]);
+          return;
+        }
+
         setLoadingWeather(true);
         setWeatherError(null);
         setWeatherForecast(null);
@@ -337,13 +365,6 @@ export default function ParkDetailsScreen() {
     }
   };
 
-  const initialRegion = {
-    latitude: park.coordinate.latitude,
-    longitude: park.coordinate.longitude,
-    latitudeDelta: 0.05,
-    longitudeDelta: 0.05,
-  };
-
   const openDirections = () => {
     const url = `https://www.google.com/maps/dir/?api=1&destination=${park.coordinate.latitude},${park.coordinate.longitude}&travelmode=driving`;
     Linking.openURL(url);
@@ -406,68 +427,79 @@ export default function ParkDetailsScreen() {
                 showsMyLocationButton
                 // mapStyle prop can be used for dark mode Google Maps if needed
               >
-                <Marker coordinate={park.coordinate} title={park.name}>
-                  <ParkMarker park={park} />
-                </Marker>
+                {/* Conditionally render Marker only if coordinates are valid */}
+                {parkCoordinateIsValid && park && (
+                  <Marker 
+                    coordinate={{ 
+                      latitude: park.coordinate.latitude as number, // Cast, check is done by parkCoordinateIsValid
+                      longitude: park.coordinate.longitude as number // Cast, check is done by parkCoordinateIsValid
+                    }} 
+                    title={park.name}
+                  >
+                    <ParkMarker park={park} />
+                  </Marker>
+                )}
               </MapView>
             </View>
           </View>
         </View>
 
-        {/* Weather Section */}
-        <View className="p-6">
-          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-blue-500 dark:border-blue-400">
-            <Text className="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-3">Current Weather</Text>
-            {loadingWeather && (
-              <View className="flex-row items-center justify-center py-4">
-                <ActivityIndicator size="large" color={getColor(effectiveTheme === 'dark' ? 'blue-400' : 'blue-600')} />
-                <Text className="ml-2 text-charcoal-700 dark:text-charcoal-300">Loading weather...</Text>
-              </View>
-            )}
-            {weatherError && (
-              <View className="py-4 items-center">
-                <Ionicons name="alert-circle-outline" size={30} color={getColor(effectiveTheme === 'dark' ? 'red-400' : 'red-600')} />
-                <Text className="text-red-600 dark:text-red-400 mt-2 text-center">Error: {weatherError}</Text>
-                <Text className="text-xs text-charcoal-500 dark:text-charcoal-400 mt-1 text-center">
-                  The weather service might be temporarily unavailable or the location data is invalid.
-                </Text>
-              </View>
-            )}
-            {!loadingWeather && weatherForecast && (
-              <View>
-                <View className="flex-row items-center mb-2">
-                  {/* We might need a way to map weatherForecast.icon to an actual image or icon component */}
-                  {/* For now, just text. Consider using an Image component if you have weather icons */}
-                  {/* <Image source={{ uri: weatherForecast.icon }} className="w-12 h-12 mr-3" /> */}
-                  <Text className="text-4xl font-bold text-charcoal-900 dark:text-charcoal-100">
-                    {weatherForecast.temperature}°{weatherForecast.temperatureUnit}
-                  </Text>
-                  <View className="ml-3 flex-1">
-                    <Text className="text-lg font-medium text-charcoal-800 dark:text-charcoal-200">{weatherForecast.shortForecast}</Text>
-                    <Text className="text-sm text-charcoal-600 dark:text-charcoal-400">
-                      Wind: {weatherForecast.windSpeed} {weatherForecast.windDirection}
-                    </Text>
-                  </View>
+        {/* Weather Section - Conditionally render if coordinates are valid */}
+        {parkCoordinateIsValid && (
+          <View className="p-6">
+            <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-blue-500 dark:border-blue-400">
+              <Text className="text-xl font-semibold text-blue-600 dark:text-blue-400 mb-3">Current Weather</Text>
+              {loadingWeather && (
+                <View className="flex-row items-center justify-center py-4">
+                  <ActivityIndicator size="large" color={getColor(effectiveTheme === 'dark' ? 'blue-400' : 'blue-600')} />
+                  <Text className="ml-2 text-charcoal-700 dark:text-charcoal-300">Loading weather...</Text>
                 </View>
-                <Text className="text-sm text-charcoal-700 dark:text-charcoal-300 leading-relaxed">
-                  {weatherForecast.detailedForecast}
-                </Text>
-                 {/* Display more details if needed, e.g., precipitation */}
-                 {weatherForecast.probabilityOfPrecipitation && weatherForecast.probabilityOfPrecipitation.value !== null && (
-                    <Text className="text-sm text-charcoal-600 dark:text-charcoal-400 mt-1">
-                        Precipitation: {weatherForecast.probabilityOfPrecipitation.value}%
+              )}
+              {weatherError && (
+                <View className="py-4 items-center">
+                  <Ionicons name="alert-circle-outline" size={30} color={getColor(effectiveTheme === 'dark' ? 'red-400' : 'red-600')} />
+                  <Text className="text-red-600 dark:text-red-400 mt-2 text-center">Error: {weatherError}</Text>
+                  <Text className="text-xs text-charcoal-500 dark:text-charcoal-400 mt-1 text-center">
+                    The weather service might be temporarily unavailable or the location data is invalid.
+                  </Text>
+                </View>
+              )}
+              {!loadingWeather && weatherForecast && (
+                <View>
+                  <View className="flex-row items-center mb-2">
+                    {/* We might need a way to map weatherForecast.icon to an actual image or icon component */}
+                    {/* For now, just text. Consider using an Image component if you have weather icons */}
+                    {/* <Image source={{ uri: weatherForecast.icon }} className="w-12 h-12 mr-3" /> */}
+                    <Text className="text-4xl font-bold text-charcoal-900 dark:text-charcoal-100">
+                      {weatherForecast.temperature}°{weatherForecast.temperatureUnit}
                     </Text>
-                )}
-              </View>
-            )}
-            {!loadingWeather && !weatherForecast && !weatherError && (
-                <Text className="text-charcoal-700 dark:text-charcoal-300 py-4 text-center">Weather data not available.</Text>
-            )}
+                    <View className="ml-3 flex-1">
+                      <Text className="text-lg font-medium text-charcoal-800 dark:text-charcoal-200">{weatherForecast.shortForecast}</Text>
+                      <Text className="text-sm text-charcoal-600 dark:text-charcoal-400">
+                        Wind: {weatherForecast.windSpeed} {weatherForecast.windDirection}
+                      </Text>
+                    </View>
+                  </View>
+                  <Text className="text-sm text-charcoal-700 dark:text-charcoal-300 leading-relaxed">
+                    {weatherForecast.detailedForecast}
+                  </Text>
+                   {/* Display more details if needed, e.g., precipitation */}
+                   {weatherForecast.probabilityOfPrecipitation && weatherForecast.probabilityOfPrecipitation.value !== null && (
+                      <Text className="text-sm text-charcoal-600 dark:text-charcoal-400 mt-1">
+                          Precipitation: {weatherForecast.probabilityOfPrecipitation.value}%
+                      </Text>
+                  )}
+                </View>
+              )}
+              {!loadingWeather && !weatherForecast && !weatherError && (
+                  <Text className="text-charcoal-700 dark:text-charcoal-300 py-4 text-center">Weather data not available.</Text>
+              )}
+            </View>
           </View>
-        </View>
+        )}
 
-        {/* Extended Forecast Section */}
-        {dailySummaries.length > 0 && (
+        {/* Extended Forecast Section - Conditionally render if coordinates are valid */}
+        {parkCoordinateIsValid && dailySummaries.length > 0 && (
           <View className="p-6 pt-0 pb-0">
             <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-emerald-500 dark:border-emerald-400">
               <Text className="text-xl font-semibold text-emerald-600 dark:text-emerald-400 mb-3">Upcoming Forecast</Text>
@@ -492,7 +524,7 @@ export default function ParkDetailsScreen() {
           </View>
         )}
 
-        {/* Detailed Forecast Modal */}
+        {/* Detailed Forecast Modal - Already implicitly conditional on dailySummaries/selectedDetailedForecast */}
         {selectedDetailedForecast && (
           <Modal
             animationType="fade"
