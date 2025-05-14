@@ -7,6 +7,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } fro
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AnimatedPressable from '../../components/AnimatedPressable';
 import FavoriteHeartIcon from '../../components/FavoriteHeartIcon';
+import ParkMarker from '../../components/ParkMarker';
 import { useFavorites } from '../../contexts/FavoritesContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { PARKS } from '../../data/parks';
@@ -351,24 +352,29 @@ export default function ParkDetailsScreen() {
   // Define colors for props not directly stylable with Tailwind dark: prefix
   const shareIconColor = getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600');
   
-  const mapMarkerBorderColor = effectiveTheme === 'dark' ? getColor('saffron-400') : getColor('saffron-600');
-  // Directions button might need specific color if not using Tailwind classes for all states
-
   return (
     <View className="flex-1 bg-charcoal-50 dark:bg-charcoal-950">
       {/* Header */}
-      <View className="bg-persian-800 dark:bg-charcoal-800 px-6 pb-3" style={{ paddingTop: insets.top + 8 }}>
+      <View 
+        className="bg-persian-800 dark:bg-charcoal-800 px-4 pb-3 flex-row items-center justify-between"
+        style={{ paddingTop: insets.top + 8 }}
+      >
         <AnimatedPressable
           onPress={() => router.back()}
-          className="p-2 absolute left-4"
-          style={{ top: insets.top + 8}}
+          className="p-2" // Removed absolute, left-4. Positioning via flex parent.
+          // style={{ top: insets.top + 8}} // Removed explicit top style
         >
           <Ionicons name="arrow-back" size={24} color={getColor(effectiveTheme === 'dark' ? 'persian-100' : 'charcoal-50')} />
         </AnimatedPressable>
-        <View className="items-center justify-center">
-          <Text className="text-2xl font-bold text-white dark:text-white">{park.name}</Text>
+        
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-2xl font-bold text-white dark:text-white text-center">{park.name}</Text>
           <Text className="text-base text-persian-200 dark:text-charcoal-300 mt-1">State Park</Text>
         </View>
+        
+        {/* Spacer view to balance the back button for title centering */}
+        <View className="w-10 h-10" /> {/* Width approx. same as back button area (p-2 + icon) */} 
+
       </View>
 
       <ScrollView 
@@ -401,9 +407,7 @@ export default function ParkDetailsScreen() {
                 // mapStyle prop can be used for dark mode Google Maps if needed
               >
                 <Marker coordinate={park.coordinate} title={park.name}>
-                  <View className="bg-white dark:bg-charcoal-800 p-2 rounded-full border-2 shadow-md" style={{ borderColor: mapMarkerBorderColor }}>
-                    <Text className="text-xl">🌲</Text>{/* Emoji, color won't change with theme */}
-                  </View>
+                  <ParkMarker park={park} />
                 </Marker>
               </MapView>
             </View>
