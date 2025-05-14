@@ -25,6 +25,10 @@ interface FavoriteCardProps {
   onShare: (park: Park) => void;
 }
 
+interface FavoritesListProps {
+  scrollEnabled?: boolean;
+}
+
 const AnimatedFavoriteCard = ({ park, index, onPress, onShare }: FavoriteCardProps) => {
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(50);
@@ -88,7 +92,7 @@ const AnimatedFavoriteCard = ({ park, index, onPress, onShare }: FavoriteCardPro
   );
 };
 
-export default function FavoritesList() {
+export default function FavoritesList({ scrollEnabled = true }: FavoritesListProps) {
   const { favorites } = useFavorites();
   const router = useRouter();
   const { effectiveTheme } = useTheme();
@@ -148,6 +152,7 @@ export default function FavoritesList() {
       keyExtractor={item => item.id}
       contentContainerStyle={{ padding: 12 }}
       className="flex-1"
+      scrollEnabled={scrollEnabled}
     />
   );
 } 

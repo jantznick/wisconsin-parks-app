@@ -414,28 +414,6 @@ export default function ParkDetailsScreen() {
           </View>
         </View>
 
-        {/* Content Sections */}
-        <View className="p-6">
-          {/* About */}
-          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-persian-700 dark:border-persian-500">
-            <View className="flex-row justify-between items-center mb-2">
-              <Text className="text-xl font-semibold text-persian-700 dark:text-persian-400">About</Text>
-              <View className="flex-row items-center">
-                <AnimatedPressable onPress={handleShare} className="p-2 ml-2">
-                  <Ionicons name="share-outline" size={26} color={shareIconColor} />
-                </AnimatedPressable>
-                {park && <FavoriteHeartIcon parkId={park.id} size={28} />}
-              </View>
-            </View>
-            <Text className="text-base text-charcoal-700 dark:text-charcoal-300 leading-relaxed">{park.description}</Text>
-          </View>
-
-          {/* Hours */}
-          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-sandy-600 dark:border-sandy-400">
-            <Text className="text-xl font-semibold text-sandy-600 dark:text-sandy-400 mb-2">Hours</Text>
-            <Text className="text-charcoal-700 dark:text-charcoal-300">{park.hours.open} – {park.hours.close}</Text>
-          </View>
-
         {/* Weather Section */}
         <View className="p-6">
           <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-blue-500 dark:border-blue-400">
@@ -610,6 +588,28 @@ export default function ParkDetailsScreen() {
             </View>
           </Modal>
         )}
+
+        {/* Content Sections */}
+        <View className="p-6">
+          {/* About */}
+          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-persian-700 dark:border-persian-500">
+            <View className="flex-row justify-between items-center mb-2">
+              <Text className="text-xl font-semibold text-persian-700 dark:text-persian-400">About</Text>
+              <View className="flex-row items-center">
+                <AnimatedPressable onPress={handleShare} className="p-2 ml-2">
+                  <Ionicons name="share-outline" size={26} color={shareIconColor} />
+                </AnimatedPressable>
+                {park && <FavoriteHeartIcon parkId={park.id} size={28} />}
+              </View>
+            </View>
+            <Text className="text-base text-charcoal-700 dark:text-charcoal-300 leading-relaxed">{park.description}</Text>
+          </View>
+
+          {/* Hours */}
+          <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-sandy-600 dark:border-sandy-400">
+            <Text className="text-xl font-semibold text-sandy-600 dark:text-sandy-400 mb-2">Hours</Text>
+            <Text className="text-charcoal-700 dark:text-charcoal-300">{park.hours.open} – {park.hours.close}</Text>
+          </View>
 
           {/* Activities */}
           <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-burnt-600 dark:border-burnt-400">

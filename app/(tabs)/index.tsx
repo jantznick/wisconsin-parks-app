@@ -126,7 +126,7 @@ export default function HomeScreen() {
           <View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-burnt-600 dark:border-burnt-400">
             <Text className="text-xl font-semibold text-burnt-600 dark:text-burnt-400 mb-4">My Favorites</Text>
             <View className="min-h-[200]">
-              <FavoritesList />
+              <FavoritesList scrollEnabled={false} />
             </View>
           </View>
         </View>
