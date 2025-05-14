@@ -1,3 +1,4 @@
+import WisconsinMap from '@/components/WisconsinMap';
 import { Text, View } from 'react-native';
 
 export default function ExploreScreen() {
@@ -8,7 +9,7 @@ export default function ExploreScreen() {
         <Text className="text-lg text-persian-100 mt-2">Find Your Next Adventure</Text>
       </View>
 
-      <View className="p-6">
+      <View className="flex-1 p-6 pb-24">
         <View className="bg-white rounded-xl p-4 shadow-sm mb-4">
           <Text className="text-xl font-semibold text-charcoal-900">Categories</Text>
           <View className="flex-row flex-wrap mt-2">
@@ -24,9 +25,12 @@ export default function ExploreScreen() {
           </View>
         </View>
 
-        <View className="bg-white rounded-xl p-4 shadow-sm">
+        <View className="flex-1 bg-white rounded-xl p-4 shadow-sm">
           <Text className="text-xl font-semibold text-charcoal-900">Nearby Parks</Text>
-          <Text className="text-persian-700 mt-2">Discover parks in your area</Text>
+          <Text className="text-persian-700 mt-2 mb-4">Discover parks in your area</Text>
+          <View className="flex-1">
+            <WisconsinMap />
+          </View>
         </View>
       </View>
     </View>
