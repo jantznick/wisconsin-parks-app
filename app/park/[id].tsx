@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Linking, Modal, Pressable, ScrollView, Share, Text, View } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AnimatedPressable from '../../components/AnimatedPressable';
@@ -427,17 +427,11 @@ export default function ParkDetailsScreen() {
                 showsMyLocationButton
                 // mapStyle prop can be used for dark mode Google Maps if needed
               >
-                {/* Conditionally render Marker only if coordinates are valid */}
+                {/* Conditionally render ParkMarker directly */}
                 {parkCoordinateIsValid && park && (
-                  <Marker 
-                    coordinate={{ 
-                      latitude: park.coordinate.latitude as number, // Cast, check is done by parkCoordinateIsValid
-                      longitude: park.coordinate.longitude as number // Cast, check is done by parkCoordinateIsValid
-                    }} 
-                    title={park.name}
-                  >
-                    <ParkMarker park={park} />
-                  </Marker>
+                  <ParkMarker 
+                    park={park}
+                  />
                 )}
               </MapView>
             </View>
