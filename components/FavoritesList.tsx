@@ -25,9 +25,28 @@ export default function FavoritesList() {
 
   if (favoriteParks.length === 0) {
     return (
-      <View className="flex-1 items-center justify-center p-5">
-        <Text className="text-lg font-bold text-charcoal-900 dark:text-charcoal-100 mb-2">No favorite parks yet</Text>
-        <Text className="text-sm text-charcoal-600 dark:text-charcoal-300 text-center">Tap the heart icon on a park to add it to favorites</Text>
+      <View className="flex-1 items-center justify-center p-8">
+        <Ionicons 
+          name="sad-outline"
+          size={64} 
+          color={getColor(effectiveTheme === 'dark' ? 'charcoal-500' : 'charcoal-400')}
+          style={{ marginBottom: 16 }} 
+        />
+        <Text className="text-xl font-bold text-charcoal-900 dark:text-charcoal-100 mb-2 text-center">
+          No Favorite Parks Yet
+        </Text>
+        <Text className="text-base text-charcoal-600 dark:text-charcoal-400 text-center mb-6">
+          Start exploring to find and add your favorite parks!
+        </Text>
+        <TouchableOpacity
+          onPress={() => router.push('/(tabs)/explore')}
+          className="bg-persian-700 dark:bg-persian-600 px-6 py-3 rounded-lg shadow-md"
+          activeOpacity={0.8}
+        >
+          <Text className="text-white dark:text-persian-100 text-lg font-semibold">
+            Explore Parks
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
