@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo, useState } from 'react';
-import { Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import CustomHeader from '../../components/CustomHeader'; // Import the new header
 import WisconsinMap from '../../components/WisconsinMap';
 import { useTheme } from '../../contexts/ThemeContext';
 import { PARKS } from '../../data/parks';
@@ -19,7 +20,7 @@ const INITIAL_PARKS = PARKS || [];
 
 export default function ExploreScreen() {
 	const insets = useSafeAreaInsets();
-	const { theme, setTheme, effectiveTheme } = useTheme();
+	const { effectiveTheme } = useTheme(); // theme, setTheme are now in CustomHeader
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 	const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
 	const [feeFilter, setFeeFilter] = useState<'any' | 'free' | 'paid'>('any');
@@ -133,33 +134,10 @@ export default function ExploreScreen() {
 
 	const areAnyFiltersActive = selectedCategories.length > 0 || selectedFacilities.length > 0 || feeFilter !== 'any' || dogFriendlyOnly || accessibleOnly;
 
-	const toggleTheme = () => {
-		if (theme === 'light') setTheme('dark');
-		else if (theme === 'dark') setTheme('system');
-		else setTheme('light');
-	};
-
-	// Define colors based on theme for props that don't accept Tailwind classes directly
-	const headerIconColor = effectiveTheme === 'dark' ? getColor('persian-100') : getColor('charcoal-50'); // charcoal-50 is white
-
 	return (
 		<View className="flex-1 bg-charcoal-50 dark:bg-charcoal-950">
-			{/* Sticky Header with Theme Toggle */}
-			<View className="bg-persian-800 dark:bg-charcoal-800 px-6 pb-3" style={{ paddingTop: insets.top + 8 }}>
-				<View className="flex-row justify-between items-center">
-					<View>
-						<Text className="text-2xl font-bold text-white dark:text-white">Explore</Text>
-						<Text className="text-base text-persian-200 dark:text-charcoal-300">Find Your Next Adventure</Text>
-					</View>
-					<TouchableOpacity onPress={toggleTheme} className="p-2">
-						<Ionicons 
-							name={theme === 'system' ? 'cog-outline' : (effectiveTheme === 'dark' ? 'moon' : 'sunny')} 
-							size={24} 
-							color={headerIconColor} // Use themed color
-						/>
-					</TouchableOpacity>
-				</View>
-			</View>
+			{/* Use CustomHeader */}
+			<CustomHeader title="Explore" subtitle="Find Your Next Adventure" />
 
 			{/* Content Wrapper with bottom padding */}
 			<View className="flex-1" style={{ paddingBottom: insets.bottom + 75 }}>
