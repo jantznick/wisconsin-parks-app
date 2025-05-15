@@ -3,7 +3,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { useTheme } from '../contexts/ThemeContext';
-import { Park } from '../data/parks';
+import { ParkMarkerProps } from '../interfaces/ParkMarker.interfaces';
 import tailwindConfig from '../tailwind.config.js';
 
 const getColor = (colorName: string) => {
@@ -13,11 +13,6 @@ const getColor = (colorName: string) => {
 	return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
 };
 
-interface ParkMarkerProps {
-	park: Park;
-	onPress?: () => void;
-}
-
 export default function ParkMarker({ park, onPress }: ParkMarkerProps) {
 	const { effectiveTheme } = useTheme();
 
@@ -25,9 +20,15 @@ export default function ParkMarker({ park, onPress }: ParkMarkerProps) {
 	const markerBorderColor = getColor(effectiveTheme === 'dark' ? 'persian-400' : 'persian-700');
 	const iconColor = getColor(effectiveTheme === 'dark' ? 'persian-100' : 'white');
 
+	// Return null if coordinates are not valid numbers
+	if (typeof park.coordinate?.latitude !== 'number' || typeof park.coordinate?.longitude !== 'number') {
+		console.warn(`ParkMarker: Park "${park.name}" has invalid coordinates. Not rendering marker.`);
+		return null;
+	}
+
 	return (
 		<Marker
-			coordinate={park.coordinate}
+			coordinate={park.coordinate as { latitude: number; longitude: number; }}
 			title={park.name}
 			description={park.description}
 			onPress={onPress}

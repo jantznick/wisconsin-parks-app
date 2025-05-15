@@ -2,15 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useColorScheme as useNativeWindColorScheme } from 'nativewind';
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { useColorScheme as useSystemColorScheme } from 'react-native';
-
-type Theme = 'light' | 'dark' | 'system';
-type EffectiveTheme = 'light' | 'dark';
-
-interface ThemeContextType {
-  theme: Theme;
-  effectiveTheme: EffectiveTheme;
-  setTheme: (theme: Theme) => void;
-}
+import { EffectiveTheme, Theme, ThemeContextType } from '../interfaces/ThemeContext.interfaces';
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 

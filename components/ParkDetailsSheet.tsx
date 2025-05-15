@@ -1,15 +1,10 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Alert, ScrollView, Share, Text, View } from 'react-native';
-import { Park } from '../data/parks';
+import { ParkDetailsSheetProps } from '../interfaces/ParkDetailsSheet.interfaces';
 import { getActivityName } from '../utils/activities';
 import AnimatedPressable from './AnimatedPressable';
 import SharedParkHeader from './SharedParkHeader';
-
-interface ParkDetailsSheetProps {
-  park: Park;
-  onClose: () => void;
-}
 
 export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProps) {
   const router = useRouter();

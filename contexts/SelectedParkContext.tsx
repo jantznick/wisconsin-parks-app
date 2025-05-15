@@ -1,10 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Park } from '../data/parks';
-
-interface SelectedParkContextType {
-  selectedPark: Park | null;
-  setSelectedPark: (park: Park | null) => void;
-}
+import { Park } from '../interfaces/Park.interface';
+import { SelectedParkContextType } from '../interfaces/SelectedParkContext.interfaces';
 
 const SelectedParkContext = createContext<SelectedParkContextType | undefined>(undefined);
 

@@ -3,7 +3,7 @@ import React from 'react';
 import { ImageBackground, Text, View } from 'react-native';
 import { useTheme } from '../contexts/ThemeContext';
 import { parkImageAssets } from '../data/image_assets';
-import { Park } from '../data/parks';
+import { SharedParkHeaderProps } from '../interfaces/SharedParkHeader.interfaces';
 import tailwindConfig from '../tailwind.config.js';
 import AnimatedPressable from './AnimatedPressable';
 import FavoriteHeartIcon from './FavoriteHeartIcon';
@@ -15,15 +15,6 @@ const getColor = (colorName: string) => {
   // @ts-ignore
   return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
 };
-
-interface SharedParkHeaderProps {
-  park: Park | undefined; // Allow undefined for safety, though typically park should exist
-  leftIconName: 'arrow-back' | 'close';
-  onLeftIconPress: () => void;
-  onSharePress: () => void;
-  safeAreaTopInset?: number; // For status bar padding
-  containerClassName?: string; // Allow passing extra classes to the main container
-}
 
 export default function SharedParkHeader({
   park,

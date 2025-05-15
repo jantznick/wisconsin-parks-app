@@ -4,6 +4,7 @@ import React from 'react';
 import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../contexts/ThemeContext';
+import { ThemeOptionProps } from '../interfaces/SettingsScreen.interfaces';
 import tailwindConfig from '../tailwind.config.js';
 
 // Helper to get color from Tailwind config
@@ -13,15 +14,6 @@ const getColor = (colorName: string) => {
   // @ts-ignore
   return tailwindConfig.theme.extend.colors[themeShade]?.[shade] || '#000000';
 };
-
-interface ThemeOptionProps {
-  title: string;
-  currentThemeSelection: string | null | undefined;
-  buttonRepresents: 'light' | 'dark' | 'system';
-  onPress: () => void;
-  iconName: React.ComponentProps<typeof Ionicons>['name'];
-  effectiveTheme: string;
-}
 
 const ThemeOptionButton = ({ title, currentThemeSelection, buttonRepresents, onPress, iconName, effectiveTheme }: ThemeOptionProps) => {
   const isSelected = (buttonRepresents === 'system' && currentThemeSelection === null) || 

@@ -3,7 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import { useSelectedPark } from '../contexts/SelectedParkContext';
-import { Park } from '../data/parks';
+import { Park } from '../interfaces/Park.interface';
+import { WisconsinMapProps } from '../interfaces/WisconsinMap.interfaces';
 import ParkMarker from './ParkMarker';
 
 // Wisconsin's approximate center coordinates
@@ -24,10 +25,6 @@ const USER_LOCATION_ZOOM_DELTA = {
   latitudeDelta: 0.25, // Adjusted from 0.1
   longitudeDelta: 0.25, // Adjusted from 0.1
 };
-
-interface WisconsinMapProps {
-  parks?: Park[];
-}
 
 export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
   const mapRef = useRef<MapView>(null);
@@ -75,7 +72,7 @@ export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
       // Check for valid coordinates before animating
       if (typeof park.coordinate?.latitude !== 'number' || 
           typeof park.coordinate?.longitude !== 'number') {
-        console.warn(`Park "${park.name}" has invalid coordinates, cannot animate to it.`);
+        console.warn(`WisconsinMap: Park "${park.name}" has invalid coordinates, cannot animate to it.`);
         setSelectedPark(park); // Still select the park to show its details, even if we can't animate
         return;
       }
@@ -118,12 +115,6 @@ export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
         showsMyLocationButton
       >
         {parks.map((park) => {
-          // Check for valid coordinates before rendering ParkMarker
-          if (typeof park.coordinate?.latitude !== 'number' || 
-              typeof park.coordinate?.longitude !== 'number') {
-            console.warn(`Park "${park.name}" (ID: ${park.id}) has missing or invalid coordinates. Not rendering marker.`);
-            return null; // Do not render a marker if coordinates are invalid
-          }
           return (
           <ParkMarker
             key={park.id}

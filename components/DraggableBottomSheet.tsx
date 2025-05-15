@@ -1,17 +1,17 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
-	Gesture,
-	GestureDetector,
-	GestureHandlerRootView,
+    Gesture,
+    GestureDetector,
+    GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import Animated, {
-	useAnimatedStyle,
-	useSharedValue,
-	withSpring
+    useAnimatedStyle,
+    useSharedValue,
+    withSpring
 } from 'react-native-reanimated';
 import { useTheme } from '../contexts/ThemeContext';
-import { Park } from '../data/parks';
+import { DraggableBottomSheetProps } from '../interfaces/DraggableBottomSheet.interfaces';
 import tailwindConfig from '../tailwind.config.js';
 import ParkDetailsSheet from './ParkDetailsSheet';
 
@@ -26,11 +26,6 @@ const getColor = (colorName: string) => {
 const MIN_SHEET_HEIGHT = 200;
 const INITIAL_SHEET_HEIGHT = 400;
 const MAX_SHEET_HEIGHT = 700;
-
-interface DraggableBottomSheetProps {
-  park: Park;
-  onClose: () => void;
-}
 
 export default function DraggableBottomSheet({ park, onClose }: DraggableBottomSheetProps) {
   const height = useSharedValue(INITIAL_SHEET_HEIGHT);

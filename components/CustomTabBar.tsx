@@ -5,6 +5,7 @@ import { Dimensions, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../contexts/ThemeContext'; // Import useTheme
+import { TabBarIconProps } from '../interfaces/CustomTabBar.interfaces';
 import tailwindConfig from '../tailwind.config.js'; // Import Tailwind config
 
 // Helper to get color from Tailwind config
@@ -14,12 +15,6 @@ const getColor = (colorName: string) => {
   // @ts-ignore
   return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
 };
-
-interface TabBarIconProps {
-  name: keyof typeof Ionicons.glyphMap; // More specific type for icon names
-  color: string;
-  size: number;
-}
 
 // Helper to get tab bar icon
 const TabBarIcon: React.FC<TabBarIconProps> = ({ name, color, size }) => {

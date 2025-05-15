@@ -1,21 +1,12 @@
 import React from 'react';
-import { Pressable, PressableProps, ViewStyle } from 'react-native';
+import { Pressable } from 'react-native';
 import Animated, {
-	useAnimatedStyle,
-	useSharedValue,
-	withSpring,
-	withTiming,
+    useAnimatedStyle,
+    useSharedValue,
+    withSpring,
+    withTiming,
 } from 'react-native-reanimated';
-
-interface AnimatedPressableProps extends PressableProps {
-  children: React.ReactNode;
-  scaleTo?: number;
-  animationType?: 'spring' | 'timing';
-  duration?: number; // for timing animation
-  springConfig?: Parameters<typeof withSpring>[1];
-  // style prop for the outer Animated.View, if needed for layout, separate from Pressable's own styling
-  containerStyle?: ViewStyle | ViewStyle[]; 
-}
+import { AnimatedPressableProps } from '../interfaces/AnimatedPressable.interfaces';
 
 const AnimatedPressable: React.FC<AnimatedPressableProps> = ({
   children,

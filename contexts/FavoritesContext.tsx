@@ -1,11 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
-
-interface FavoritesContextType {
-  favorites: string[];
-  toggleFavorite: (parkId: string) => Promise<void>;
-  isFavorite: (parkId: string) => boolean;
-}
+import { FavoritesContextType } from '../interfaces/FavoritesContext.interfaces';
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
 

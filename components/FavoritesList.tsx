@@ -5,11 +5,13 @@ import { Alert, FlatList, Share, Text, TouchableOpacity, View } from 'react-nati
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { FavoriteCardProps, FavoritesListProps } from '../interfaces/FavoritesList.interfaces';
+import { Park } from '../interfaces/Park.interface';
 import tailwindConfig from '../tailwind.config.js';
 import { getActivityName } from '../utils/activities';
 import AnimatedPressable from './AnimatedPressable';
 import FavoriteHeartIcon from './FavoriteHeartIcon';
-const PARKS = require('../data/parks.json');
+const PARKS: Park[] = require('../data/parks.json');
 
 // Helper to get color from Tailwind config
 const getColor = (colorName: string) => {
@@ -18,17 +20,6 @@ const getColor = (colorName: string) => {
   // @ts-ignore
   return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
 };
-
-interface FavoriteCardProps {
-  park: Park;
-  index: number;
-  onPress: () => void;
-  onShare: (park: Park) => void;
-}
-
-interface FavoritesListProps {
-  scrollEnabled?: boolean;
-}
 
 const AnimatedFavoriteCard = ({ park, index, onPress, onShare }: FavoriteCardProps) => {
   const opacity = useSharedValue(0);

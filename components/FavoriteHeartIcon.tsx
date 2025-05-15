@@ -4,6 +4,7 @@ import { Pressable } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { FavoriteHeartIconProps } from '../interfaces/FavoriteHeartIcon.interfaces';
 import tailwindConfig from '../tailwind.config.js'; // Assuming getColor might be needed or direct color values
 
 // Helper to get color from Tailwind config (if not already universally available)
@@ -14,11 +15,6 @@ const getColor = (colorName: string) => {
   // @ts-ignore
   return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
 };
-
-interface FavoriteHeartIconProps {
-  parkId: string;
-  size?: number;
-}
 
 export default function FavoriteHeartIcon({ parkId, size = 24 }: FavoriteHeartIconProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
