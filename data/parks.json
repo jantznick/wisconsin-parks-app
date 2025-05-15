@@ -68,11 +68,11 @@
     },
     "description": "From downtown Sturgeon Bay, this 48-mile, county-operated trail winds south along the beautiful Ahnapee and Kewaunee rivers to Algoma, Casco, Luxemburg and Kewaunee, passing by a mixture of evergreen glades, farmland, prairies and wooded areas teeming with wildlife and native wildflowers. Near Sunset Road in Kewaunee County, the trail branches off in three directions, west to Luxemburg, northeast towards Algoma and southeast towards the city of Kewaunee.",
     "activities": [
-      "Horseback riding",
-      "Ice Age National Scenic Trail",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -128,13 +128,13 @@
     },
     "description": "Amnicon Falls State Park features a series of delightful waterfalls and rapids along the Amnicon River. You can view them from a covered foot bridge or 2 miles of trails along the river. The park is a place to picnic, camp, walk in the woods and learn about the Douglas Fault, the geological formation that created the falls.",
     "activities": [
-      "Camping",
-      "Hiking",
-      "Hunting and trapping",
-      "Fishing",
-      "Picnic areas",
-      "Swimming",
-      "Winter activities"
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -190,13 +190,12 @@
     },
     "description": "Aztalan State Park is a National Historic Landmark and contains one of Wisconsin's most important archaeological sites, showcasing an ancient Middle-Mississippian village that thrived between A.D. 1000 and 1300. The people who settled in Aztalan built large, flat-topped pyramidal mounds and a stockade around their village. Portions of the stockade and two mounds have been reconstructed in the park.",
     "activities": [
-      "Boating, canoeing and kayaking",
-      "Hiking",
-      "Hunting and trapping",
-      "Fishing",
-      "Pets",
-      "Picnicking and shelters",
-      "Winter activities"
+      6,
+      9,
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -252,10 +251,10 @@
     },
     "description": "The Badger State Trail travels 40 miles between Madison and the Wisconsin-Illinois border while traversing farmlands, woods, rolling hills, scenic meadows, remnant prairies, ravines, glacial topography and several small communities. The Badger State Trail\u00a0also connects to many local parks and the Capital City and Sugar River state trails.",
     "activities": [
-      "Ice Age National Scenic Trail",
-      "Walking, bicycling and in-line skating",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -310,9 +309,10 @@
     },
     "description": "Named for the Bearskin Creek the trail follows, this former railroad corridor is an opportunity to experience the Northwoods of Wisconsin. The railroad line was built to export white pine logs from the forests of northern Wisconsin to the cities of the Midwest. Today the trail is a 21.5-mile recreation corridor between Minocqua and Tomahawk, surfaced with compacted granite suitable for walking and bicycling in summer and snowmobiling in winter.The Bearskin State Trail is celebrating its 50th anniversary in 2023!",
     "activities": [
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -369,10 +369,10 @@
     },
     "description": "Belmont, from the Frenchbelle monte, means \"beautiful mountain.\" The top of Belmont Mound is 1,400 feet above sea level, providing some fantastic views of the area. Wisconsin's First Capitol historic site is a half mile west of the park. The park is operated by the Belmont Lions Club.",
     "activities": [
-      "Hiking",
-      "Hunting and trapping",
-      "Picnicking",
-      "Winter activities"
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -423,15 +423,15 @@
     },
     "description": "On the eastern side of Madeline Island, the largest of the Apostle Islands archipelago, Big Bay State Park features picturesque sandstone bluffs along 4 miles of Lake Superior shoreline. The park also has a 1-mile boardwalk, sandy swimming beach, hiking trails, large family campground and two group camps. A short ferry ride from Bayfield to Madeline Island is needed to reach the park.",
     "activities": [
-      "Accessibility",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Picnic areas",
-      "Swimming",
-      "Winter activities"
+      1,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -488,14 +488,14 @@
     },
     "description": "Located on the shores of Lake Geneva, Big Foot Beach State Park offers 5 miles of hiking trails, a family campground, a swimming beach and picnic and playground areas. Snowshoeing and cross-country skiing are popular in winter.",
     "activities": [
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -603,14 +603,14 @@
     },
     "description": "Perched atop the highest point in southern Wisconsin, Blue Mound State Park offers spectacular views and unique geological features. A swimming pool is available during summer. Over 20 miles of scenic hiking, off-road biking and cross-country ski trails, as well as a family campground, access to the Military Ridge State Trail with bike-in campsites and a rustic cabin for people with disabilities make Blue Mound a popular destination year-round.",
     "activities": [
-      "Accessibility",
-      "Bicycling",
-      "Camping",
-      "Hiking",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter Activities"
+      1,
+      5,
+      7,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -665,17 +665,16 @@
     },
     "description": "The Brule River State Forest offers exceptional recreational opportunities, including river paddling, world-class trout fishing, wildlife viewing, a 23-mile stretch of the North Country National Scenic Trail and 9 miles of Lake Superior shoreline. All 44 miles of the Bois Brule River are contained in the forest. Two campgrounds offer family campsites and access to canoe landings on the Bois Brule River.",
     "activities": [
-      "Biking",
-      "Camping",
-      "Canoeing, kayaking and boating",
-      "Fishing",
-      "Hiking",
-      "Horseback riding",
-      "Hunting",
-      "Picnic areas and shelters",
-      "Swimming",
-      "Wildlife viewing",
-      "Winter activities"
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -738,15 +737,15 @@
     },
     "description": "Brunet Island State Park, on the Chippewa and Fisher rivers, offers more than 1,300 acres of scenic beauty and recreational opportunities. Quiet lagoons and channels are excellent for canoeing and wildlife watching. The rolling landscape in Chippewa County is a product of the most recent Ice Age. The park links to the Old Abe State Trail which runs from Cornell to Chippewa Falls.",
     "activities": [
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Picnicking and shelters",
-      "Hunting",
-      "Swimming",
-      "Winter activities"
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -802,16 +801,16 @@
     },
     "description": "Buckhorn State Park is a paradise for water enthusiasts, hunters, hikers, campers and nature lovers. The park and two adjacent state wildlife areas cover more than 8,000 acres on a peninsula in the Castle Rock Flowage of the Wisconsin River. Family and group campsites, unique cart-in camping, a cabin for people with disabilities, canoe trail and an accessible fishing pier, are all available at the park.",
     "activities": [
-      "Accessibility",
-      "Boating, canoeing and kayaking",
-      "Biking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -871,11 +870,12 @@
     },
     "description": "This trail in west-central Wisconsin follows the scenic Buffalo River valley for 36 miles between Mondovi and Fairchild. The river, which lends its name to the trail, was named by early French explorers. They called itRiviere de Beeufsfor the many bison that once inhabited the area. The trail is built on a former railroad corridor and passes by farmlands, woods, hills and wetlands while traveling through the communities of Eleva, Strum and Osseo.",
     "activities": [
-      "All-terrain vehicles/Utility-terrain vehicles",
-      "Horseback riding",
-      "Hunting",
-      "Walking and bicycling",
-      "Winter activities"
+      2,
+      5,
+      11,
+      12,
+      13,
+      21
     ],
     "hours": {
       "open": "",
@@ -931,13 +931,13 @@
     },
     "description": "Cadiz Springs is a day use area that provides picnicking, hiking, hunting, fishing and wildlife watching opportunities. Located in southwest Wisconsin's driftless area, the landscape is uniquely different from the rest of the state. Here the bogs, marshes and many lakes are replaced by rolling hills and valleys with spring-fed streams. There is no camping at Cadiz Springs.",
     "activities": [
-      "Boating, canoeing and kayaking",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Picnic areas",
-      "Swimming",
-      "Winter activities"
+      6,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -993,9 +993,9 @@
     },
     "description": "The Capital City State Trail is the link around and through Madison between the Military Ridge State Trail, Badger State Trail and, eventually, the Glacial Drumlin State Trail. Nine miles of the trail go through the scenic Capital Springs State Recreation Area (Dane County E-way) south of Madison between Verona Road and Industrial Drive near Nob Hill.",
     "activities": [
-      "Camping",
-      "Walking, bicycling and in-line skating",
-      "No Hunting and trapping allowed on trail"
+      5,
+      7,
+      15
     ],
     "hours": {
       "open": "",
@@ -1049,15 +1049,14 @@
     },
     "description": "Just minutes from downtown Madison, Capital Springs State Recreation Area and Dane County's William G. Lunney Lake Farm County Park, offer many recreation opportunities, including camping, hiking and skiing trails, picnicking, fishing and a boat launch on Lake Waubesa. The Capital City State Trail connects both properties to the city of Madison and links to regional Dane County bicycle trails.",
     "activities": [
-      "Bicycling",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Pets",
-      "Picnic areas",
-      "Winter activities"
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -1115,11 +1114,12 @@
     },
     "description": "The Cattail State Trail travels for 18 miles on a former rail corridor between the communities of Amery and Almena in northwestern Wisconsin. Forests, farmlands, prairies, hills and various wildlife habitats surround the trail, which also passes through the Village of Turtle Lake. The trail is maintained and managed by Polk and Barron counties.",
     "activities": [
-      "All-terrain vehicles",
-      "Horseback riding",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      2,
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -1176,11 +1176,12 @@
     },
     "description": "The Chippewa Flowage, a 15,300-acre impoundment, is located in central Sawyer County, 15 miles east of Hayward. Dotted with about 200 undeveloped islands, it is Wisconsin's third-largest lake and boasts a highly irregular, wooded and generally undeveloped 233-mile shoreline. Boat-in to camp at one of several primitive campsites or explore the seemingly endless maze of islands, points, bays, floating bogs and channels.",
     "activities": [
-      "Boating, Canoeing and Kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Snowmobiles and ATVs"
+      2,
+      6,
+      7,
+      9,
+      11,
+      20
     ],
     "hours": {
       "open": "6 AM",
@@ -1235,13 +1236,13 @@
     },
     "description": "Situated along the Ice Age National Scenic Trail, the Chippewa Moraine State Recreation Area offers unspoiled beauty with kettle lakes and many glacial features. Hiking, snowshoeing, backpack camping, fishing and bird watching are popular activities. The David R. Obey Ice Age Interpretive Center houses first-class glacial, cultural and natural history displays.",
     "activities": [
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Picnic areas",
-      "Winter activities"
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -1298,10 +1299,11 @@
     },
     "description": "This 30-mile trail extends from Phoenix Park in downtown Eau Claire, at the confluence of the Eau Claire and Chippewa rivers and travels south along the Chippewa River through a wide variety of habitat including river bottoms, prairies, sandstone bluffs and wetlands. The trail joins the Red Cedar State Trail in the Dunnville Wildlife Area near the confluence of the Red Cedar and Chippewa Rivers and ends at the town of Durand.",
     "activities": [
-      "Canoeing and kayaking",
-      "Hunting",
-      "Walking, bicycling and in-line skating",
-      "Winter activities"
+      5,
+      6,
+      11,
+      13,
+      21
     ],
     "hours": {
       "open": "",
@@ -1401,16 +1403,16 @@
     },
     "description": "Ancient lava flows, deep gorges and spectacular waterfalls make Copper Falls State Park one of Wisconsin's most scenic parks. Log buildings built by the Civilian Conservation Corps in the 1930s add to the park's charm.\u00a0 The park offers camping, hiking, bicycling, picnicking, fishing and swimming opportunities in Loon Lake. The 1.7-mile Doughboy's Nature Trail, along the Bad River, is one of the best hikes in Wisconsin.",
     "activities": [
-      "Accessibility",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -1468,10 +1470,10 @@
     },
     "description": "The Coulee Experimental State Forest is a unique property in Wisconsin. This 3,000-acre forest is used for long-term forest watershed research studies to develop land management practices. The property is managed for forest production and wildlife habitat, and offers recreation opportunities for hunting, cross-country skiing, hiking and horseback riding.\u00a0Coulee accurately describes the area, as the forest has many deep gulches and ravines.",
     "activities": [
-      "Hiking and wildlife viewing",
-      "Horseback riding",
-      "Hunting",
-      "Cross-country skiing"
+      11,
+      12,
+      13,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -1524,15 +1526,15 @@
     },
     "description": "Located along the beautiful Wisconsin River near the site of Native American encampments, Council Grounds State Park is a favorite for water enthusiasts. The park offers many recreational opportunities including family and group campsites, wooded trails, a beach area and an accessible fishing pier. A boat landing offers access to Lake Alexander and the Wisconsin River.",
     "activities": [
-      "Accessibility",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      1,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -1588,10 +1590,10 @@
     },
     "description": "Cross Plains State Park is located just west of Madison near the village of Cross Plains. This area contains an outstanding collection of glacial landforms, a gorge carved by meltwater and expansive views of both driftless and glaciated terrain. The state park is part of the larger Glacial Passage Area, a partnership project of public lands cooperatively managed by the Wisconsin DNR, National Park Service, U.S. Fish and Wildlife Service, Dane County Land and Water Resources Department and the nonprofit Ice Age Trail Alliance.",
     "activities": [
-      "Hiking",
-      "Fishing",
-      "Hunting and trapping",
-      "Winter activities"
+      9,
+      11,
+      13,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -1645,17 +1647,16 @@
     },
     "description": "Situated along the Ice Age National Scenic Trail, Devil's Lake State Park offers magnificent views from 500-foot quartzite bluffs overlooking a 360-acre lake. Visitors enjoy nearly 30 miles of hiking trails, lakeshore picnic areas, swimming beaches, paddling opportunities, and year-round naturalist programs.",
     "activities": [
-      "Accessibility",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Hiking",
-      "Hunting",
-      "Fishing",
-      "Picnicking and shelters",
-      "Rock climbing",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6:00 AM",
@@ -1715,9 +1716,10 @@
     },
     "description": "This scenic rail trail in Brown and Manitowoc counties travels through four small communities while passing by a wide variety of scenery, including farmlands, prairies, rivers and wetlands. The trail features two dramatic railroad trestles crossing the Devil's River and tributaries.",
     "activities": [
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -1771,10 +1773,10 @@
     },
     "description": "This 25-mile, county-operated trail extends from the historic city of West Bend into the scenic countryside of eastern Wisconsin past the glacial landscape of the Kettle Moraine State Forest. Built on a former railroad corridor, the history of the trail is remembered in the title \"Eisenbahn,\" a German word for railroad. The trail passes through the communities of West Bend, Kewaskum and Campbellsport, ending in Eden at the village park. Washington and Fond du Lac counties maintain and manage the Eisenbahn State Trail.",
     "activities": [
-      "Ice Age National Scenic Trail",
-      "Walking, bicycling and in-line skating",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -1830,10 +1832,11 @@
     },
     "description": "Considered the first rail-to-trail in the United States, the Elroy-Sparta State Trail remains one of the most popular trails in the country. With three rock tunnels and five small towns along its 32.5-mile route, the trail is a favorite Wisconsin bicycling destination. Traveling between Sparta and Elroy, the trail stretches through the communities of Norwalk, Wilton and Kendall, passing by wetlands, prairies, farmland and unglaciated areas.",
     "activities": [
-      "Walking and bicycling",
-      "Camping",
-      "Hunting",
-      "Winter activities"
+      5,
+      7,
+      11,
+      13,
+      21
     ],
     "hours": {
       "open": "",
@@ -1978,17 +1981,17 @@
     },
     "description": "The Flambeau River State Forest provides excellent backcountry opportunities, including wooded hiking trails, ATV and snowmobile trails, family campgrounds and rustic river sites, hunting and fishing. Canoeing is the most popular activity at the forest. Different portions of the river offer varying degrees of difficulty. The North Fork is ideal for the novice, while the South Fork is for the advanced paddler. Nine landings offer access to forest lakes and the Flambeau River.",
     "activities": [
-      "ATV",
-      "Biking",
-      "Camping",
-      "Canoeing and Kayaking",
-      "Fishing",
-      "Hiking",
-      "Horseback riding",
-      "Hunting",
-      "Picnic areas and shelters",
-      "Swimming",
-      "Winter activities"
+      2,
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -2045,10 +2048,11 @@
     },
     "description": "From downtown Green Bay, the Fox River State Trail winds along the beautiful Fox River before extending for 25 miles along a former rail corridor. The Fox River corridor has a rich history, beginning with the Native Americans who used footpaths to travel between their villages located along the river. The early French explorers, missionaries and traders built their posts and missions along these trails",
     "activities": [
-      "Horseback riding",
-      "Walking, bicycling and in-line skating",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "5 AM",
@@ -2105,10 +2109,11 @@
     },
     "description": "The four-mile Friendship State Trail passes through woods and scenic farmland in Calumet County while traveling between the communities of Forest Junction and Brillion. The trail connects to the Fox River State Trail in Forest Junction. In Brillion, parking is available at Horn Park. The trail is maintained and operated by Calumet County.",
     "activities": [
-      "Horseback riding",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -2163,12 +2168,13 @@
     },
     "description": "The northern segment of the Gandy Dancer State Trail begins on the Minnesota side of the St. Croix River. The trail runs for 31 miles in Minnesota and then crosses back into Wisconsin for 15 miles where it connects with the Saunders State Trail just south of Superior. Built on a former railroad corridor, the trail is named for the work crews who laid the railroad tracks. The crews used tools made by the Gandy Tool Company of Chicago and were known to work by keeping their voices, feet and tools in harmony, leading them to be called \"Gandy Dancers.\"",
     "activities": [
-      "All-terrain vehicles",
-      "Off-Highway motorcycles",
-      "Horseback riding",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      2,
+      5,
+      8,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -2230,10 +2236,10 @@
     },
     "description": "The southern segment of the Gandy Dancer State Trail travels for 47 miles in Wisconsin through the communities of Centuria, Milltown, Luck, Frederic, Siren and Webster, ending in the town of Danbury at the Minnesota border. Here a 520-foot trestle crosses the St. Croix National Scenic Riverway into Minnesota. Built on a former railroad corridor, the trail is named for the work crews who laid the railroad tracks. The crews used tools made by the Gandy Tool Company of Chicago and were known to work by keeping their voices, feet and tools in harmony, leading them to be called \"Gandy Dancers.\"",
     "activities": [
-      "Ice Age National Scenic Trail",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -2290,11 +2296,10 @@
     },
     "description": "Running between Wisconsin's two largest urban areas, this trail stretches for 52 miles through farmlands and glacial topography. The trail travels through 10 small towns from Cottage Grove to Waukesha. The trail is on an abandoned rail corridor, except for a 1.5-mile section northeast of Jefferson, between State Highway 26 and County Highway Y, which uses public roads as the trail route.",
     "activities": [
-      "Camping",
-      "Hunting",
-      "Ice Age National Scenic Trail",
-      "Walking, bicycling and in-line skating",
-      "Winter activities"
+      5,
+      7,
+      13,
+      21
     ],
     "hours": {
       "open": "",
@@ -2351,16 +2356,16 @@
     },
     "description": "Governor Dodge State Park is one of the state's largest parks, with over 5,000 acres of steep hills, bluffs and deep valleys plus two lakes and a waterfall. Located in Wisconsin's scenic driftless area, Governor Dodge offers camping, picnicking, hiking, canoeing, biking, hunting, fishing, off-road biking, cross-country skiing and horseback riding opportunities.",
     "activities": [
-      "Bicycling",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Horseback riding",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -2417,13 +2422,13 @@
     },
     "description": "This 55-mile-long forest in northwestern Wisconsin parallels the St. Croix National Scenic Riverway and offers camping, paddling, hiking, horseback riding, biking, hunting, fishing, cross-country skiing and snowmobiling opportunities.Three campgrounds (St. Croix, Trade River Equestrian and Sioux Portage Group) and nine primitive backpack campsitesare found within 32,500 wooded acres.",
     "activities": [
-      "Biking",
-      "Camping",
-      "Canoeing, kayaking and boating",
-      "Hiking",
-      "Horseback riding",
-      "Hunting",
-      "Winter activities"
+      5,
+      6,
+      7,
+      11,
+      12,
+      13,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -2476,14 +2481,14 @@
     },
     "description": "Located on 10,000-acre Lake Mendota, recreation and nature mingle within sight of the State Capitol. Governor Nelson is a day use park offering a sand beach, boat launch, fish cleaning facility, picnic areas and playground equipment, prairie restorations and over 8 miles of trails. Native American effigy mounds can be seen on the Woodland Trail.",
     "activities": [
-      "Accessibility",
-      "Bicycling",
-      "Canoeing, kayaking and boating",
-      "Fishing",
-      "Hiking",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      9,
+      11,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -2539,14 +2544,14 @@
     },
     "description": "With more than 2,800 acres of woods, a family campground, picnic and beach area on Woods Lake, hiking and skiing trails, and 6 miles of shoreline on Caldron Falls Flowage, visitors will find an atmosphere perfect for relaxation and recreation. The park is adjacent to the Peshtigo River, a popular free-flowing river for fly-fishing and canoeing.",
     "activities": [
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking",
-      "Swimming",
-      "Winter activities"
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -2601,12 +2606,12 @@
     },
     "description": "This 24-mile trail travels through prairies and backwaters of the upper Mississippi River valley. Built on an abandoned Chicago-Northwestern railroad line, the trail has a finely crushed limestone surface suitable for walking and bicycling for much of the year and snowmobiling, cross-country skiing and snowshoeing in winter. The Great River trail is within a larger area called the Mississippi Flyway and passes through two National Wildlife Refuges. The Great River State Trail links to the La Crosse River State Trail via a short road route in the city of La Crosse.",
     "activities": [
-      "Camping",
-      "Canoeing and kayaking",
-      "Hunting",
-      "Walking and bicycling",
-      "Winter activities",
-      "Part of the Mississippi River Trail"
+      5,
+      6,
+      7,
+      11,
+      13,
+      21
     ],
     "hours": {
       "open": "",
@@ -2663,9 +2668,9 @@
     },
     "description": "The Great Sauk State Trail parallels the Wisconsin River through the communities of Prairie du Sac and Sauk City, extending through the heart of the Sauk Prairie State Recreation Area. Built on a former rail corridor, this 10.5-mile trail is paved with asphalt. Visitors can enjoy beautiful views as they pass through two historic towns nestled above the Wisconsin River. Parking and accommodations are available in each community.",
     "activities": [
-      "Walking, bicycling and in-line skating",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -2717,9 +2722,9 @@
     },
     "description": "Encircling the city of Stevens Point, this trail meanders along the scenic Wisconsin and Plover rivers, recalling the history of the lumber-making and pioneer settlements of the area, while connecting secluded natural and wildlife areas, the Schmeeckle Reserve and many city parks. The trail, including all spurs, is 31 miles long and features river scenery, forests, wetlands, prairies, boardwalks and quiet neighborhoods. A 4-mile spur on Hoover Road connects to the Tomorrow River State Trail in Plover.",
     "activities": [
-      "Walking, bicycling and in-line skating",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -2772,9 +2777,9 @@
     },
     "description": "Named in honor of baseball legend Hank Aaron, this trail provides a continuous connection between American Family Field, home of the Milwaukee Brewers, and the Lake Michigan lakefront. The Hank Aaron State Trail\u00a0also links to\u00a0famous Milwaukee landmarks such as the Ward Theatre on the grounds of the Historic Soldiers Home, the Wisconsin State Fair Park and\u00a0the Pettit National Ice Center.",
     "activities": [
-      "Walking, bicycling and in-line skating",
-      "Winter recreation",
-      "No Hunting and trapping allowed on trail"
+      5,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -2831,17 +2836,17 @@
     },
     "description": "Harrington Beach State Park has more than a mile of beach along Lake Michigan. This 715-acre park also features a white cedar and hardwood swamp, old field grasslands with restored wetland ponds and a scenic limestone quarry lake. Camp, sunbathe, picnic, hike, bird watch, fish or practice astronomy at one of the observatory's monthly public viewings.",
     "activities": [
-      "Accessibility",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Horseback riding",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -2900,16 +2905,16 @@
     },
     "description": "Located on the beautiful Chain O' Lakes, Hartman Creek State Park is a quiet and friendly, natural gem and a popular destination in central Wisconsin. The park offers camping, boating, swimming, horseback riding and mountain biking opportunities, the historic Hellestad House log cabin, and four picnic areas including Whispering Pines along crystal-clear Marl Lake.",
     "activities": [
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Horseback riding",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -2966,10 +2971,10 @@
     },
     "description": "Havenwoods State Forest is Wisconsin\u2019s only urban state forest, featuring 237 acres of grasslands, woods and wetlands in the city of Milwaukee. Hike, run, bike and watch wildlife on over 6 miles of trails. Explore the nature center, the forest's ponds, stroll over the 120-foot bridge or find a bench to sit and relax outdoors.",
     "activities": [
-      "Bicycling",
-      "Hiking",
-      "Picnic areas",
-      "Winter activities"
+      5,
+      11,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -3070,17 +3075,17 @@
     },
     "description": "High Cliff State Park is the only state-owned recreational area on Lake Winnebago, Wisconsin's largest lake. The park gets its name from the limestone cliff of the Niagara Escarpment, which parallels the eastern shore of Lake Winnebago. The magnificent 12-foot statue of Winnebago Tribe Chief Red Bird, standing high on a huge granite rock, overlooks the lake and is a popular destination in the park.",
     "activities": [
-      "Accessibility",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Horseback riding",
-      "Hunting",
-      "Picnicking",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "10 AM",
@@ -3191,10 +3196,10 @@
     },
     "description": "Hoffman Hills State Recreation Area offers 700 acres of preserved and restored wooded hills, wetlands and prairie traversed with hiking and cross-country ski trails. A 60-foot-high observation tower crowns one of the highest points in Dunn County, offering spectacular views of the surrounding countryside, especially in autumn.",
     "activities": [
-      "Hiking",
-      "Hunting",
-      "Picnic areas",
-      "Winter activities"
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -3247,15 +3252,14 @@
     },
     "description": "Interstate is Wisconsin's oldest state park, established in 1900. Located along the picturesque St. Croix National Scenic Riverway, the park provides scenic views of the river and the steep-sided gorge known as the Dalles of the St. Croix. The Ice Age Interpretive Center features a film, photographs, murals and information about Wisconsin's glacial history.",
     "activities": [
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking and shelters",
-      "Rock climbing",
-      "Swimming",
-      "Winter activities"
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -3312,15 +3316,15 @@
     },
     "description": "Located where the St. Croix and Kinnickinnic rivers meet, Kinnickinnic State Park offers experiences in two types of worlds. Enjoy the quiet and solitude of the Kinnickinnic River Valley and the many popular water-based recreational pursuits on the St. Croix River. A large sandy delta is found at the junction of the rivers. Visitors can also explore 10 miles of hiking trails.",
     "activities": [
-      "Boating, canoeing and kayaking",
-      "Camping - Boat mooring",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Mountain Biking",
-      "Picnicking",
-      "Swimming",
-      "Winter activities"
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -3378,17 +3382,17 @@
     },
     "description": "Named for John Michael Kohler and Terry Andrae state parks,Kohler-Andrae is the home of majestic sand dunes, miles of golden beach, shimmering blue Lake Michigan water, whispering pines, an abundance of wildlife and recreational activities. Kohler-Andrae State Park is one of the last natural preserves along the Lake Michigan shore and is open for everyone to explore and enjoy.",
     "activities": [
-      "Accessibility",
-      "Bicycling",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Horseback riding",
-      "Hunting",
-      "Picnicking",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -3447,10 +3451,11 @@
     },
     "description": "The 22-mile La Crosse River State Trail has been developed from the abandoned Chicago and Northwestern Railroad between Sparta and La Crosse. The trail is open to walkers and bicyclists spring through fall and snowmobiles in winter. Packed-limestone screenings provide a smooth surface for bicycling. Mileage markers are posted every half mile on the 7-mile section between La Crosse and West Salem.",
     "activities": [
-      "Camping",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      7,
+      11,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -3506,16 +3511,15 @@
     },
     "description": "Lake Kegonsa State Park offers a variety of recreational activities set along a 3,200-acre lake. A swimming beach, picnic areas with reservable shelters, and a boat launch are within 1 mile of the campground. Fishing opportunities are excellent, while hiking trails weave among oak woodlands, prairies and wetlands.",
     "activities": [
-      "Accessibility",
-      "Lower Yahara River Trail",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      1,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -3572,17 +3576,17 @@
     },
     "description": "Lake Wissota State Park, northeast of Chippewa Falls, offers secluded campsites, hiking, biking and horseback riding trails, picnic and playground areas and a swimming beach on a 6,300-acre man-made lake. Boating, canoeing, kayaking and water skiing are popular summer activities on the lake.",
     "activities": [
-      "Accessibility",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Horseback riding",
-      "Picnic areas and playgrounds",
-      "Swimming",
-      "Hunting and trapping",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -3659,13 +3663,13 @@
     },
     "description": "In the heart of downtown Milwaukee, Lakeshore State Park is adjacent to the Henry W. Maier Festival Grounds and Discovery World at Pier Wisconsin. The park is an urban oasis offering a small beach and accessible paved trails that link to Milwaukee's other lakefront parks and the Hank Aaron State Trail. The parkoffers great views of the city and Lake Michigan and has a reservable, overnight boat slip.",
     "activities": [
-      "Accessibility",
-      "Bicycling and skating",
-      "Boating, canoeing and kayaking",
-      "Fishing",
-      "Hiking",
-      "Winter activities",
-      "No Hunting and trapping allowed in park"
+      1,
+      5,
+      6,
+      9,
+      11,
+      15,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -3722,13 +3726,12 @@
     },
     "description": "The Lapham Peak Unit of the Kettle Moraine State Forest was formed 10,000 years ago when a glacier covered much of Wisconsin. Lapham Peak's glaciated topography provides excellent hiking, backpacking and cross-country skiing on lighted trails. Climb a 45-foot observation tower atop the highest point in Waukesha County (1,233 feet above sea level).",
     "activities": [
-      "Hiking",
-      "Biking",
-      "Camping",
-      "Hausmann Nature Center",
-      "Horseback riding",
-      "Picnicking and shelters",
-      "Winter activities"
+      5,
+      7,
+      11,
+      12,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -3783,9 +3786,8 @@
     },
     "description": "Lizard Mound is one of the most well-preserved Native American effigy mound sites in the nation, with 28 extant conical and linear mounds on the property. The property's effigy mounds have been interpreted as representing spiritual and/or animal-like forms, including bird, panther or water spirit, and the eponymous lizard.",
     "activities": [
-      "Hiking",
-      "Interpretive Center",
-      "Picnicking"
+      11,
+      17
     ],
     "hours": {
       "open": "6 AM",
@@ -3838,12 +3840,12 @@
     },
     "description": "The Loew Lake Unit of the Kettle Moraine State Forest is situated along Wisconsin's Ice Age National Scenic Trail. Hiking, horseback riding, fishing and hunting opportunities are available in the forest. Loew Lake is a day-use property and there is no overnight camping.",
     "activities": [
-      "Boating, canoeing and kayaking",
-      "Fishing",
-      "Hiking",
-      "Horseback riding",
-      "Hunting and trapping",
-      "Winter activities"
+      6,
+      9,
+      11,
+      12,
+      13,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -3942,11 +3944,10 @@
     },
     "description": "The Lower Wisconsin is the longest free-flowing stretch of river in the Midwest. This 45,000-acre property extends along 92 miles of the river from Prairie du Sac to the confluence with the Mississippi River. A fantastically diverse resource with a wide variety of wildlife, fisheries, historical and archaeological sites, and scenic beauty found nowhere else. Abundant sand bars and islands are a popular destination for boat-in campers.",
     "activities": [
-      "Boating and canoeing",
-      "Camping",
-      "Hiking",
-      "Horseback riding",
-      "Know before you go"
+      6,
+      7,
+      11,
+      12
     ],
     "hours": {
       "open": "6 AM",
@@ -4051,10 +4052,11 @@
     },
     "description": "This county-operated trail goes past farms, prairies and wetlands in Green Lake, Winnebago and Fond du Lac counties. The Mascoutin Valley State Trail, built on a former railroad corridor, is divided into two sections totaling 21 miles. The western section travels between Berlin and Ripon and the eastern section travels between Rosendale and the city of Fond du Lac. The gap in the two sections, between Ripon and Rosendale, is in private ownership.",
     "activities": [
-      "Horseback riding",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -4109,13 +4111,13 @@
     },
     "description": "Menominee River State Recreation Area straddles the banks of the scenic Menominee River for several miles in northeast Wisconsin. Canoe the river among towering pines, rock outcrops and falls or enjoy the other areas of this quiet-use property for primitive camping, hiking, fishing and hunting opportunities.",
     "activities": [
-      "Camping",
-      "Canoeing and kayaking",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Waterfalls",
-      "Winter activities"
+      6,
+      7,
+      9,
+      11,
+      13,
+      18,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -4177,14 +4179,14 @@
     },
     "description": "Merrick State Park is located on the beautiful backwaters of the Mississippi River. All island campground sites and some sites in the south campground have river access for mooring watercraft or fishing directly from the sites. There are 3 miles of hiking trails, and two boat landings provide easy launching for boats of all sizes.",
     "activities": [
-      "Accessibility",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Picnic areas and playgrounds",
-      "Winter activities"
+      1,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -4244,11 +4246,11 @@
     },
     "description": "The 40-mile Military Ridge State Trail, in Iowa and Dane counties, connects Dodgeville and Madison by way of an 1855 military route between Verona and Dodgeville. The trail runs along the southern borders of Governor Dodge and Blue Mound state parks passing by agricultural lands, woods, wetlands and prairies.",
     "activities": [
-      "Camping",
-      "Ice Age National Scenic Trail",
-      "Walking, bicycling and in-line skating",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      7,
+      11,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -4306,13 +4308,13 @@
     },
     "description": "Part of the Ice Age National Scientific Reserve, Mill Bluff State Park offers a spectacular view of picturesque rock formations. Campsites, picnic areas, a shelter, hiking trails, and a swimming pond can all be found at this park just outside Camp Douglas.",
     "activities": [
-      "Bicycling",
-      "Camping",
-      "Hiking",
-      "Hunting and trapping",
-      "Picnic areas",
-      "Swimming",
-      "Winter activities"
+      5,
+      7,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -4370,17 +4372,17 @@
     },
     "description": "Mirror Lake State Park is named for its centerpiece, a lake which often is so calm that not a ripple marks its surface. The lake reflects a wooded shoreline with cliffs up to 50 feet high, a swimming beach and wetlands that are home to a variety of wildlife. The park's 2,200 acres include\u00a0several picnic areas, wooded campsites, summer rentals and a cabin for people with disabilities.",
     "activities": [
-      "Winter activities",
-      "Accessibility",
-      "Amphitheater",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking, playgrounds and shelters",
-      "Swimming"
+      1,
+      3,
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -4440,9 +4442,9 @@
     },
     "description": "This pleasant, gently-rolling trail in southwest Wisconsin connects the communities of Platteville and Belmont. Enjoy traveling along charming streams and through the open countryside where two large mounds rise above farm fields on the north side of the trail. The world's largest \"M\" easily identifies Platte Mound which is about midway between the two communities.",
     "activities": [
-      "Walking, bicycling and in-line skating",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -4496,11 +4498,11 @@
     },
     "description": "The Mountain-Bay State Trail is one of the longest rail-trails in Wisconsin. The trail travels for 83 miles between the two geologic features it is named for; Rib Mountain and Green Bay. On the western end, the trail ends in Weston, just east of Wausau. On the eastern end, the trail ends at Howard Memorial Park near the city of Green Bay. There is a short gap in the trail in the city of Shawano near the Wolf River where local roads are used to connect the trail.",
     "activities": [
-      "Horseback riding",
-      "Ice Age National Scenic Trail",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -4605,9 +4607,9 @@
     },
     "description": "Natural Bridge State Park has a natural sandstone arch created by the eroding effects of wind and water. The bridge opening is 25 feet high by 35 feet wide. This weathered formation was missed by the glaciers during the last Ice Age. Near the bridge is a rock shelter used by native people when the glacier was melting, 11,000 years ago. The park is for day use only.",
     "activities": [
-      "Hiking",
-      "Hunting and trapping",
-      "Winter activities"
+      11,
+      13,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -4658,13 +4660,13 @@
     },
     "description": "Nelson Dewey State Park overlooks the Mississippi River from a 500-foot bluff. At this park combine your interest in history with your enjoyment of the outdoors.\u00a0Camp, hike or picnic high above the Mighty Mississippi. Named for Wisconsin\u2019s first governor, Nelson Dewey, the park offers a rich history, featuring the Dewey home and the nearby Stonefield Historic site.",
     "activities": [
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Picnic areas and shelters",
-      "Winter activities"
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -4729,13 +4731,13 @@
     },
     "description": "New Glarus Woods State Park is a 435-acre state park offering camping, hiking, picnicking and snowshoeing just south of the city of New Glarus. The park has direct access to the Sugar River State Trail, a 24-mile linear trail surfaced with compressed limestone screenings, for bicycling, hiking and snowmobiling.",
     "activities": [
-      "Accessibility",
-      "Biking",
-      "Camping",
-      "Hiking",
-      "Hunting and trapping",
-      "Picnic areas and playgrounds",
-      "Winter activities"
+      1,
+      5,
+      7,
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -4793,16 +4795,15 @@
     },
     "description": "Newport's wilderness experience offers over 2,300 acres of forest on 11 miles of Lake Michigan shoreline, 30 miles of hiking trails, and backpack camping as a quiet alternative to bustling Door County. At the far end of the Door Peninsula, Newport is also designated as a Dark Sky Park, a perfect destination for stargazing.",
     "activities": [
-      "Accessibility",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Night sky viewing",
-      "Picnic areas",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -4863,10 +4864,11 @@
     },
     "description": "The Newton Blackmour State Trail spans 22 miles on a former rail corridor in Outagamie County. The trail name is derived from the four communities the trail passes through: New London, Shiocton, Black Creek and Seymour. The trail's eastern end in Seymour connects to the Duck Creek Trail, which travels east towards Green Bay for 5 miles.",
     "activities": [
-      "Horseback riding",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -4922,11 +4924,12 @@
     },
     "description": "This county-operated trail meanders for more than 89 miles through the Nicolet National Forest in northeastern Wisconsin. The trail follows the same corridor built by railroad companies in the late 19th century to open up Wisconsin's pine and hardwood forests for the timber industry. The Nicolet State Trail runs through several small communities from Gillett in Oconto County to the Michigan state line.",
     "activities": [
-      "All-terrain vehicles (ATVs) and Off-highway motorcycles (OHMs)",
-      "Horseback riding",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      2,
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -4987,16 +4990,17 @@
     },
     "description": "With over 236,000 acres and more than 900 lakes within its boundaries, the Northern Highland - American Legion State Forest provides wonderfully scenic opportunities for a variety of outdoor recreation from wild and remote campsites accessible only by boat, to developed family and group campgrounds, beaches, boat launches and trails. The forest is spread across three counties near the towns of Woodruff, Minocqua and Boulder Junction. There are two main contact stations at Crystal and Clear lakes. TheNorthern Highland-American Legion State Forestis celebrating its 100th anniversary in 2025.",
     "activities": [
-      "ATVs/UTVs",
-      "Biking",
-      "Camping",
-      "Hiking",
-      "Horseback riding",
-      "Hunting",
-      "Pets",
-      "Picnic areas and shelters",
-      "Water activities",
-      "Winter activities"
+      2,
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -5057,20 +5061,16 @@
     },
     "description": "The first and largest unit of the Kettle Moraine State Forest offers year-round recreation among world-famous glacial landforms. Visitors can swim at three beaches, enjoy challenging mountain biking trails or groomed ski trails, hike the Ice Age Trail, take in a nature program, or just escape among 30,000 acres of rolling, wooded hills and prairies. The Ice Age Visitor Center is open all year. The forest has over 350 campsites, including family, group, equestrian and backpack opportunities.",
     "activities": [
-      "Bicycling",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Cross-country skiing",
-      "Fishing",
-      "Hiking",
-      "Horseback riding",
-      "Hunting",
-      "Nature Programs",
-      "Pets and dog training",
-      "Picnicking and shelters",
-      "State Natural Areas",
-      "Swimming",
-      "Winter activities"
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -5131,9 +5131,10 @@
     },
     "description": "This 8-mile trail passes through the forests and farms of Oconto County between the communities of Oconto and Stiles Junction. Outside of Oconto, the trail parallels the Oconto River. The river has a long history of human activity, dating back 6,000 years to the early Native Americans who lived along the river, to the fur trading and logging operations of the last few centuries, to present-day recreation activities such as canoeing and kayaking.",
     "activities": [
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -5188,11 +5189,11 @@
     },
     "description": "The Old Abe State Trail is a paved 20-mile trail connects Lake Wissota State Park and Brunet Island State Park.The trail is on an abandoned railroad grade and winds through agricultural and forest land while following the undeveloped shoreline of the beautiful Chippewa River. The trail features an abundance of wildlife and natural beauty, with many historical sites along the way.",
     "activities": [
-      "Horseback riding",
-      "Hunting",
-      "Ice Age National Scenic Trail",
-      "Walking, bicycling and in-line skating",
-      "Winter activities"
+      5,
+      11,
+      12,
+      13,
+      21
     ],
     "hours": {
       "open": "",
@@ -5249,14 +5250,14 @@
     },
     "description": "Pattison State Park features the highest waterfalls in Wisconsin and the fourth highest waterfall east of the Rocky Mountains. Big Manitou Falls is 165 feet high and Twin Little Manitou Falls is 31 feet high. This 1,400-acre park also has a lake with a beach, a nature center, camping and scenic hiking trails.",
     "activities": [
-      "Accessibility",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      1,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -5311,11 +5312,12 @@
     },
     "description": "Running 10 miles through the picturesque Bonner Branch valley, this county-operated trail links Belmont with the 47-mile Cheese Country Trail in Calamine. The Pecatonica State Trail follows the old Milwaukee Road railroad corridor that at one time hauled lead through this valley, reminiscent of the mining era which once dominated this region of Wisconsin. The western terminus of the trail ends in Belmont where it connects to the Mound View State Trail.",
     "activities": [
-      "All-terrain vehicles (ATVs) and Off-highway motorcycles (OHMs)",
-      "Horseback riding",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      2,
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -5371,20 +5373,19 @@
     },
     "description": "Considered Wisconsin's most complete park, Peninsula State Park offers over 460 campsites, three group camps, a summer theater, an 18-hole golf course, sand beach, bike trails, a lighthouse and eight miles of Door County shoreline. The rollicking waves that skip towards Peninsula's sky high bluffs are part of the Niagara Escarpment.",
     "activities": [
-      "Accessibility",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Golfing",
-      "Hiking",
-      "Hunting",
-      "Lighthouse tours",
-      "Northern Sky Theater",
-      "Picnicking, playgrounds and shelters",
-      "Sightseeing and touring",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      10,
+      11,
+      13,
+      14,
+      16,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -5446,15 +5447,15 @@
     },
     "description": "Perrot State Park is nestled among 500-foot bluffs where the Trempealeau and Mississippi rivers meet. Enjoy breathtaking river views from the hiking trails in this park, known for its natural, archaeological, and historical resources. There is direct access for bicyclists from the campground to the 24-mile Great River State Trail. There is also a marked canoe trail in Trempealeau Bay. Canoes can be rented at the park in season.",
     "activities": [
-      "Accessibility",
-      "Bicycling",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking and shelters",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -5510,13 +5511,15 @@
     },
     "description": "Governor Earl Peshtigo River State Forest is a long, linear state forest in northeast Wisconsin bordering some of the most beautiful and exciting sections of the Peshtigo River. Anglers know the river's free-flowing portion for its excellent fly-fishing; paddlers brave the Midwest's longest continuous whitewater rapids; and boaters can access more than 3,000 acres of flowage from 15 boat landings. The forest offers a family campground and several remote boat-in campsites along the river.",
     "activities": [
-      "ATV",
-      "Hiking",
-      "Horseback riding and mountain biking",
-      "Hunting",
-      "Water activities",
-      "Wildlife viewing",
-      "Winter activities"
+      2,
+      5,
+      6,
+      9,
+      11,
+      12,
+      13,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -5578,16 +5581,16 @@
     },
     "description": "The Pike Lake Unit of the Kettle Moraine State Forest is in the middle of the Kettle Moraine, a strip of glacial landforms which extends through southeast Wisconsin. The forest is named after the 522-acre, spring-fed kettle lake. Powder Hill, a large glacial kame, provides terrific views of the landscape. Visitors can enjoy camping, swimming, hiking, fishing, picnicking and more.",
     "activities": [
-      "Accessibility",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -5695,11 +5698,10 @@
     },
     "description": "The 89-mile Pine River and its major tributary, the 62-mile Popple River, offer a true wild experience, being among Wisconsin's more remote river systems. The rivers alternate from quiet sections to swift, rocky riffles, low rapids and waterfalls, offering high-quality paddling and fishing in a secluded, natural environment.",
     "activities": [
-      "Camping",
-      "Canoeing and Kayaking",
-      "Fishing",
-      "Waterfalls",
-      "Neighboring lands"
+      6,
+      7,
+      9,
+      18
     ],
     "hours": {
       "open": "6 AM",
@@ -5754,17 +5756,17 @@
     },
     "description": "Point Beach State Forest features 3,000 acres of land and 6 miles of sandy beach along the shores of Lake Michigan. Point Beach offers family campsites, two large group cabins and an outdoor group camp. A popular feature within the property is the Rawley Point Lighthouse, which has been operated and maintained by the U.S. Coast Guard since 1853.",
     "activities": [
-      "Accessibility",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Hiking",
-      "Horseback Riding",
-      "Hunting",
-      "Lighthouse",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      11,
+      12,
+      13,
+      14,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -5824,15 +5826,15 @@
     },
     "description": "Potawatomi State Park on the shore of Sturgeon Bay in southern Door County, has 1,200 acres of gently rolling upland terrain bordered by steep slopes and rugged limestone cliffs. The park is named in honor of the tribe that inhabited Green Bay\u2019s shores and islands when Europeans first settled the area. The tribe called themselves Bo-De-Wad-Me which means \"keeper of the fire.\"",
     "activities": [
-      "Accessibility",
-      "Bicycling",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking and shelters",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -5888,11 +5890,12 @@
     },
     "description": "This 14.5-mile rail trail shadows the steep walls of the Red Cedar Valley from Menomonie to its connection with the Chippewa River State Trail. Along its route, the trail passes through the communities of Irvington and Downsville and the Dunnville State Wildlife Area. The trail passes by prairies, marshland bottoms, forests and farmlands, including sandstone bluffs and other unique rock formations.",
     "activities": [
-      "Canoeing and kayaking",
-      "Cross-country skiing, snowshoeing and winter biking",
-      "Hunting",
-      "Snowmobiling",
-      "Walking and bicycling"
+      5,
+      6,
+      11,
+      13,
+      20,
+      21
     ],
     "hours": {
       "open": "",
@@ -5949,10 +5952,10 @@
     },
     "description": "This billion-year-old hill is one of the oldest geological formations on earth. Rib Mountain State Park is a premier day-use property with picnicking, hiking trails and reservable facilities that include a scenic amphitheater, indoor gathering space and picnic shelters. The top of the park offers spectacular views of the Wausau area and Wisconsin River. Granite Peak Ski Area is on the north face of the mountain and offers downhill skiing and snowboarding.",
     "activities": [
-      "Hiking",
-      "Hunting and trapping",
-      "Picnicking and shelters",
-      "Winter activities"
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -6005,21 +6008,19 @@
     },
     "description": "Once designated to be a jet fighter base, Richard Bong State Recreation Area is named after Major Richard I. Bong, a Poplar, WI native who was America's leading air ace during World War II. The air base was abandoned three days before concrete was to be poured for a 12,500-foot runway. Local citizens had the foresight to protect this open space for future generations.",
     "activities": [
-      "Accessibility",
-      "ATVs and UTVs",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Horseback Riding",
-      "Hunting",
-      "Nature Center",
-      "Off-highway Motorcycles",
-      "Picnicking and shelters",
-      "Special Use Zone",
-      "Swimming",
-      "Winter activities"
+      1,
+      2,
+      5,
+      6,
+      7,
+      8,
+      9,
+      11,
+      12,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -6082,13 +6083,12 @@
     },
     "description": "Roche-A-Cri State Park, established in 1948, protects a 300-foot-high rock outcropping and Native American petroglyphs and pictographs. The name \"Roche-A-Cri\" comes from French words meaning \"screaming rock.\" The park offers camping, picnicking, fishing and hiking trails with a stairway to the top of the mound. Native American petroglyphs and a wayside exhibit can also be viewed.Roche-A-Cri State Park is celebrating its 75th anniversary in 2023!",
     "activities": [
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Picnic areas and shelters",
-      "Rock art",
-      "Winter activities"
+      7,
+      9,
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -6142,15 +6142,15 @@
     },
     "description": "Take the ferry Memorial Day weekend through the second Monday in October to this primitive Lake Michigan island where no vehicles are allowed. This unique park features the Pottawatomie Lighthouse as well as stone buildings built by a wealthy inventor who owned the island between 1910 and 1964. Rock Island offers rustic, walk-in campsites, hiking trails, a swimming beach and miles of shoreline to explore.",
     "activities": [
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Lighthouse tours",
-      "Picnic areas",
-      "Swimming",
-      "Winter activities"
+      6,
+      7,
+      9,
+      11,
+      13,
+      14,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -6216,11 +6216,11 @@
     },
     "description": "Rocky Arbor State Park is just 1.5 miles from Wisconsin Dells, offering seclusion from the busy vacation community with wooded campsites, hiking trails and picnic and playground areas in a setting surrounded by pine trees and sandstone bluffs.",
     "activities": [
-      "Camping",
-      "Hiking",
-      "Hunting and trapping",
-      "Picnic areas and playgrounds",
-      "Winter activities"
+      7,
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -6319,11 +6319,12 @@
     },
     "description": "This 8-mile county-operated trail links with the Gandy Dancer State Trail south of the city of Superior in Douglas County. The trail begins near the town of Saunders and passes through the communities of Boylston Junction, Boylston and Borea before continuing into Minnesota. Along its route, the trail crosses Clear Creek and the Pokegama River.",
     "activities": [
-      "Horseback riding",
-      "Motorized vehicles",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      2,
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -6380,17 +6381,17 @@
     },
     "description": "Covering more than 22,000 acres of forested glacial hills, kettle lakes and prairies, the Southern Unit of the Kettle Moraine State Forest is interlaced with more than 100 miles of mountain biking, horseback riding and hiking and nature trails. Paddling, boating, swimming, fishing, hunting and winter sport opportunities are all available. There are three family campgrounds, a horseriders camp, two group camps and remote backpack shelters on the Ice Age Trail.",
     "activities": [
-      "Accessibility",
-      "Bicycling",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Horseback riding",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -6450,9 +6451,10 @@
     },
     "description": "Built on a former railroad corridor, this 14-mile trail begins in Amery, travels through the communities of Deronda, Wanderoos and Nye, ending about one mile from Dresser at 90th Avenue. The trail passes through maple and oak forests, wetlands, prairies and farmlands and past seven picturesque lakes. The trail crosses between the North Twin and South Twin lakes in Amery, then skirts Bear Trap, Kinney, Dwight, Horse and Lotus lakes.",
     "activities": [
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -6505,13 +6507,13 @@
     },
     "description": "Lake views and glacial features provide great vistas on the trails within this 2,000-acre park. Ten walk-in campsites, carry-in boat launches, and a picnic area with reservable shelter are found on the south side of the park's two wild lakes. A premier segment of the Ice Age National Scenic Trail meanders through the park.",
     "activities": [
-      "Accessibility",
-      "Camping",
-      "Canoeing and kayaking",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Winter activities"
+      1,
+      6,
+      7,
+      9,
+      11,
+      13,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -6577,11 +6579,11 @@
     },
     "description": "The Sugar River State Trail follows an abandoned railroad line in south central Wisconsin for 24 miles from New Glarus to Brodhead. A short access trail connects the Sugar River State Trail to New Glarus Woods State Park. Fourteen trestle bridges cross over the Sugar River and its tributaries, while the trail passes by farmlands, woods, rolling hills, and remnant prairies. The trail has also been designated as a National Recreational Trail.",
     "activities": [
-      "Camping",
-      "Ice Age National Scenic Trail",
-      "Hunting",
-      "Walking and bicycling",
-      "Winter activities"
+      5,
+      7,
+      11,
+      13,
+      21
     ],
     "hours": {
       "open": "",
@@ -6638,11 +6640,11 @@
     },
     "description": "This 29-mile rail trail travels through scenic glacial terrain and farm country from Plover in Portage County to just outside the village of Manawa in Waupaca County, while passing through the communities of Amherst Junction, Scandinavia and Ogdensburg. The western end of the trail connects to the Green Circle State Trail at Hoover Road in Plover.",
     "activities": [
-      "Horseback riding",
-      "Ice Age National Scenic Trail",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -6699,7 +6701,7 @@
     },
     "description": "The Totogatic River is a wild gem flowing through Bayfield, Sawyer, Washburn, Douglas and Burnett counties. The river provides rich habitat for diverse aquatic and terrestrial species, has excellent water quality and beautiful scenery, and offers great fishing and paddling opportunities.",
     "activities": [
-      "Paddling"
+      6
     ],
     "hours": {
       "open": "6 AM",
@@ -6750,12 +6752,12 @@
     },
     "description": "Visitors can see how lead shot was made in the mid-1800s, hike bluff trails and enjoy river views at this park outside Spring Green. A picnic area and shelter, hiking trails, canoe landing on the Wisconsin River and a small campground are all available.",
     "activities": [
-      "Camping",
-      "Canoeing and kayaking",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Picnic areas"
+      6,
+      7,
+      9,
+      11,
+      13,
+      17
     ],
     "hours": {
       "open": "6 AM",
@@ -6809,14 +6811,15 @@
     },
     "description": "Undisturbed, wooded shorelines and islands offer the opportunity to boat, camp, fish and enjoy the outdoors in wild and rugged northern Wisconsin. Spread across 40,000 acres in Iron County, the Turtle-Flambeau Scenic Waters Area offers 66 remote campsites accessible by water only.",
     "activities": [
-      "Auto Tour",
-      "Boating and canoeing",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Skiing and snowshoeing",
-      "Snowmobiling and ATVs"
+      2,
+      4,
+      6,
+      7,
+      9,
+      11,
+      13,
+      20,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -6871,12 +6874,12 @@
     },
     "description": "This 74-mile trail on a former rail corridor is one of the longest rail trails in the state, running from Park Falls to the Wild Rivers State Trail just north of Rice Lake. The trail passes through part of the Flambeau River State Forest and the rugged wilderness of Wisconsin's Blue Hills. The trail connects seven small communities in Barron, Washburn, Sawyer and Price counties, each providing year-round accommodations and services.",
     "activities": [
-      "Walking and bicycling",
-      "Horseback riding",
-      "Hunting",
-      "Ice Age National Scenic Trail",
-      "All-Terrain Vehicles",
-      "Winter activities"
+      2,
+      5,
+      11,
+      12,
+      13,
+      21
     ],
     "hours": {
       "open": "",
@@ -6937,10 +6940,11 @@
     },
     "description": "This 19-mile trail follows a former rail corridor as it travels between Elkhorn in Walworth County and Dover in Racine County, with a short gap in Burlington. The trail passes by numerous bridges, scenic vistas, quaint towns, farmlands and wetlands. The trail is operated by Walworth and Racine counties and is within five miles of Lake Geneva and Big Foot Beach State Park.",
     "activities": [
-      "Horseback riding",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -6995,16 +6999,15 @@
     },
     "description": "Whitefish Dunes State Park protects the fragile dune environment on the eastern Door County Peninsula. At this day-use park, stroll along Lake Michigan or on one of the many trails throughout the huge sand dunes and forest. A nature center features year-round programs, exhibits and displays. The park's reservable picnic shelter overlooks Lake Michigan and is adjacent to the nature center, beach and hiking trails.",
     "activities": [
-      "Accessibility",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Fishing",
-      "Hiking",
-      "Hunting and trapping",
-      "Pets",
-      "Picnicking",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -7062,10 +7065,11 @@
     },
     "description": "This 34-mile rail trail skirts the western edge of the vast Horicon Marsh, a National Wildlife Refuge and world-famous home to over 250 migrant bird species.\u00a0The Wild Goose State Trail was Wisconsin\u2019s first \u201ccooperative\u201d State trail and is maintained and operated by Dodge and Fond du Lac counties.\u00a0 The trail runs from State Highway 60 in Clyman Junction to the city of Fond du Lac, passing by several small communities.",
     "activities": [
-      "Horseback riding",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -7121,11 +7125,12 @@
     },
     "description": "The Wild Rivers State Trail stretches 104 miles through Douglas, Washburn and Barron counties in northwest Wisconsin. The surrounding area is rich in natural resources and wildlife habitat. The trail crosses numerous rivers and streams, including the Namakagon River, a federally designated river which is part of the St. Croix National Scenic Riverway. The trail passes through the communities of Solon Springs, Gordon, Minong, Trego, Spooner, Haugen and Rice Lake.",
     "activities": [
-      "All-terrain Vehicles",
-      "Horseback riding",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      2,
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -7181,14 +7186,14 @@
     },
     "description": "Located on a ridge rising steeply above the Kickapoo River, Wildcat Mountain State Park offers camping for families, groups and horseback riders. Twenty-one miles of scenic hiking, nature and equestrian trails meander through the park. An observation point and picnic areas overlook the Kickapoo Valley. The Kickapoo River is popular for paddling and rentals are available in the village of Ontario.Wildcat Mountain State Park is celebrating its 75th anniversary in 2023!",
     "activities": [
-      "Camping",
-      "Canoeing and kayaking",
-      "Fishing",
-      "Hiking",
-      "Horseback riding",
-      "Hunting",
-      "Picnicking and shelters",
-      "Winter activities"
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -7243,16 +7248,15 @@
     },
     "description": "With limited development and access, the Willow Flowage Scenic Waters Area is a large, island-studded reservoir with a truly wild flavor. The property includes 73 miles of shoreline (95% of which is undeveloped), 106 islands and seven boat landings. There are 37 rustic campsites scattered along the flowage shoreline and islands and 4 rustic campsites along the Lower Tomahawk River. All campsites are accessible by watercraft and are clearly marked along the water's edge.",
     "activities": [
-      "Biking",
-      "Boating, Canoeing and Kayaking",
-      "Camping",
-      "Dogs",
-      "Fishing",
-      "Hiking",
-      "Horses",
-      "Hunting and trapping",
-      "Snowmobile and ATVs",
-      "Wildlife Viewing"
+      2,
+      5,
+      6,
+      7,
+      9,
+      11,
+      12,
+      13,
+      20
     ],
     "hours": {
       "open": "6 AM",
@@ -7310,16 +7314,16 @@
     },
     "description": "This popular park in northwest Wisconsin\u00a0features spectacular views of\u00a0Willow Falls and the Willow River Gorge. Prairie remnants, miles of scenic hiking trails,\u00a0family and group campgrounds, lakeside picnic areas and a nature center are all found within 2,800 acres of rolling countryside. Visitors will also enjoy paddling, fishing and swimming opportunities on Little Falls Lake.",
     "activities": [
-      "Accessibility",
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking",
-      "Swimming",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -7376,10 +7380,11 @@
     },
     "description": "The Wiouwash State Trail is named for Winnebago, Outagamie, Waupaca and Shawano counties. This trail, built on a former rail corridor, is maintained and operated by the four counties the trail traverses. Two sections of the trail are complete and are separated by a gap of about 30 miles. In Shawano County, the northern segment of the trail travels 19 miles between Birnamwood and Split Rock. The southern segment of the trail is open for 22 miles from Hortonville to Oshkosh.",
     "activities": [
-      "Horseback riding",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      5,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -7435,11 +7440,13 @@
     },
     "description": "The Wolf River State Trail runs 33 miles on a former rail corridor from White Lake to Crandon. Four additional miles of trail are currently under development south of White Lake to the Menomonee/Langlade county line. Once complete, the Wolf River State Trail will total 37 miles. The trail skirts the Wolf River and the Nicolet National Forestwhere camping, hunting, fishing, hiking, mountain biking and cross-country skiing opportunities are plentiful.",
     "activities": [
-      "All-terrain vehicles (ATVs) and Off-highway motorcycles (OHMs)",
-      "Horseback riding",
-      "Walking and bicycling",
-      "Winter activities",
-      "No Hunting and trapping allowed on trail"
+      2,
+      5,
+      8,
+      11,
+      12,
+      15,
+      21
     ],
     "hours": {
       "open": "",
@@ -7498,15 +7505,15 @@
     },
     "description": "At Wyalusing State Park, camp 500 feet above the confluence of the Wisconsin and Mississippi rivers. One of Wisconsin's oldest state parks, Wyalusing features family and group campsites, hiking trails, a canoe trail, Native American burial mounds, bird watching, fishing, boating, bicycling and picnicking on bluff top overlooks. Wyalusing's overnight group lodge and dormitories can be reserved by contacting the property office.",
     "activities": [
-      "Accessibility",
-      "Hiking",
-      "Biking",
-      "Camping",
-      "Picnicking and shelters",
-      "Boating, canoeing and kayaking",
-      "Fishing",
-      "Hunting and trapping",
-      "Winter activities"
+      1,
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      21
     ],
     "hours": {
       "open": "6 AM",
@@ -7562,15 +7569,15 @@
     },
     "description": "One of a few lakes in southwestern Wisconsin, 450-acre Yellowstone Lake State Park is a popular year-round recreation area that offers visitors ample space to enjoy camping, swimming, fishing, boating, hiking, biking and picnicking. In winter the park is open to ice fishing, snowmobiling and cross-country skiing. A large family campground and group camp are just a short walk from the beach and boat landing.",
     "activities": [
-      "Biking",
-      "Boating, canoeing and kayaking",
-      "Camping",
-      "Fishing",
-      "Hiking",
-      "Hunting",
-      "Picnicking and shelters",
-      "Swimming",
-      "Winter activities"
+      5,
+      6,
+      7,
+      9,
+      11,
+      13,
+      17,
+      19,
+      21
     ],
     "hours": {
       "open": "6 AM",

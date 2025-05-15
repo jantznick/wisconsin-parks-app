@@ -227,6 +227,96 @@ def map_scraped_strings_to_llm_ids(scraped_activity_list: list[str], park_name_f
             
     return mapped_numeric_ids, unmapped_phrases
 
+def get_llm_parsed_hours(hours_text_description: str, park_name: str) -> dict[str, str | None]:
+    """
+    Uses an LLM to parse open and close times from a text description.
+    Returns a dictionary with 'open_time' and 'close_time'.
+    Values can be null if not found or not clearly parsable.
+    """
+    global openai_client, OPENAI_MODEL
+
+    if not openai_client:
+        # print(f"OpenAI client not initialized. Skipping LLM hours parsing for {park_name}.")
+        return {"open_time": None, "close_time": None}
+
+    if not hours_text_description.strip():
+        # print(f"No hours text description provided for {park_name}. Skipping LLM hours parsing.")
+        return {"open_time": None, "close_time": None}
+
+    prompt = f"""
+    You are an expert at understanding and extracting specific information from text about park operating hours. 
+    Your task is to parse the provided text description of a park's hours and extract the general daily opening time and closing time.
+
+    Park Name: {park_name}
+    Hours Text Description: "{hours_text_description}"
+
+    Output Instructions:
+    Return your response as a JSON object. The JSON object should have two keys:
+    1. "open_time": A string representing the typical daily opening time (e.g., "6:00 AM", "Sunrise", "Varies"). If no specific opening time is mentioned or inferable, use null.
+    2. "close_time": A string representing the typical daily closing time (e.g., "11:00 PM", "Sunset", "Varies"). If no specific closing time is mentioned or inferable, use null.
+
+    Focus on general daily hours. Ignore specific seasonal variations or exceptions unless they are the *only* hours mentioned. 
+    If times are like "6 a.m.", format them as "6:00 AM". If "11 p.m.", format as "11:00 PM".
+    If the text says "Open year-round", this refers to accessibility, not daily open/close times. Only extract times if specified.
+    If the text implies continuous opening (e.g. "Open 24 hours"), set open_time to "12:00 AM" and close_time to "11:59 PM" or similar representation of all day.
+
+    Example Input Text: "The park is open year-round from 6 a.m. to 11 p.m."
+    Example JSON Output: {{ "open_time": "6:00 AM", "close_time": "11:00 PM" }}
+
+    Example Input Text: "Office open 8am-4pm. Park grounds open sunrise to sunset."
+    Example JSON Output: {{ "open_time": "Sunrise", "close_time": "Sunset" }} 
+
+    Example Input Text: "Trails open. Visitor center hours vary by season."
+    Example JSON Output: {{ "open_time": null, "close_time": null }} 
+
+    Ensure the JSON is well-formed.
+    """
+
+    # print(f"--- Sending request to LLM for hours parsing for park: {park_name} ---")
+    try:
+        completion = openai_client.chat.completions.create(
+            model=OPENAI_MODEL,
+            messages=[
+                {"role": "system", "content": "You are an expert parser of park operating hours. Output your response strictly in the requested JSON format."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.1, # Low temperature for factual extraction
+        )
+        
+        response_content = completion.choices[0].message.content
+        # print(f"LLM Raw Hours Response for {park_name}: {response_content[:150]}...")
+
+        if not response_content:
+            print(f"Error: LLM returned an empty response for hours parsing for '{park_name}'.")
+            return {"open_time": None, "close_time": None}
+
+        json_match = re.search(r"```json\n(.*\n)```", response_content, re.DOTALL)
+        json_str = json_match.group(1).strip() if json_match else response_content.strip()
+
+        llm_response_data = json.loads(json_str)
+        
+        parsed_open_time = llm_response_data.get("open_time")
+        parsed_close_time = llm_response_data.get("close_time")
+        
+        # Basic validation that we got strings or null
+        if not (parsed_open_time is None or isinstance(parsed_open_time, str)):
+            print(f"Warning: LLM returned unexpected type for open_time for '{park_name}': {parsed_open_time}")
+            parsed_open_time = None
+        if not (parsed_close_time is None or isinstance(parsed_close_time, str)):
+            print(f"Warning: LLM returned unexpected type for close_time for '{park_name}': {parsed_close_time}")
+            parsed_close_time = None
+
+        return {"open_time": parsed_open_time, "close_time": parsed_close_time}
+
+    except openai.APIError as e: # type: ignore
+        print(f"OpenAI API Error during hours parsing for '{park_name}': {e}")
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON from LLM for hours parsing for '{park_name}': {e}. Response: {response_content}")
+    except Exception as e:
+        print(f"Unexpected error during LLM hours parsing for '{park_name}': {e}")
+    
+    return {"open_time": None, "close_time": None} # Fallback
+
 # --- End LLM Helper Functions ---
 
 # Load standard activities data globally for use in scraper
@@ -395,12 +485,12 @@ def scrape_park_page_details(park_landing_url, image_from_listing):
     # --- Scrape Main Park Page (soup_main) ---
     if soup_main:
         # Extract Name: document.getElementsByClassName('dnr-hero-content')[0].textContent
-        # Needs to be cleaned coming as: "\n                Aztalan\n\n                                State Park\n                         '"
+        # Needs to be cleaned coming as: "\\n                Aztalan\\n\\n                                State Park\\n                         '"
         name_hero_content = soup_main.select_one('.dnr-hero-content')
         if name_hero_content:
             raw_name = name_hero_content.get_text(separator=' ', strip=True)
             # Clean up excessive newlines and spaces that might result from separator=' '
-            park_data["name"] = re.sub(r'\s+', ' ', raw_name).strip()
+            park_data["name"] = re.sub(r'\\s+', ' ', raw_name).strip()
         else:
             # Fallback to original name extraction if .dnr-hero-content is not found
             name_tag = soup_main.select_one('h1.page-title') 
@@ -427,14 +517,13 @@ def scrape_park_page_details(park_landing_url, image_from_listing):
             else:
                 print(f"Could not find description for {park_landing_url}")
         
-        # Retain original Hours and Admission text from main page if specific parsing fails later
-        hours_text_main = soup_main.find(string=lambda t: t and "Open 6 a.m. to 11 p.m." in t) # Example for Aztalan
-        if hours_text_main:
-            park_data["hours"]["text_description"] = hours_text_main.strip()
-            # Basic parsing attempt, can be improved
-            if "6 a.m." in hours_text_main and "11 p.m." in hours_text_main:
-                park_data["hours"]["open"] = "6:00 AM"
-                park_data["hours"]["close"] = "11:00 PM"
+        # Capture hours text from main page (as a fallback for LLM)
+        hours_text_tag_main = soup_main.find(string=lambda t: t and ("open" in t.lower() and ("a.m." in t.lower() or "p.m." in t.lower() or "hour" in t.lower() or "sunrise" in t.lower() or "sunset" in t.lower())))
+        if hours_text_tag_main:
+            park_data["hours"]["text_description"] = hours_text_tag_main.strip()
+            park_data["hours"]["open"] = "" # Clear, LLM will populate
+            park_data["hours"]["close"] = "" # Clear, LLM will populate
+        # else: text_description remains "", open/close remain ""
 
         admission_text_main = soup_main.find(string=lambda t: t and "vehicle admission sticker is required" in t)
         if admission_text_main:
@@ -442,44 +531,33 @@ def scrape_park_page_details(park_landing_url, image_from_listing):
 
     # --- Scrape Info Page (soup_info) ---
     if soup_info:
-        # print("DEBUG: Processing info page (soup_info is not None).") # Too verbose for normal run
+        # ... existing map link processing code from lines 441-517 should remain here ...
+        # (Ensuring the map processing logic is not touched by this hours edit)
         maps_link_processed = False # Flag to ensure we only process one map link successfully
 
         # --- Attempt 1: Look for Google Maps link directly in the main content body of the info page ---
         content_body_info_for_maps = soup_info.select_one('.field--name-field-content-page-body')
         if content_body_info_for_maps:
-            # print("DEBUG: Found .field--name-field-content-page-body on info page.") # Too verbose
-            # --- DEBUG: Print all links in this content body --- (This whole block was for debug, removing)
-            # all_links_in_content_body = content_body_info_for_maps.find_all('a')
-            # if all_links_in_content_body:
-            #     print(f"DEBUG: Found {len(all_links_in_content_body)} links in .field--name-field-content-page-body:")
-            #     for link_tag_debug in all_links_in_content_body:
-            #         print(f"  DEBUG Link Href: {link_tag_debug.get('href')}, Text: {link_tag_debug.get_text(strip=True)[:50]}...")
-            # else:
-            #     print("DEBUG: No <a> tags found in .field--name-field-content-page-body.")
-            # --- END DEBUG ---
-
             maps_link_tag_in_body = content_body_info_for_maps.select_one('a[href*="maps.google.com"]')
             if maps_link_tag_in_body and maps_link_tag_in_body.get('href'):
                 maps_url = maps_link_tag_in_body.get('href')
-                print(f"Attempt 1: Found Google Maps link href in info page content body: {maps_url}")
+                # print(f"Attempt 1: Found Google Maps link href in info page content body: {maps_url}") # Less verbose
                 lat, lon = None, None
-                coord_match_daddr = re.search(r'daddr=([\d.-]+),([\d.-]+)', maps_url)
+                coord_match_daddr = re.search(r'daddr=([\\d.-]+),([\\d.-]+)', maps_url)
                 if coord_match_daddr:
                     try:
                         lat = float(coord_match_daddr.group(1))
                         lon = float(coord_match_daddr.group(2))
-                        print(f"Found coordinates using daddr pattern (from content body): {lat}, {lon}")
+                        # print(f"Found coordinates using daddr pattern (from content body): {lat}, {lon}")
                     except ValueError:
                         print(f"Could not parse daddr coordinates from {maps_url} (in content body)")
                 
                 if lat is None or lon is None:
-                    coord_match_at = re.search(r'@([\d.-]+),([\d.-]+)', maps_url)
+                    coord_match_at = re.search(r'@([\\d.-]+),([\\d.-]+)', maps_url)
                     if coord_match_at:
                         try:
                             lat = float(coord_match_at.group(1))
                             lon = float(coord_match_at.group(2))
-                            # print(f"Found coordinates using @ pattern (from content body): {lat}, {lon}") # Keep if daddr fails
                         except ValueError:
                             print(f"Could not parse @ coordinates from {maps_url} (in content body)")
                 
@@ -487,90 +565,104 @@ def scrape_park_page_details(park_landing_url, image_from_listing):
                     park_data["coordinate"]["latitude"] = lat
                     park_data["coordinate"]["longitude"] = lon
                     maps_link_processed = True
-                    print(f"Successfully parsed coordinates: {lat}, {lon} from {maps_url}") # Consolidated success message
-                else:
-                    print(f"Could not extract coordinates from Google Maps URL (from content body attempt): {maps_url}")
-            else:
-                print("Attempt 1: No Google Maps link (with href*='maps.google.com') found directly in .field--name-field-content-page-body on info page.")
-        else:
-            print("Attempt 1: Could not find .field--name-field-content-page-body on info page for map link search.")
+                    # print(f"Successfully parsed coordinates: {lat}, {lon} from {maps_url}")
+                # else:
+                    # print(f"Could not extract coordinates from Google Maps URL (from content body attempt): {maps_url}")
+            # else:
+                # print("Attempt 1: No Google Maps link (with href*='maps.google.com') found directly in .field--name-field-content-page-body on info page.")
+        # else:
+            # print("Attempt 1: Could not find .field--name-field-content-page-body on info page for map link search.")
 
         # --- Attempt 2 (Fallback): Look in .dnr-property-info-card if not found/processed above ---
         if not maps_link_processed:
-            print("Attempt 2 (Fallback): Searching for maps link in .dnr-property-info-card elements.")
+            # print("Attempt 2 (Fallback): Searching for maps link in .dnr-property-info-card elements.")
             info_cards = soup_info.select('.dnr-property-info-card')
             for card in info_cards:
                 card_text = card.get_text(strip=True)
                 if "Directions" in card_text:
-                    print(f"Found 'Directions' card with text: '{card_text[:100]}...'") 
+                    # print(f"Found 'Directions' card with text: '{card_text[:100]}...'") 
                     maps_link_tag_in_card = card.select_one('a[href*="maps.google.com"]')
                     if maps_link_tag_in_card and maps_link_tag_in_card.get('href'):
                         maps_url = maps_link_tag_in_card.get('href')
-                        print(f"Found Google Maps link href in card: {maps_url}")
+                        # print(f"Found Google Maps link href in card: {maps_url}")
                         lat, lon = None, None
-                        coord_match_daddr = re.search(r'daddr=([\d.-]+),([\d.-]+)', maps_url)
+                        coord_match_daddr = re.search(r'daddr=([\\d.-]+),([\\d.-]+)', maps_url)
                         if coord_match_daddr:
                             try:
                                 lat = float(coord_match_daddr.group(1))
                                 lon = float(coord_match_daddr.group(2))
-                                print(f"Found coordinates using daddr pattern (from card): {lat}, {lon}")
                             except ValueError:
                                 print(f"Could not parse daddr coordinates from {maps_url} (in card)")
                         
                         if lat is None or lon is None:
-                            coord_match_at = re.search(r'@([\d.-]+),([\d.-]+)', maps_url)
+                            coord_match_at = re.search(r'@([\\d.-]+),([\\d.-]+)', maps_url)
                             if coord_match_at:
                                 try:
                                     lat = float(coord_match_at.group(1))
                                     lon = float(coord_match_at.group(2))
-                                    # print(f"Found coordinates using @ pattern (from card): {lat}, {lon}") # Keep if daddr fails
                                 except ValueError:
                                     print(f"Could not parse @ coordinates from {maps_url} (in card)")
                         
                         if lat is not None and lon is not None:
                             park_data["coordinate"]["latitude"] = lat
                             park_data["coordinate"]["longitude"] = lon
-                            maps_link_processed = True # Mark as processed
-                            print(f"Successfully parsed coordinates: {lat}, {lon} from {maps_url}") # Consolidated success message
-                            break # Found and processed in this card, exit card loop
-                        else:
-                            print(f"Could not extract coordinates from Google Maps URL (from card attempt): {maps_url}")
-                    else:
-                        print(f"No Google Maps link found in this 'Directions' card for {park_landing_url}")
-                if maps_link_processed: # If processed in the inner loop, break outer card loop too
+                            maps_link_processed = True
+                            # print(f"Successfully parsed coordinates: {lat}, {lon} from {maps_url}")
+                            break 
+                        # else:
+                            # print(f"Could not extract coordinates from Google Maps URL (from card attempt): {maps_url}")
+                    # else:
+                        # print(f"No Google Maps link found in this 'Directions' card for {park_landing_url}")
+                if maps_link_processed: 
                     break
-            if not maps_link_processed:
-                 print(f"Attempt 2 (Fallback): No usable Google Maps link found in any 'Directions' card for {park_landing_url}")
+            # if not maps_link_processed:
+            #      print(f"Attempt 2 (Fallback): No usable Google Maps link found in any 'Directions' card for {park_landing_url}")
+        # --- End of map link processing ---
 
-        # Hours: There's a p tag inside of document.getElementsByClassName('field--name-field-content-page-body') 
-        # on the info page that says 'Aztalan State Park is open year-round from 6 a.m. to 11 p.m.' that can be parsed
-        content_body_info = soup_info.select_one('.field--name-field-content-page-body')
-        if content_body_info:
-            hours_p_tags = content_body_info.find_all('p')
+        # Hours: Text from info page (prioritized for LLM)
+        content_body_info_hours = soup_info.select_one('.field--name-field-content-page-body')
+        if content_body_info_hours:
+            hours_p_tags = content_body_info_hours.find_all('p')
             for p_tag in hours_p_tags:
                 p_text = p_tag.get_text(strip=True)
-                if "open year-round from" in p_text.lower() or ("open" in p_text.lower() and ("a.m." in p_text.lower() or "p.m." in p_text.lower())):
+                if ("open year-round from" in p_text.lower() or \
+                   ("open" in p_text.lower() and ("a.m." in p_text.lower() or "p.m." in p_text.lower() or "hour" in p_text.lower() or "sunrise" in p_text.lower() or "sunset" in p_text.lower())) or \
+                   ("hours" in p_text.lower() and "vary" in p_text.lower())):
                     park_data["hours"]["text_description"] = p_text # Overwrite with more specific text
-                    # Attempt to parse open/close times
-                    # Example: 'Aztalan State Park is open year-round from 6 a.m. to 11 p.m.'
-                    # More general: "Open [time] to [time]"
-                    match = re.search(r'(\d{1,2}(?:\s?:\s?\d{2})?\s?[apAP]\.?[mM]\.?)\s+to\s+(\d{1,2}(?:\s?:\s?\d{2})?\s?[apAP]\.?[mM]\.?)', p_text, re.IGNORECASE)
-                    if match:
-                        park_data["hours"]["open"] = match.group(1).upper().replace('.','')
-                        park_data["hours"]["close"] = match.group(2).upper().replace('.','')
-                        break # Found and parsed hours
+                    park_data["hours"]["open"] = ""  # Clear, LLM will populate
+                    park_data["hours"]["close"] = "" # Clear, LLM will populate
+                    break 
             
         # Contact: 
-        # phone: there's an a tag with href that includes tel: on the info page
         phone_tag = soup_info.select_one('a[href^="tel:"]')
         if phone_tag and phone_tag.get('href'):
             park_data["contact"]["phone"] = phone_tag.get('href').replace("tel:", "").strip()
 
-        # email: there's an a tag with title 'Contact information' on the info page that contains a mailto href
         email_tag = soup_info.select_one('a[title="Contact information"][href^="mailto:"]')
         if email_tag and email_tag.get('href'):
             park_data["contact"]["email"] = email_tag.get('href').replace("mailto:", "").strip()
 
+    # --- LLM Hours Parsing (after main and info pages have been processed) ---
+    current_hours_text_desc = park_data["hours"].get("text_description", "").strip()
+    if current_hours_text_desc and openai_client: # Check if we have text and client
+        park_name_for_log = park_data.get('name', park_landing_url.split("/")[-1] or "Unknown Park")
+        # print(f"  Attempting LLM parsing for hours for park: {park_name_for_log} using text: '{current_hours_text_desc[:100]}...'") # Less verbose
+        parsed_times = get_llm_parsed_hours(current_hours_text_desc, park_name_for_log)
+        
+        # Update only if LLM provided a non-empty string, otherwise keep existing (which should be "")
+        if parsed_times.get("open_time") and isinstance(parsed_times["open_time"], str):
+            park_data["hours"]["open"] = parsed_times["open_time"]
+        if parsed_times.get("close_time") and isinstance(parsed_times["close_time"], str):
+            park_data["hours"]["close"] = parsed_times["close_time"]
+        
+        if park_data["hours"]["open"] or park_data["hours"]["close"]:
+            print(f"    LLM parsed hours for {park_name_for_log}: Open: '{park_data['hours']['open']}', Close: '{park_data['hours']['close']}'")
+        elif current_hours_text_desc: # Only print if there was text to parse
+             print(f"    LLM could not parse specific open/close times from text for {park_name_for_log}.")
+    elif current_hours_text_desc:
+        # This case means we have hours text, but no openai_client
+        print(f"  OpenAI client not available. Skipping LLM hours parsing for {park_data.get('name', 'Unknown Park')}. Hours text was: '{current_hours_text_desc[:100]}...'")
+    # If no current_hours_text_desc, fields remain as initialized (e.g., "")
 
     # --- Scrape Recreation Page (soup_rec) ---
     if soup_rec:

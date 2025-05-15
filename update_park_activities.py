@@ -18,7 +18,7 @@ except ImportError:
 # --- Configuration ---
 STANDARDIZED_ACTIVITIES_FILE = "data/activities.json"  # Changed from .ts
 PARKS_DATA_FILE = "data/parks.json"          # Changed from .ts
-DEBUG_FIRST_PARK_ONLY = True
+DEBUG_FIRST_PARK_ONLY = False
 OPENAI_MODEL = "gpt-3.5-turbo" # Or gpt-4 if preferred and available
 
 # Load OpenAI API Key
