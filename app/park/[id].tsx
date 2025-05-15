@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useRef } from 'react';
-import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
+import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AnimatedPressable from '../../components/AnimatedPressable';
@@ -12,6 +12,7 @@ import WeatherSection from '../../components/park_details/WeatherSection';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Park } from '../../interfaces/Park.interface';
 import { getActivityName } from '../../utils/activities';
+import { openDirections } from '../../utils/map';
 import { shareContent } from '../../utils/share';
 
 const PARKS: Park[] = require('../../data/parks.json');
@@ -60,13 +61,10 @@ export default function ParkDetailsScreen() {
 		});
 	};
 
-	const openDirections = () => {
-		if (!parkCoordinateIsValid || !park) {
-			Alert.alert("Cannot get directions", "Park location is not available.");
-			return;
+	const handleOpenDirections = () => {
+		if (park && park.coordinate) {
+			openDirections(park.coordinate.latitude, park.coordinate.longitude);
 		}
-		const url = `https://www.google.com/maps/dir/?api=1&destination=${park.coordinate.latitude},${park.coordinate.longitude}&travelmode=driving`;
-		Linking.openURL(url);
 	};
 
 	return (
@@ -89,9 +87,9 @@ export default function ParkDetailsScreen() {
 						<View className="flex-row justify-between items-center mb-2">
 							<Text className="text-xl font-semibold text-saffron-700 dark:text-saffron-400">Location</Text>
 							<AnimatedPressable
-								onPress={openDirections}
 								className={`bg-saffron-700 dark:bg-saffron-500 px-3 py-2 rounded-lg flex-row items-center shadow-sm ${!parkCoordinateIsValid ? 'opacity-50' : ''}`}
 								disabled={!parkCoordinateIsValid}
+								onPress={handleOpenDirections}
 							>
 								<Ionicons name="navigate" size={16} color="white" />
 								<Text className="text-white dark:text-saffron-100 font-medium ml-2 text-sm">Directions</Text>

@@ -1,8 +1,10 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { ParkDetailsSheetProps } from '../interfaces/ParkDetailsSheet.interfaces';
 import { getActivityName } from '../utils/activities';
+import { openDirections } from '../utils/map';
 import { shareContent } from '../utils/share';
 import AnimatedPressable from './AnimatedPressable';
 import SharedParkHeader from './SharedParkHeader';
@@ -16,11 +18,17 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
 
   const handleShare = async () => {
     if (!park) return;
-      await shareContent({
-        message: `Check out ${park.name}! Find out more here: ${park.contact.website}`,
-        title: `Share ${park.name}`,
-		url: park.contact.website
-      });
+    await shareContent({
+      message: `Check out ${park.name}! Find out more here: ${park.contact.website}`,
+      title: `Share ${park.name}`,
+      url: park.contact.website
+    });
+  };
+
+  const handleOpenDirections = () => {
+    if (park && park.coordinate) {
+      openDirections(park.coordinate.latitude, park.coordinate.longitude);
+    }
   };
 
   return (
@@ -100,12 +108,18 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
       </ScrollView>
 
       {/* Footer */}
-      <View className="p-4 border-t border-gray-200 dark:border-charcoal-700">
+      <View className="p-6 border-t border-gray-200 dark:border-charcoal-700 flex-row items-center">
+        <AnimatedPressable
+          onPress={handleOpenDirections}
+          className="bg-saffron-600 dark:bg-saffron-700 p-3 rounded-xl items-center justify-center aspect-square"
+        >
+          <Ionicons name="navigate-circle-outline" size={24} color="white" />
+        </AnimatedPressable>
         <AnimatedPressable
           onPress={handleViewFullDetails}
-          className="bg-persian-800 dark:bg-persian-600 py-3 rounded-xl"
+          className="bg-persian-800 dark:bg-persian-600 py-3 px-6 rounded-xl ml-3 flex-grow"
         >
-          <Text className="text-white dark:text-persian-100 text-center font-semibold">View Full Details</Text>
+          <Text className="text-white dark:text-persian-100 text-center font-semibold">Full Details</Text>
         </AnimatedPressable>
       </View>
     </View>
