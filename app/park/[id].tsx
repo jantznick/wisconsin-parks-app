@@ -11,9 +11,10 @@ import ParkMarker from '../../components/ParkMarker';
 import SharedParkHeader from '../../components/SharedParkHeader';
 import { useFavorites } from '../../contexts/FavoritesContext';
 import { useTheme } from '../../contexts/ThemeContext';
-import { PARKS } from '../../data/parks';
 import tailwindConfig from '../../tailwind.config.js';
+import { getActivityName } from '../../utils/activities';
 
+const PARKS = require('../../data/parks.json');
 // Helper to get color from Tailwind config
 const getColor = (colorName: string) => {
   const [theme, shade] = colorName.split('-');
@@ -642,7 +643,7 @@ export default function ParkDetailsScreen() {
             <View className="flex-row flex-wrap gap-2">
               {park.activities.map((activity, index) => (
                 <View key={index} className="bg-burnt-100 dark:bg-charcoal-700 px-3 py-1.5 rounded-full shadow-sm">
-                  <Text className="text-burnt-700 dark:text-burnt-300 font-medium text-sm">{activity}</Text>
+                  <Text className="text-burnt-700 dark:text-burnt-300 font-medium text-sm">{getActivityName(activity)}</Text>
                 </View>
               ))}
             </View>

@@ -5,10 +5,11 @@ import { Alert, FlatList, Share, Text, TouchableOpacity, View } from 'react-nati
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { PARKS, Park } from '../data/parks';
 import tailwindConfig from '../tailwind.config.js';
+import { getActivityName } from '../utils/activities';
 import AnimatedPressable from './AnimatedPressable';
 import FavoriteHeartIcon from './FavoriteHeartIcon';
+const PARKS = require('../data/parks.json');
 
 // Helper to get color from Tailwind config
 const getColor = (colorName: string) => {
@@ -61,7 +62,7 @@ const AnimatedFavoriteCard = ({ park, index, onPress, onShare }: FavoriteCardPro
             <View className="flex-row flex-wrap gap-1">
               {park.activities?.map((activity, actIndex) => (
                 <View key={actIndex} className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-xl">
-                  <Text className="text-xs text-blue-700 dark:text-blue-300">{activity}</Text>
+                  <Text className="text-xs text-blue-700 dark:text-blue-300">{getActivityName(activity)}</Text>
                 </View>
               ))}
             </View>

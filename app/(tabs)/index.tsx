@@ -6,8 +6,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomHeader from '../../components/CustomHeader'; // Import the new header
 import FavoritesList from '../../components/FavoritesList';
 import { useTheme } from '../../contexts/ThemeContext';
-import { PARKS } from '../../data/parks';
 import tailwindConfig from '../../tailwind.config.js'; // Import Tailwind config
+const PARKS = require('../../data/parks.json');;
 
 // Helper to get color from Tailwind config (simplified)
 // In a real scenario, you might have a more robust way or directly use palette names if props allow

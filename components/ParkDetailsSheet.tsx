@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { Alert, ScrollView, Share, Text, View } from 'react-native';
 import { Park } from '../data/parks';
+import { getActivityName } from '../utils/activities';
 import AnimatedPressable from './AnimatedPressable';
 import SharedParkHeader from './SharedParkHeader';
 
@@ -54,7 +55,7 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
           <View className="flex-row flex-wrap gap-2">
             {park.activities.map((activity, index) => (
               <View key={index} className="bg-persian-100 dark:bg-persian-800 px-3 py-1 rounded-full">
-                <Text className="text-persian-800 dark:text-persian-200">{activity}</Text>
+                <Text className="text-persian-800 dark:text-persian-200">{getActivityName(activity)}</Text>
               </View>
             ))}
           </View>

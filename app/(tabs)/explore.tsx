@@ -1,3 +1,4 @@
+import { getActivityName } from '@/utils/activities';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
@@ -5,8 +6,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomHeader from '../../components/CustomHeader'; // Import the new header
 import WisconsinMap from '../../components/WisconsinMap';
 import { useTheme } from '../../contexts/ThemeContext';
-import { PARKS } from '../../data/parks';
 import tailwindConfig from '../../tailwind.config.js'; // Import Tailwind config
+const PARKS = require('../../data/parks.json');;
 
 // Helper to get color from Tailwind config (copied from HomeScreen)
 const getColor = (colorName: string) => {
@@ -194,7 +195,7 @@ export default function ExploreScreen() {
 																	: 'text-sandy-700 dark:text-sandy-300'
 															}`}
 															>
-																{category}
+																{getActivityName(category)}
 															</Text>
 															<Text
 																className={`ml-2 text-xs ${isSelected
@@ -233,7 +234,7 @@ export default function ExploreScreen() {
 																	: 'text-sandy-700 dark:text-sandy-300'
 															}`}
 															>
-																{category}
+																{getActivityName(category)}
 															</Text>
 															<Text
 																className={`ml-2 text-xs ${isSelected
