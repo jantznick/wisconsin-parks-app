@@ -5,16 +5,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-na
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { FavoriteHeartIconProps } from '../interfaces/FavoriteHeartIcon.interfaces';
-import tailwindConfig from '../tailwind.config.js'; // Assuming getColor might be needed or direct color values
-
-// Helper to get color from Tailwind config (if not already universally available)
-// This might be redundant if you have a global getColor, but included for component encapsulation
-const getColor = (colorName: string) => {
-  // @ts-ignore
-  const [theme, shade] = colorName.split('-');
-  // @ts-ignore
-  return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
-};
+import { getColor } from '../utils/colors';
 
 export default function FavoriteHeartIcon({ parkId, size = 24 }: FavoriteHeartIconProps) {
   const { isFavorite, toggleFavorite } = useFavorites();

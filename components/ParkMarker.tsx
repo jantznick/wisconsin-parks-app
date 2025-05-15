@@ -4,14 +4,7 @@ import { View } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { useTheme } from '../contexts/ThemeContext';
 import { ParkMarkerProps } from '../interfaces/ParkMarker.interfaces';
-import tailwindConfig from '../tailwind.config.js';
-
-const getColor = (colorName: string) => {
-	// @ts-ignore
-	const [theme, shade] = colorName.split('-');
-	// @ts-ignore
-	return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
-};
+import { getColor } from '../utils/colors';
 
 export default function ParkMarker({ park, onPress }: ParkMarkerProps) {
 	const { effectiveTheme } = useTheme();

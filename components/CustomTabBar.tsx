@@ -1,20 +1,12 @@
-import { Ionicons } from '@expo/vector-icons'; // Assuming you use Ionicons
+import { Ionicons } from '@expo/vector-icons';
 import { BottomTabBarProps, BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { Dimensions, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useTheme } from '../contexts/ThemeContext'; // Import useTheme
+import { useTheme } from '../contexts/ThemeContext';
 import { TabBarIconProps } from '../interfaces/CustomTabBar.interfaces';
-import tailwindConfig from '../tailwind.config.js'; // Import Tailwind config
-
-// Helper to get color from Tailwind config
-const getColor = (colorName: string) => {
-  // @ts-ignore
-  const [theme, shade] = colorName.split('-');
-  // @ts-ignore
-  return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
-};
+import { getColor } from '../utils/colors';
 
 // Helper to get tab bar icon
 const TabBarIcon: React.FC<TabBarIconProps> = ({ name, color, size }) => {
@@ -50,28 +42,28 @@ export default function CustomTabBar({ state, descriptors, navigation }: BottomT
 
   return (
     <View 
-      className="absolute bg-transparent" // This view is for positioning the pill
+      className="absolute bg-transparent"
       style={{ 
         bottom: insets.bottom + TAB_BAR_BOTTOM_OFFSET,
         left: TAB_BAR_MARGIN_HORIZONTAL, 
         right: TAB_BAR_MARGIN_HORIZONTAL,
-        height: pillHeight, // Set height for the positioning container as well
+        height: pillHeight,
       }}
     >
       <View 
         className="flex-row bg-white dark:bg-charcoal-800 rounded-full shadow-lg items-center"
         style={{
           paddingHorizontal: PILL_HORIZONTAL_PADDING,
-          height: '100%', // Pill takes full height of its container
+          height: '100%',
         }}
       >
         <Animated.View
-          className="absolute bg-persian-800 dark:bg-persian-600 rounded-full" // This is the sliding indicator
+          className="absolute bg-persian-800 dark:bg-persian-600 rounded-full"
           style={[
             animatedIndicatorStyle,
             {
-              top: PILL_VERTICAL_PADDING, // Position indicator considering pill's vertical padding
-              height: ICON_CONTAINER_HEIGHT, // Indicator height matches icon area
+              top: PILL_VERTICAL_PADDING,
+              height: ICON_CONTAINER_HEIGHT,
               width: tabWidth,
             },
           ] as StyleProp<ViewStyle>}
@@ -120,7 +112,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: BottomT
               className="flex-1 items-center justify-center"
               style={{ height: ICON_CONTAINER_HEIGHT, zIndex: 1, marginVertical: PILL_VERTICAL_PADDING }}
             >
-              <TabBarIcon name={iconName} size={22} color={iconColor} /> {/* Slightly smaller icon */}
+              <TabBarIcon name={iconName} size={22} color={iconColor} />
             </TouchableOpacity>
           );
         })}

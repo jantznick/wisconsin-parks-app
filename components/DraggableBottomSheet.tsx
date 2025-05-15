@@ -1,27 +1,19 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
-    Gesture,
-    GestureDetector,
-    GestureHandlerRootView,
+	Gesture,
+	GestureDetector,
+	GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withSpring
+	useAnimatedStyle,
+	useSharedValue,
+	withSpring
 } from 'react-native-reanimated';
 import { useTheme } from '../contexts/ThemeContext';
 import { DraggableBottomSheetProps } from '../interfaces/DraggableBottomSheet.interfaces';
-import tailwindConfig from '../tailwind.config.js';
+import { getColor } from '../utils/colors';
 import ParkDetailsSheet from './ParkDetailsSheet';
-
-// Helper to get color from Tailwind config
-const getColor = (colorName: string) => {
-	// @ts-ignore
-	const [theme, shade] = colorName.split('-');
-	// @ts-ignore
-	return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
-};
 
 const MIN_SHEET_HEIGHT = 200;
 const INITIAL_SHEET_HEIGHT = 400;

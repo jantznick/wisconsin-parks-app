@@ -16,20 +16,20 @@ const WISCONSIN_CENTER = {
 // Default zoom level if user location is not available or denied
 const DEFAULT_ZOOMED_IN_WISCONSIN_REGION: Region = {
   ...WISCONSIN_CENTER,
-  latitudeDelta: 3, // More zoomed in than original 5
+  latitudeDelta: 3,
   longitudeDelta: 3,
 };
 
 // Zoom level for when user's location is available
 const USER_LOCATION_ZOOM_DELTA = {
-  latitudeDelta: 0.25, // Adjusted from 0.1
-  longitudeDelta: 0.25, // Adjusted from 0.1
+  latitudeDelta: 0.25,
+  longitudeDelta: 0.25,
 };
 
 export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
   const mapRef = useRef<MapView>(null);
   const { setSelectedPark } = useSelectedPark();
-  const [currentMapRegion, setCurrentMapRegion] = useState<Region | undefined>(undefined); // Undefined initially
+  const [currentMapRegion, setCurrentMapRegion] = useState<Region | undefined>(undefined);
   const [locationPermissionStatus, setLocationPermissionStatus] = useState<Location.PermissionStatus | null>(null);
 
   useEffect(() => {

@@ -1,115 +1,102 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Alert, ScrollView, Share, Text, View } from 'react-native';
+import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
+import { useFavorites } from '../contexts/FavoritesContext';
 import { ParkDetailsSheetProps } from '../interfaces/ParkDetailsSheet.interfaces';
 import { getActivityName } from '../utils/activities';
+import { shareContent } from '../utils/share';
 import AnimatedPressable from './AnimatedPressable';
 import SharedParkHeader from './SharedParkHeader';
 
 export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProps) {
-  const router = useRouter();
+	const router = useRouter();
+	const { isFavorite, toggleFavorite } = useFavorites();
 
-  const handleViewFullDetails = () => {
-    router.push(`/park/${park.id}`);
-  };
+	if (!park) {
+		return null;
+	}
 
-  const handleShare = async () => {
-    if (!park) return;
-    try {
-      await Share.share({
-        message: `Check out ${park.name}! Find out more here: ${park.contact.website}`,
-        title: `Share ${park.name}`,
-      });
-    } catch (error: any) {
-      Alert.alert(error.message);
-    }
-  };
+	const handleViewFullDetails = () => {
+		router.push(`/park/${park.id}`);
+	};
 
-  return (
-    <View className="flex-1 bg-white dark:bg-charcoal-900 rounded-t-3xl overflow-hidden">
-      <SharedParkHeader 
-        park={park}
-        leftIconName="close"
-        onLeftIconPress={onClose}
-        onSharePress={handleShare}
-      />
+	const handleShare = async () => {
+		if (!park) return;
+		await shareContent({
+			message: `Check out ${park.name}! Find out more here: ${park.contact.website}`,
+			title: `Share ${park.name}`,
+			url: park.contact.website
+		});
+	};
 
-      {/* Content */}
-      <ScrollView className="flex-1 p-4">
-        <Text className="text-base text-charcoal-700 dark:text-charcoal-300 mb-4">{park.description}</Text>
+	const openDirections = () => {
+		if (park.coordinate?.latitude && park.coordinate?.longitude) {
+			const url = `https://www.google.com/maps/dir/?api=1&destination=${park.coordinate.latitude},${park.coordinate.longitude}`;
+			Linking.openURL(url);
+		} else {
+			Alert.alert("Cannot get directions", "Park location is not available.");
+		}
+	};
 
-        {/* Hours */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Hours</Text>
-          <Text className="text-charcoal-700 dark:text-charcoal-300">{park.hours.open} - {park.hours.close}</Text>
-        </View>
+	return (
+		<View className="bg-charcoal-50 dark:bg-charcoal-900 flex-1">
+			<SharedParkHeader
+				park={park}
+				leftIconName="close"
+				onLeftIconPress={onClose}
+				onFavoritePress={() => toggleFavorite(park.id)}
+				isFavorite={isFavorite(park.id)}
+				onSharePress={handleShare}
+				showTitle={false}
+			/>
+			<ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 40 }}>
+				<View className="p-4">
+					<Text className="text-3xl font-bold mb-1 text-charcoal-900 dark:text-charcoal-100">{park.name}</Text>
 
-        {/* Activities */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Activities</Text>
-          <View className="flex-row flex-wrap gap-2">
-            {park.activities.map((activity, index) => (
-              <View key={index} className="bg-persian-100 dark:bg-persian-800 px-3 py-1 rounded-full">
-                <Text className="text-persian-800 dark:text-persian-200">{getActivityName(activity)}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
+					<View className="flex-row justify-around mb-6">
+						<AnimatedPressable
+							onPress={handleViewFullDetails}
+							className="bg-blue-600 dark:bg-blue-500 p-3 rounded-full shadow-md active:opacity-80"
+						>
+							<Ionicons name="information-circle-outline" size={24} color="white" />
+						</AnimatedPressable>
+						<AnimatedPressable
+							onPress={openDirections}
+							className="bg-emerald-600 dark:bg-emerald-500 p-3 rounded-full shadow-md active:opacity-80"
+						>
+							<Ionicons name="navigate-outline" size={24} color="white" />
+						</AnimatedPressable>
+					</View>
 
-        {/* Facilities */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Facilities</Text>
-          <View className="flex-row flex-wrap gap-2">
-            {park.facilities.map((facility, index) => (
-              <View key={index} className="bg-saffron-100 dark:bg-saffron-800 px-3 py-1 rounded-full">
-                <Text className="text-saffron-800 dark:text-saffron-200">{facility}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
+					<View className="mb-4 p-4 bg-white dark:bg-charcoal-800 rounded-lg shadow">
+						<Text className="text-xl font-semibold text-charcoal-800 dark:text-charcoal-200 mb-2">About</Text>
+						<Text className="text-charcoal-700 dark:text-charcoal-300 leading-relaxed">{park.description}</Text>
+					</View>
 
-        {/* Fees */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Entrance Fees</Text>
-          <Text className="text-charcoal-700 dark:text-charcoal-300">Daily: ${park.entranceFee.daily}</Text>
-          <Text className="text-charcoal-700 dark:text-charcoal-300">Annual: ${park.entranceFee.annual}</Text>
-        </View>
+					<View className="mb-4 p-4 bg-white dark:bg-charcoal-800 rounded-lg shadow">
+						<Text className="text-xl font-semibold text-charcoal-800 dark:text-charcoal-200 mb-2">Activities</Text>
+						<View className="flex-row flex-wrap gap-2">
+							{park.activities.map((activity, index) => (
+								<View key={index} className="bg-burnt-100 dark:bg-charcoal-700 px-3 py-1.5 rounded-full shadow-sm">
+									<Text className="text-burnt-700 dark:text-burnt-300 font-medium text-sm">{getActivityName(activity)}</Text>
+								</View>
+							))}
+						</View>
+					</View>
 
-        {/* Contact */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Contact</Text>
-          <Text className="text-charcoal-700 dark:text-charcoal-300">{park.contact.phone}</Text>
-          <Text className="text-charcoal-700 dark:text-charcoal-300">{park.contact.email}</Text>
-          <Text className="text-persian-700 dark:text-persian-300">{park.contact.website}</Text>
-        </View>
-
-        {/* Rules */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Rules</Text>
-          {park.rules.map((rule, index) => (
-            <Text key={index} className="text-charcoal-700 dark:text-charcoal-300 mb-1">• {rule}</Text>
-          ))}
-        </View>
-
-        {/* Seasonal Info */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Seasonal Information</Text>
-          <Text className="text-charcoal-700 dark:text-charcoal-300">Best Time to Visit: {park.seasonalInfo.bestTimeToVisit}</Text>
-          {park.seasonalInfo.seasonalClosures.map((closure, index) => (
-            <Text key={index} className="text-charcoal-700 dark:text-charcoal-300">• {closure}</Text>
-          ))}
-        </View>
-      </ScrollView>
-
-      {/* Footer */}
-      <View className="p-4 border-t border-gray-200 dark:border-charcoal-700">
-        <AnimatedPressable
-          onPress={handleViewFullDetails}
-          className="bg-persian-800 dark:bg-persian-600 py-3 rounded-xl"
-        >
-          <Text className="text-white dark:text-persian-100 text-center font-semibold">View Full Details</Text>
-        </AnimatedPressable>
-      </View>
-    </View>
-  );
+					<View className="mb-4 p-4 bg-white dark:bg-charcoal-800 rounded-lg shadow">
+						<Text className="text-xl font-semibold text-charcoal-800 dark:text-charcoal-200 mb-2">Contact</Text>
+						<Text className="text-charcoal-700 dark:text-charcoal-300">{park.contact.phone}</Text>
+						<Pressable onPress={() => Linking.openURL(`mailto:${park.contact.email}`)}>
+							<Text className="text-persian-700 dark:text-persian-400 underline font-medium">{park.contact.email}</Text>
+						</Pressable>
+						<Pressable onPress={() => Linking.openURL(park.contact.website)}>
+							<Text className="text-persian-700 dark:text-persian-400 underline font-medium">{park.contact.website}</Text>
+						</Pressable>
+					</View>
+				</View>
+			</ScrollView>
+		</View>
+	);
 } 

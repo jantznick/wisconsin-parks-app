@@ -5,7 +5,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Park } from '../../interfaces/Park.interface';
 import { getColor } from '../../utils/colors';
 import { formatDateForDisplay, formatDateForUrl } from '../../utils/date';
-import AnimatedPressable from '../AnimatedPressable'; // Path to AnimatedPressable might need adjustment
+import AnimatedPressable from '../AnimatedPressable';
 
 interface ReservationsCardProps {
     park: Park;

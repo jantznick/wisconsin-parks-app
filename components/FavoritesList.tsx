@@ -1,25 +1,18 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
-import { Alert, FlatList, Share, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { FavoriteCardProps, FavoritesListProps } from '../interfaces/FavoritesList.interfaces';
 import { Park } from '../interfaces/Park.interface';
-import tailwindConfig from '../tailwind.config.js';
 import { getActivityName } from '../utils/activities';
+import { getColor } from '../utils/colors';
+import { shareContent } from '../utils/share';
 import AnimatedPressable from './AnimatedPressable';
 import FavoriteHeartIcon from './FavoriteHeartIcon';
 const PARKS: Park[] = require('../data/parks.json');
-
-// Helper to get color from Tailwind config
-const getColor = (colorName: string) => {
-  // @ts-ignore
-  const [theme, shade] = colorName.split('-');
-  // @ts-ignore
-  return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
-};
 
 const AnimatedFavoriteCard = ({ park, index, onPress, onShare }: FavoriteCardProps) => {
   const opacity = useSharedValue(0);
@@ -91,14 +84,11 @@ export default function FavoritesList({ scrollEnabled = true }: FavoritesListPro
   
   const handleShare = async (parkToShare: Park) => {
     if (!parkToShare) return;
-    try {
-      await Share.share({
-        message: `Check out ${parkToShare.name}! Find out more here: ${parkToShare.contact.website}`,
-        title: `Share ${parkToShare.name}`,
-      });
-    } catch (error: any) {
-      Alert.alert(error.message);
-    }
+    await shareContent({
+      message: `Check out ${parkToShare.name}! Find out more here: ${parkToShare.contact.website}`,
+      title: `Share ${parkToShare.name}`,
+      url: parkToShare.contact.website
+    });
   };
   
   const favoriteParks = PARKS.filter(park => favorites.includes(park.id));

@@ -4,17 +4,9 @@ import { ImageBackground, Text, View } from 'react-native';
 import { useTheme } from '../contexts/ThemeContext';
 import { parkImageAssets } from '../data/image_assets';
 import { SharedParkHeaderProps } from '../interfaces/SharedParkHeader.interfaces';
-import tailwindConfig from '../tailwind.config.js';
+import { getColor } from '../utils/colors';
 import AnimatedPressable from './AnimatedPressable';
 import FavoriteHeartIcon from './FavoriteHeartIcon';
-
-// Helper to get color from Tailwind config (copied from other files)
-const getColor = (colorName: string) => {
-  // @ts-ignore
-  const [theme, shade] = colorName.split('-');
-  // @ts-ignore
-  return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
-};
 
 export default function SharedParkHeader({
   park,

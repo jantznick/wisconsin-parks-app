@@ -5,14 +5,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../contexts/ThemeContext';
 import { CustomHeaderProps } from '../interfaces/CustomHeader.interfaces';
-import tailwindConfig from '../tailwind.config.js';
-
-// Helper to get color from Tailwind config
-const getColor = (colorName: string) => {
-  const [theme, shade] = colorName.split('-');
-  // @ts-ignore
-  return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
-};
+import { getColor } from '../utils/colors';
 
 export default function CustomHeader({ title, subtitle }: CustomHeaderProps) {
   const insets = useSafeAreaInsets();

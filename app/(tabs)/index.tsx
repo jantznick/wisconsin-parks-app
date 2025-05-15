@@ -3,24 +3,17 @@ import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { FlatList, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import CustomHeader from '../../components/CustomHeader'; // Import the new header
+import CustomHeader from '../../components/CustomHeader';
 import FavoritesList from '../../components/FavoritesList';
 import { useTheme } from '../../contexts/ThemeContext';
-import tailwindConfig from '../../tailwind.config.js'; // Import Tailwind config
-const PARKS = require('../../data/parks.json');;
-
-// Helper to get color from Tailwind config (simplified)
-// In a real scenario, you might have a more robust way or directly use palette names if props allow
-const getColor = (colorName: string) => {
-  const [theme, shade] = colorName.split('-');
-  // @ts-ignore
-  return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
-};
+import { Park } from '../../interfaces/Park.interface';
+import { getColor } from '../../utils/colors';
+const PARKS = require('../../data/parks.json');
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { effectiveTheme } = useTheme(); // theme, setTheme are now in CustomHeader
+  const { effectiveTheme } = useTheme();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredParks, setFilteredParks] = useState<typeof PARKS>([]);
@@ -33,7 +26,7 @@ export default function HomeScreen() {
       return;
     }
     const lowerCaseQuery = searchQuery.toLowerCase();
-    const results = PARKS.filter(park => 
+    const results = PARKS.filter((park: Park) => 
       park.name.toLowerCase().includes(lowerCaseQuery) || 
       (park.description && park.description.toLowerCase().includes(lowerCaseQuery))
     );
@@ -45,7 +38,7 @@ export default function HomeScreen() {
       className="px-4 py-3 border-b border-charcoal-200 dark:border-charcoal-700"
       onPress={() => {
         router.push(`/park/${item.id}`);
-        setSearchQuery(''); // Clear search query on selection
+        setSearchQuery('');
       }}
     >
       <Text className="text-charcoal-800 dark:text-charcoal-100 text-base font-semibold">{item.name}</Text>
@@ -55,7 +48,6 @@ export default function HomeScreen() {
   // Define colors based on theme for props that don't accept Tailwind classes directly
   const placeholderColor = effectiveTheme === 'dark' ? getColor('charcoal-300') : getColor('charcoal-400');
   const searchIconColor = effectiveTheme === 'dark' ? getColor('charcoal-300') : getColor('charcoal-500');
-  // headerIconColor is now in CustomHeader
 
   return (
     <View className="flex-1 bg-charcoal-50 dark:bg-charcoal-950">
@@ -73,10 +65,10 @@ export default function HomeScreen() {
             className={`bg-white dark:bg-charcoal-800 p-3 shadow-lg border-l-4 border-persian-700 dark:border-persian-500 ${isDropdownVisible ? 'rounded-t-xl' : 'rounded-xl mb-6'}`}
           >
             <View className="flex-row items-center bg-charcoal-100 dark:bg-charcoal-700 rounded-lg px-3 py-2.5">
-              <Ionicons name="search" size={20} color={searchIconColor} /> {/* Use themed color */}
+              <Ionicons name="search" size={20} color={searchIconColor} />
               <TextInput
                 placeholder="Search for a park..."
-                placeholderTextColor={placeholderColor} // Use themed color
+                placeholderTextColor={placeholderColor}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 className="flex-1 ml-2 text-charcoal-800 dark:text-charcoal-100 text-base"

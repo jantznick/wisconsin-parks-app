@@ -5,15 +5,7 @@ import { Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../contexts/ThemeContext';
 import { ThemeOptionProps } from '../interfaces/SettingsScreen.interfaces';
-import tailwindConfig from '../tailwind.config.js';
-
-// Helper to get color from Tailwind config
-const getColor = (colorName: string) => {
-  const [themeShade, ...rest] = colorName.split('-');
-  const shade = rest.join('-');
-  // @ts-ignore
-  return tailwindConfig.theme.extend.colors[themeShade]?.[shade] || '#000000';
-};
+import { getColor } from '../utils/colors';
 
 const ThemeOptionButton = ({ title, currentThemeSelection, buttonRepresents, onPress, iconName, effectiveTheme }: ThemeOptionProps) => {
   const isSelected = (buttonRepresents === 'system' && currentThemeSelection === null) || 

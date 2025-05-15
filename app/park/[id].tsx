@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useRef } from 'react';
-import { Alert, Linking, Pressable, ScrollView, Share, Text, View } from 'react-native';
+import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AnimatedPressable from '../../components/AnimatedPressable';
@@ -12,6 +12,7 @@ import WeatherSection from '../../components/park_details/WeatherSection';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Park } from '../../interfaces/Park.interface';
 import { getActivityName } from '../../utils/activities';
+import { shareContent } from '../../utils/share';
 
 const PARKS: Park[] = require('../../data/parks.json');
 
@@ -51,14 +52,12 @@ export default function ParkDetailsScreen() {
 	}
 
 	const handleShare = async () => {
-		try {
-			await Share.share({
-				message: `Check out ${park.name}! Find out more here: ${park.contact.website}`,
-				title: `Share ${park.name}`,
-			});
-		} catch (error: any) {
-			Alert.alert(error.message);
-		}
+		if (!park) return;
+		await shareContent({
+			message: `Check out ${park.name}! Find out more here: ${park.contact.website}`,
+			title: `Share ${park.name}`,
+			url: park.contact.website
+		});
 	};
 
 	const openDirections = () => {

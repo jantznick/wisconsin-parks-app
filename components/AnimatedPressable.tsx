@@ -1,10 +1,10 @@
 import React from 'react';
 import { Pressable } from 'react-native';
 import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withSpring,
-    withTiming,
+	useAnimatedStyle,
+	useSharedValue,
+	withSpring,
+	withTiming,
 } from 'react-native-reanimated';
 import { AnimatedPressableProps } from '../interfaces/AnimatedPressable.interfaces';
 
@@ -18,7 +18,7 @@ const AnimatedPressable: React.FC<AnimatedPressableProps> = ({
   duration = 50,
   springConfig = { damping: 15, stiffness: 400, mass: 0.1 },
   containerStyle,
-  ...rest // باقی props به Pressable داخلی منتقل می‌شوند (مثل className, accessibilityLabel)
+  ...rest 
 }) => {
   const scale = useSharedValue(1);
 

@@ -3,26 +3,19 @@ import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import CustomHeader from '../../components/CustomHeader'; // Import the new header
+import CustomHeader from '../../components/CustomHeader';
 import WisconsinMap from '../../components/WisconsinMap';
 import { useTheme } from '../../contexts/ThemeContext';
-import tailwindConfig from '../../tailwind.config.js'; // Import Tailwind config
-const PARKS = require('../../data/parks.json');;
+import { Park } from '../../interfaces/Park.interface';
+import { getColor } from '../../utils/colors';
+const PARKS_DATA = require('../../data/parks.json');
 
-// Helper to get color from Tailwind config (copied from HomeScreen)
-const getColor = (colorName: string) => {
-	const [theme, shade] = colorName.split('-');
-	// @ts-ignore
-	return tailwindConfig.theme.extend.colors[theme]?.[shade] || '#000000';
-};
-
-// Ensure PARKS is initialized
-const INITIAL_PARKS = PARKS || [];
+const INITIAL_PARKS: Park[] = PARKS_DATA || [];
 
 export default function ExploreScreen() {
 	const insets = useSafeAreaInsets();
-	const { effectiveTheme } = useTheme(); // theme, setTheme are now in CustomHeader
-	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+	const { effectiveTheme } = useTheme();
+	const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 	const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
 	const [feeFilter, setFeeFilter] = useState<'any' | 'free' | 'paid'>('any');
 	const [dogFriendlyOnly, setDogFriendlyOnly] = useState<boolean>(false);
@@ -41,7 +34,7 @@ export default function ExploreScreen() {
 	const activeAmenityFiltersCount = (dogFriendlyOnly ? 1 : 0) + (accessibleOnly ? 1 : 0);
 
 	// Get unique activities & facilities from all parks
-	const categories = useMemo(() => [...new Set(INITIAL_PARKS.flatMap(park => park.activities || []))].filter(Boolean).sort(), [INITIAL_PARKS]);
+	const categories = useMemo(() => [...new Set(INITIAL_PARKS.flatMap(park => park.activities || []))].filter(Boolean).sort((a,b) => a - b), [INITIAL_PARKS]);
 	const facilities = useMemo(() => [...new Set(INITIAL_PARKS.flatMap(park => park.facilities || []))].filter(Boolean).sort(), [INITIAL_PARKS]);
 
 	const FEE_OPTIONS = [
@@ -52,53 +45,53 @@ export default function ExploreScreen() {
 
 	// Enhanced filtering logic
 	const filteredParks = useMemo(() => {
-		let parks = INITIAL_PARKS;
+		let parks: Park[] = INITIAL_PARKS;
 
 		// Filter by selected categories (park must have at least one)
 		if (selectedCategories.length > 0) {
-			parks = parks.filter(park =>
+			parks = parks.filter((park: Park) =>
 				selectedCategories.some(category => park.activities?.includes(category))
 			);
 		}
 
 		// Filter by selected facilities (park must have all selected)
 		if (selectedFacilities.length > 0) {
-			parks = parks.filter(park =>
+			parks = parks.filter((park: Park) =>
 				selectedFacilities.every(facility => park.facilities?.includes(facility))
 			);
 		}
 
 		// Filter by entrance fee
 		if (feeFilter === 'free') {
-			parks = parks.filter(park => !park.entranceFee || park.entranceFee.daily === 0 || park.entranceFee.daily === null);
+			parks = parks.filter((park: Park) => !park.entranceFee || park.entranceFee.daily === 0 || park.entranceFee.daily === null);
 		} else if (feeFilter === 'paid') {
-			parks = parks.filter(park => park.entranceFee && typeof park.entranceFee.daily === 'number' && park.entranceFee.daily > 0);
+			parks = parks.filter((park: Park) => park.entranceFee && typeof park.entranceFee.daily === 'number' && park.entranceFee.daily > 0);
 		}
 
 		// Filter by dog-friendly
 		if (dogFriendlyOnly) {
-			parks = parks.filter(park => park.isDogFriendly === true);
+			parks = parks.filter((park: Park) => park.isDogFriendly === true);
 		}
 
 		// Filter by accessible
 		if (accessibleOnly) {
-			parks = parks.filter(park => park.isAccessible === true);
+			parks = parks.filter((park: Park) => park.isAccessible === true);
 		}
 
 		return parks;
 	}, [INITIAL_PARKS, selectedCategories, selectedFacilities, feeFilter, dogFriendlyOnly, accessibleOnly]);
 
 	// Calculate park counts for each category, considering other active filters
-	const getCategoryCount = (category: string) => {
-		return filteredParks.filter(park => park.activities?.includes(category)).length;
+	const getCategoryCount = (category: number) => {
+		return filteredParks.filter((park: Park) => park.activities?.includes(category)).length;
 	};
 
 	// Calculate park counts for each facility, considering other active filters
 	const getFacilityCount = (facility: string) => {
-		return filteredParks.filter(park => park.facilities?.includes(facility)).length;
+		return filteredParks.filter((park: Park) => park.facilities?.includes(facility)).length;
 	};
 
-	const toggleCategory = (category: string) => {
+	const toggleCategory = (category: number) => {
 		setSelectedCategories(prev =>
 			prev.includes(category)
 				? prev.filter(c => c !== category)
