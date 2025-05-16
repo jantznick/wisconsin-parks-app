@@ -1,0 +1,1 @@
+export const DATA_REFRESH_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds 

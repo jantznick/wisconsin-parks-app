@@ -1,20 +1,21 @@
 import { getActivityName } from '@/utils/activities';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useMemo, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomHeader from '../../components/CustomHeader';
 import WisconsinMap from '../../components/WisconsinMap';
+import { useActivities } from '../../contexts/ActivitiesContext';
+import { useParks } from '../../contexts/ParksContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Park } from '../../interfaces/Park.interface';
 import { getColor } from '../../utils/colors';
-const PARKS_DATA = require('../../data/parks.json');
-
-const INITIAL_PARKS: Park[] = PARKS_DATA || [];
 
 export default function ExploreScreen() {
 	const insets = useSafeAreaInsets();
 	const { effectiveTheme } = useTheme();
+	const { parks: INITIAL_PARKS, loading: parksLoading, error: parksError } = useParks();
+	const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
 	const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 	const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
 	const [feeFilter, setFeeFilter] = useState<'any' | 'free' | 'paid'>('any');
@@ -44,51 +45,51 @@ export default function ExploreScreen() {
 	];
 
 	// Enhanced filtering logic
-	const filteredParks = useMemo(() => {
-		let parks: Park[] = INITIAL_PARKS;
+	const filteredParksData = useMemo(() => {
+		let parksToFilter: Park[] = INITIAL_PARKS || [];
 
 		// Filter by selected categories (park must have at least one)
 		if (selectedCategories.length > 0) {
-			parks = parks.filter((park: Park) =>
+			parksToFilter = parksToFilter.filter((park: Park) =>
 				selectedCategories.some(category => park.activities?.includes(category))
 			);
 		}
 
 		// Filter by selected facilities (park must have all selected)
 		if (selectedFacilities.length > 0) {
-			parks = parks.filter((park: Park) =>
+			parksToFilter = parksToFilter.filter((park: Park) =>
 				selectedFacilities.every(facility => park.facilities?.includes(facility))
 			);
 		}
 
 		// Filter by entrance fee
 		if (feeFilter === 'free') {
-			parks = parks.filter((park: Park) => !park.entranceFee || park.entranceFee.daily === 0 || park.entranceFee.daily === null);
+			parksToFilter = parksToFilter.filter((park: Park) => !park.entranceFee || park.entranceFee.daily === 0 || park.entranceFee.daily === null);
 		} else if (feeFilter === 'paid') {
-			parks = parks.filter((park: Park) => park.entranceFee && typeof park.entranceFee.daily === 'number' && park.entranceFee.daily > 0);
+			parksToFilter = parksToFilter.filter((park: Park) => park.entranceFee && typeof park.entranceFee.daily === 'number' && park.entranceFee.daily > 0);
 		}
 
 		// Filter by dog-friendly
 		if (dogFriendlyOnly) {
-			parks = parks.filter((park: Park) => park.isDogFriendly === true);
+			parksToFilter = parksToFilter.filter((park: Park) => park.isDogFriendly === true);
 		}
 
 		// Filter by accessible
 		if (accessibleOnly) {
-			parks = parks.filter((park: Park) => park.isAccessible === true);
+			parksToFilter = parksToFilter.filter((park: Park) => park.isAccessible === true);
 		}
 
-		return parks;
+		return parksToFilter;
 	}, [INITIAL_PARKS, selectedCategories, selectedFacilities, feeFilter, dogFriendlyOnly, accessibleOnly]);
 
 	// Calculate park counts for each category, considering other active filters
 	const getCategoryCount = (category: number) => {
-		return filteredParks.filter((park: Park) => park.activities?.includes(category)).length;
+		return filteredParksData.filter((park: Park) => park.activities?.includes(category)).length;
 	};
 
 	// Calculate park counts for each facility, considering other active filters
 	const getFacilityCount = (facility: string) => {
-		return filteredParks.filter((park: Park) => park.facilities?.includes(facility)).length;
+		return filteredParksData.filter((park: Park) => park.facilities?.includes(facility)).length;
 	};
 
 	const toggleCategory = (category: number) => {
@@ -128,6 +129,23 @@ export default function ExploreScreen() {
 	};
 
 	const areAnyFiltersActive = selectedCategories.length > 0 || selectedFacilities.length > 0 || feeFilter !== 'any' || dogFriendlyOnly || accessibleOnly;
+
+	if (parksLoading || activitiesLoading) {
+		return (
+			<View className="flex-1 justify-center items-center">
+				<ActivityIndicator size="large" />
+				<Text>Loading data...</Text>
+			</View>
+		);
+	}
+
+	if (parksError || activitiesError) {
+		return (
+			<View className="flex-1 justify-center items-center">
+				<Text>Error loading data: {parksError?.message || activitiesError?.message}</Text>
+			</View>
+		);
+	}
 
 	return (
 		<View className="flex-1 bg-charcoal-50 dark:bg-charcoal-950">
@@ -188,7 +206,7 @@ export default function ExploreScreen() {
 																	: 'text-sandy-700 dark:text-sandy-300'
 															}`}
 															>
-																{getActivityName(category)}
+																{getActivityName(category, activities)}
 															</Text>
 															<Text
 																className={`ml-2 text-xs ${isSelected
@@ -227,7 +245,7 @@ export default function ExploreScreen() {
 																	: 'text-sandy-700 dark:text-sandy-300'
 															}`}
 															>
-																{getActivityName(category)}
+																{getActivityName(category, activities)}
 															</Text>
 															<Text
 																className={`ml-2 text-xs ${isSelected
@@ -383,8 +401,8 @@ export default function ExploreScreen() {
 						<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-sandy-600 dark:border-sandy-400">
 							<Text className="text-xl font-semibold text-sandy-600 dark:text-sandy-400">Nearby Parks</Text>
 							<Text className="text-sandy-700 dark:text-sandy-300 mt-1 mb-3 font-medium">Discover parks in your area</Text>
-							<View className="h-80 rounded-md overflow-hidden">
-								<WisconsinMap parks={filteredParks} />
+							<View style={{ height: 300, width: '100%', marginBottom: 16 }}>
+								<WisconsinMap parks={filteredParksData} />
 							</View>
 						</View>
 					</View>

@@ -3,8 +3,11 @@ import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from 'react-native-reanimated';
+import { useActivities } from '../contexts/ActivitiesContext';
 import { useFavorites } from '../contexts/FavoritesContext';
+import { useParks } from '../contexts/ParksContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { Activity } from '../interfaces/Activity.interface';
 import { FavoriteCardProps, FavoritesListProps } from '../interfaces/FavoritesList.interfaces';
 import { Park } from '../interfaces/Park.interface';
 import { getActivityName } from '../utils/activities';
@@ -12,9 +15,12 @@ import { getColor } from '../utils/colors';
 import { shareContent } from '../utils/share';
 import AnimatedPressable from './AnimatedPressable';
 import FavoriteHeartIcon from './FavoriteHeartIcon';
-const PARKS: Park[] = require('../data/parks.json');
 
-const AnimatedFavoriteCard = ({ park, index, onPress, onShare }: FavoriteCardProps) => {
+interface AnimatedFavoriteCardComponentProps extends FavoriteCardProps {
+  activities: Activity[];
+}
+
+const AnimatedFavoriteCard = ({ park, index, onPress, onShare, activities }: AnimatedFavoriteCardComponentProps) => {
   const opacity = useSharedValue(0);
   const translateY = useSharedValue(50);
 
@@ -26,7 +32,6 @@ const AnimatedFavoriteCard = ({ park, index, onPress, onShare }: FavoriteCardPro
   });
 
   useEffect(() => {
-    // Animate in with a slight delay based on index
     opacity.value = withDelay(index * 100, withTiming(1, { duration: 400 }));
     translateY.value = withDelay(index * 100, withTiming(0, { duration: 400 }));
   }, [opacity, translateY, index]);
@@ -44,9 +49,11 @@ const AnimatedFavoriteCard = ({ park, index, onPress, onShare }: FavoriteCardPro
               {park.description}
             </Text>
             <View className="flex-row flex-wrap gap-1">
-              {park.activities?.map((activity, actIndex) => (
+              {park.activities?.map((activityId, actIndex) => (
                 <View key={actIndex} className="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-xl">
-                  <Text className="text-xs text-blue-700 dark:text-blue-300">{getActivityName(activity)}</Text>
+                  <Text className="text-xs text-blue-700 dark:text-blue-300">
+                    {getActivityName(activityId, activities)}
+                  </Text>
                 </View>
               ))}
             </View>
@@ -81,6 +88,8 @@ export default function FavoritesList({ scrollEnabled = true }: FavoritesListPro
   const { favorites } = useFavorites();
   const router = useRouter();
   const { effectiveTheme } = useTheme();
+  const { parks: PARKS, loading: parksLoading, error: parksError } = useParks();
+  const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
   
   const handleShare = async (parkToShare: Park) => {
     if (!parkToShare) return;
@@ -91,7 +100,25 @@ export default function FavoritesList({ scrollEnabled = true }: FavoritesListPro
     });
   };
   
-  const favoriteParks = PARKS.filter(park => favorites.includes(park.id));
+  const favoriteParks = PARKS && PARKS.length > 0 ? PARKS.filter(park => favorites.includes(park.id)) : [];
+
+  if (parksLoading || activitiesLoading) {
+    return (
+      <View className="flex-1 items-center justify-center p-8">
+        <Text className="text-lg text-charcoal-600 dark:text-charcoal-400">Loading favorite parks...</Text>
+      </View>
+    );
+  }
+
+  if (parksError || activitiesError) {
+    return (
+      <View className="flex-1 items-center justify-center p-8">
+        <Text className="text-lg text-red-600 dark:text-red-400">
+          Error loading data: {parksError?.message || activitiesError?.message}
+        </Text>
+      </View>
+    );
+  }
 
   if (favoriteParks.length === 0) {
     return (
@@ -129,6 +156,7 @@ export default function FavoritesList({ scrollEnabled = true }: FavoritesListPro
           index={index} 
           onPress={() => router.push(`/park/${item.id}`)} 
           onShare={handleShare}
+          activities={activities}
         />
       )}
       keyExtractor={item => item.id}

@@ -1,22 +1,23 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { FlatList, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomHeader from '../../components/CustomHeader';
 import FavoritesList from '../../components/FavoritesList';
+import { useParks } from '../../contexts/ParksContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Park } from '../../interfaces/Park.interface';
 import { getColor } from '../../utils/colors';
-const PARKS = require('../../data/parks.json');
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { effectiveTheme } = useTheme();
+  const { parks: PARKS, loading: parksLoading, error: parksError } = useParks();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredParks, setFilteredParks] = useState<typeof PARKS>([]);
+  const [filteredParks, setFilteredParks] = useState<Park[]>([]);
 
   const isDropdownVisible = searchQuery.trim() !== '';
 
@@ -48,6 +49,23 @@ export default function HomeScreen() {
   // Define colors based on theme for props that don't accept Tailwind classes directly
   const placeholderColor = effectiveTheme === 'dark' ? getColor('charcoal-300') : getColor('charcoal-400');
   const searchIconColor = effectiveTheme === 'dark' ? getColor('charcoal-300') : getColor('charcoal-500');
+
+  if (parksLoading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" />
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (parksError) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Text>Error: {parksError.message}</Text>
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-charcoal-50 dark:bg-charcoal-950">

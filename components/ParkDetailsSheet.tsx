@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
+import { useActivities } from '../contexts/ActivitiesContext';
 import { ParkDetailsSheetProps } from '../interfaces/ParkDetailsSheet.interfaces';
 import { getActivityName } from '../utils/activities';
 import { openDirections } from '../utils/map';
@@ -11,6 +12,7 @@ import SharedParkHeader from './SharedParkHeader';
 
 export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProps) {
   const router = useRouter();
+  const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
 
   const handleViewFullDetails = () => {
     router.push(`/park/${park.id}`);
@@ -53,13 +55,19 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
         {/* Activities */}
         <View className="mb-4">
           <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Activities</Text>
-          <View className="flex-row flex-wrap gap-2">
-            {park.activities.map((activity, index) => (
-              <View key={index} className="bg-persian-100 dark:bg-persian-800 px-3 py-1 rounded-full">
-                <Text className="text-persian-800 dark:text-persian-200">{getActivityName(activity)}</Text>
-              </View>
-            ))}
-          </View>
+          {activitiesLoading && <ActivityIndicator />}
+          {activitiesError && <Text>Error loading activities.</Text>}
+          {!activitiesLoading && !activitiesError && activities && (
+            <View className="flex-row flex-wrap gap-2">
+              {park.activities.map((activityId, index) => (
+                <View key={index} className="bg-persian-100 dark:bg-persian-800 px-3 py-1 rounded-full">
+                  <Text className="text-persian-800 dark:text-persian-200">
+                    {getActivityName(activityId, activities)}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          )}
         </View>
 
         {/* Facilities */}

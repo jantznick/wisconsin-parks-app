@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useRef } from 'react';
-import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AnimatedPressable from '../../components/AnimatedPressable';
@@ -9,13 +9,13 @@ import ParkMarker from '../../components/ParkMarker';
 import SharedParkHeader from '../../components/SharedParkHeader';
 import ReservationsCard from '../../components/park_details/ReservationsCard';
 import WeatherSection from '../../components/park_details/WeatherSection';
+import { useActivities } from '../../contexts/ActivitiesContext';
+import { useParks } from '../../contexts/ParksContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Park } from '../../interfaces/Park.interface';
 import { getActivityName } from '../../utils/activities';
 import { openDirections } from '../../utils/map';
 import { shareContent } from '../../utils/share';
-
-const PARKS: Park[] = require('../../data/parks.json');
 
 export default function ParkDetailsScreen() {
 	const { id } = useLocalSearchParams();
@@ -23,8 +23,10 @@ export default function ParkDetailsScreen() {
 	const mapRef = useRef<MapView>(null);
 	const insets = useSafeAreaInsets();
 	const { effectiveTheme } = useTheme();
+	const { parks, loading: parksLoading, error: parksError } = useParks();
+	const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
 
-	const park: Park | undefined = PARKS.find(p => p.id === id);
+	const park: Park | undefined = parks.find(p => p.id === id);
 
 	const parkCoordinateIsValid = !!(park &&
 		typeof park.coordinate?.latitude === 'number' &&
@@ -43,6 +45,25 @@ export default function ParkDetailsScreen() {
 			latitudeDelta: 5,
 			longitudeDelta: 5,
 		};
+
+	if (parksLoading || activitiesLoading) {
+		return (
+			<View className="flex-1 items-center justify-center bg-charcoal-50 dark:bg-charcoal-950">
+				<ActivityIndicator size="large" />
+				<Text className="text-xl text-charcoal-900 dark:text-charcoal-100">Loading park details...</Text>
+			</View>
+		);
+	}
+
+	if (parksError || activitiesError) {
+		return (
+			<View className="flex-1 items-center justify-center bg-charcoal-50 dark:bg-charcoal-950">
+				<Text className="text-xl text-charcoal-900 dark:text-charcoal-100">
+					Error loading data: {parksError?.message || activitiesError?.message}
+				</Text>
+			</View>
+		);
+	}
 
 	if (!park) {
 		return (
@@ -132,7 +153,9 @@ export default function ParkDetailsScreen() {
 						<View className="flex-row flex-wrap gap-2">
 							{park.activities.map((activity, index) => (
 								<View key={index} className="bg-burnt-100 dark:bg-charcoal-700 px-3 py-1.5 rounded-full shadow-sm">
-									<Text className="text-burnt-700 dark:text-burnt-300 font-medium text-sm">{getActivityName(activity)}</Text>
+									<Text className="text-burnt-700 dark:text-burnt-300 font-medium text-sm">
+										{getActivityName(activity, activities)}
+									</Text>
 								</View>
 							))}
 						</View>
