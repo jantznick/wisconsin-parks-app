@@ -66,9 +66,7 @@ export const ParksProvider = ({ children }: { children: ReactNode }) => {
           }
         }
       } catch (e) {
-        // Could not load from async storage, or data is stale/invalid
         console.error('Error loading parks data from AsyncStorage:', e);
-        // Proceed to fetch from network
       }
       await fetchParksData();
     };

@@ -10,6 +10,7 @@ import SharedParkHeader from '../../components/SharedParkHeader';
 import ReservationsCard from '../../components/park_details/ReservationsCard';
 import WeatherSection from '../../components/park_details/WeatherSection';
 import { useActivities } from '../../contexts/ActivitiesContext';
+import { useFeatureFlags } from '../../contexts/FeatureFlagsContext';
 import { useParks } from '../../contexts/ParksContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Park } from '../../interfaces/Park.interface';
@@ -25,6 +26,7 @@ export default function ParkDetailsScreen() {
 	const { effectiveTheme } = useTheme();
 	const { parks, loading: parksLoading, error: parksError } = useParks();
 	const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
+	const { featureFlags } = useFeatureFlags();
 
 	const park: Park | undefined = parks.find(p => p.id === id);
 
@@ -102,7 +104,9 @@ export default function ParkDetailsScreen() {
 				contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
 			>
 				<View className="p-6">
-					<ReservationsCard park={park} effectiveTheme={effectiveTheme} />
+					{featureFlags?.parkDetailsPage?.reservations && (
+						<ReservationsCard park={park} effectiveTheme={effectiveTheme} />
+					)}
 
 					<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-saffron-700 dark:border-saffron-400">
 						<View className="flex-row justify-between items-center mb-2">

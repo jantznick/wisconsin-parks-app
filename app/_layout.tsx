@@ -6,6 +6,7 @@ import 'react-native-reanimated';
 import DraggableBottomSheet from '../components/DraggableBottomSheet';
 import { ActivitiesProvider } from '../contexts/ActivitiesContext';
 import { FavoritesProvider } from '../contexts/FavoritesContext';
+import { FeatureFlagsProvider } from '../contexts/FeatureFlagsContext';
 import { ParksProvider } from '../contexts/ParksContext';
 import { SelectedParkProvider, useSelectedPark } from '../contexts/SelectedParkContext';
 import { ThemeProvider as CustomThemeProvider, useTheme } from '../contexts/ThemeContext';
@@ -58,16 +59,18 @@ export default function RootLayout() {
   }
 
   return (
-    <ParksProvider>
-      <ActivitiesProvider>
-        <FavoritesProvider>
-          <SelectedParkProvider>
-            <CustomThemeProvider>
-              <AppNavigation />
-            </CustomThemeProvider>
-          </SelectedParkProvider>
-        </FavoritesProvider>
-      </ActivitiesProvider>
-    </ParksProvider>
+    <FeatureFlagsProvider>
+      <ParksProvider>
+        <ActivitiesProvider>
+          <FavoritesProvider>
+            <SelectedParkProvider>
+              <CustomThemeProvider>
+                <AppNavigation />
+              </CustomThemeProvider>
+            </SelectedParkProvider>
+          </FavoritesProvider>
+        </ActivitiesProvider>
+      </ParksProvider>
+    </FeatureFlagsProvider>
   );
 }

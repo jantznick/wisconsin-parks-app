@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomHeader from '../../components/CustomHeader';
 import WisconsinMap from '../../components/WisconsinMap';
 import { useActivities } from '../../contexts/ActivitiesContext';
+import { useFeatureFlags } from '../../contexts/FeatureFlagsContext';
 import { useParks } from '../../contexts/ParksContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Park } from '../../interfaces/Park.interface';
@@ -16,6 +17,7 @@ export default function ExploreScreen() {
 	const { effectiveTheme } = useTheme();
 	const { parks: INITIAL_PARKS, loading: parksLoading, error: parksError } = useParks();
 	const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
+	const { featureFlags } = useFeatureFlags();
 	const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 	const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
 	const [feeFilter, setFeeFilter] = useState<'any' | 'free' | 'paid'>('any');
@@ -167,6 +169,7 @@ export default function ExploreScreen() {
 						</View>
 
 						{/* Categories Section (now Activities) */}
+						{featureFlags?.explorePage?.filterBy?.activities && (
 						<View className="bg-white dark:bg-charcoal-800 rounded-xl shadow-lg mb-6 border-l-4 border-saffron-700 dark:border-saffron-400 overflow-hidden">
 							<Pressable 
 								onPress={() => setActivitiesExpanded(!activitiesExpanded)}
@@ -276,8 +279,10 @@ export default function ExploreScreen() {
 								</View>
 							)}
 						</View>
+						)}
 
 						{/* Facilities Section */}
+						{featureFlags?.explorePage?.filterBy?.facilities && (
 						<View className="bg-white dark:bg-charcoal-800 rounded-xl shadow-lg mb-6 border-l-4 border-burnt-600 dark:border-burnt-400 overflow-hidden">
 							<Pressable 
 								onPress={() => setFacilitiesExpanded(!facilitiesExpanded)}
@@ -320,6 +325,7 @@ export default function ExploreScreen() {
 								</View>
 							)}
 						</View>
+						)}
 
 						{/* Entrance Fee Section */}
 						<View className="bg-white dark:bg-charcoal-800 rounded-xl shadow-lg mb-6 border-l-4 border-persian-700 dark:border-persian-500 overflow-hidden">
@@ -356,6 +362,7 @@ export default function ExploreScreen() {
 						</View>
 
 						{/* Amenities Section (Dog Friendly, Accessible) */}
+						{featureFlags?.explorePage?.filterBy?.other?.dogFriendly || featureFlags?.explorePage?.filterBy?.other?.accessible && (
 						<View className="bg-white dark:bg-charcoal-800 rounded-xl shadow-lg mb-6 border-l-4 border-sandy-600 dark:border-sandy-400 overflow-hidden">
 							<Pressable 
 								onPress={() => setAmenitiesExpanded(!amenitiesExpanded)}
@@ -370,6 +377,7 @@ export default function ExploreScreen() {
 								<View className="px-4 pb-4 pt-2">
 									<View className="flex-col space-y-3">
 										{/* Dog Friendly Toggle */}
+										{featureFlags?.explorePage?.filterBy?.other?.dogFriendly && (
 										<Pressable 
 											className={`flex-row items-center justify-between p-3 rounded-lg shadow-sm ${dogFriendlyOnly ? 'bg-sandy-600 dark:bg-sandy-500' : 'bg-sandy-100 dark:bg-charcoal-700'}`}
 											onPress={() => setDogFriendlyOnly(!dogFriendlyOnly)}
@@ -380,8 +388,10 @@ export default function ExploreScreen() {
 											</View>
 											<Ionicons name={dogFriendlyOnly ? "checkbox" : "square-outline"} size={24} color={dogFriendlyOnly ? 'white' : getColor(effectiveTheme === 'dark' ? 'sandy-400' : 'sandy-600')} />
 										</Pressable>
+										)}
 
 										{/* Accessible Toggle */}
+										{featureFlags?.explorePage?.filterBy?.other?.accessible && (
 										<Pressable 
 											className={`flex-row items-center justify-between p-3 rounded-lg shadow-sm ${accessibleOnly ? 'bg-sandy-600 dark:bg-sandy-500' : 'bg-sandy-100 dark:bg-charcoal-700'}`}
 											onPress={() => setAccessibleOnly(!accessibleOnly)}
@@ -392,10 +402,12 @@ export default function ExploreScreen() {
 											</View>
 											<Ionicons name={accessibleOnly ? "checkbox" : "square-outline"} size={24} color={accessibleOnly ? 'white' : getColor(effectiveTheme === 'dark' ? 'sandy-400' : 'sandy-600')} />
 										</Pressable>
+										)}
 									</View>
 								</View>
 							)}
 						</View>
+						)}
 
 						{/* Nearby Parks Section */}
 						<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-sandy-600 dark:border-sandy-400">

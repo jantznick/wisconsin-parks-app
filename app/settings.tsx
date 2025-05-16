@@ -1,8 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { ActivityIndicator, Linking, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SvgXml } from 'react-native-svg';
+import { useFeatureFlags } from '../contexts/FeatureFlagsContext';
 import { useParks } from '../contexts/ParksContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { ThemeOptionProps } from '../interfaces/SettingsScreen.interfaces';
@@ -10,148 +12,250 @@ import { getColor } from '../utils/colors';
 
 // Helper function to format the timestamp
 const formatLastFetchTime = (timestamp: number | null): string => {
-  if (timestamp === null) {
-    return 'Not updated yet';
-  }
-  const date = new Date(timestamp);
-  return `In-app data was last updated: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+	if (timestamp === null) {
+		return 'Not updated yet';
+	}
+	const date = new Date(timestamp);
+	return `In-app data was last updated: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 };
 
 const ThemeOptionButton = ({ title, currentThemeSelection, buttonRepresents, onPress, iconName, effectiveTheme }: ThemeOptionProps) => {
-  const isSelected = (buttonRepresents === 'system' && currentThemeSelection === null) || 
-                     (buttonRepresents !== 'system' && currentThemeSelection === buttonRepresents);
-  
-  const bgColor = isSelected 
-    ? (effectiveTheme === 'dark' ? 'bg-persian-600' : 'bg-persian-500') 
-    : (effectiveTheme === 'dark' ? 'bg-charcoal-700' : 'bg-charcoal-100');
-  const textColor = isSelected 
-    ? (effectiveTheme === 'dark' ? 'text-white' : 'text-white') 
-    : (effectiveTheme === 'dark' ? 'text-charcoal-200' : 'text-charcoal-700');
-  const iconColor = isSelected 
-    ? (getColor(effectiveTheme === 'dark' ? 'persian-100' : 'persian-50')) 
-    : (getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600'));
+	const isSelected = (buttonRepresents === 'system' && currentThemeSelection === null) ||
+		(buttonRepresents !== 'system' && currentThemeSelection === buttonRepresents);
 
-  return (
-    <TouchableOpacity 
-      onPress={onPress} 
-      className={`flex-row items-center p-4 rounded-lg shadow-sm mb-3 ${bgColor}`}
-    >
-      <Ionicons name={iconName} size={24} color={iconColor} />
-      <Text className={`ml-4 text-lg font-medium ${textColor}`}>{title}</Text>
-      {isSelected && (
-        <Ionicons name="checkmark-circle" size={24} color={getColor(effectiveTheme === 'dark' ? 'persian-50' : 'persian-100')} className="ml-auto" />
-      )}
-    </TouchableOpacity>
-  );
+	const bgColor = isSelected
+		? (effectiveTheme === 'dark' ? 'bg-persian-600' : 'bg-persian-500')
+		: (effectiveTheme === 'dark' ? 'bg-charcoal-700' : 'bg-charcoal-100');
+	const textColor = isSelected
+		? (effectiveTheme === 'dark' ? 'text-white' : 'text-white')
+		: (effectiveTheme === 'dark' ? 'text-charcoal-200' : 'text-charcoal-700');
+	const iconColor = isSelected
+		? (getColor(effectiveTheme === 'dark' ? 'persian-100' : 'persian-50'))
+		: (getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600'));
+
+	return (
+		<TouchableOpacity
+			onPress={onPress}
+			className={`flex-row items-center p-4 rounded-lg shadow-sm mb-3 ${bgColor}`}
+		>
+			<Ionicons name={iconName} size={24} color={iconColor} />
+			<Text className={`ml-4 text-lg font-medium ${textColor}`}>{title}</Text>
+			{isSelected && (
+				<Ionicons name="checkmark-circle" size={24} color={getColor(effectiveTheme === 'dark' ? 'persian-50' : 'persian-100')} className="ml-auto" />
+			)}
+		</TouchableOpacity>
+	);
 };
 
 export default function SettingsScreen() {
-  const router = useRouter();
-  const insets = useSafeAreaInsets();
-  const { theme, setTheme, effectiveTheme } = useTheme();
-  const { fetchParks, lastFetch, loading: parksLoading } = useParks();
+	const router = useRouter();
+	const insets = useSafeAreaInsets();
+	const { theme, setTheme, effectiveTheme } = useTheme();
+	const { fetchParks, lastFetch, loading: parksLoading } = useParks();
+	const {
+		fetchFeatureFlags,
+		loading: featureFlagsLoading,
+		error: featureFlagsError,
+		lastFetchTime: featureFlagsLastFetchTime
+	} = useFeatureFlags();
 
-  const headerCloseIconColor = effectiveTheme === 'dark' ? getColor('persian-100') : getColor('charcoal-50');
+	// Ref for ScrollView
+	const scrollViewRef = useRef<ScrollView>(null);
 
-  const handleRefreshParks = async () => {
-    await fetchParks();
-    // Optionally, show a toast or alert: "Parks data refresh initiated."
-  };
+	// State for developer menu
+	const [developerMenuVisible, setDeveloperMenuVisible] = useState(false);
+	const [logoTapCount, setLogoTapCount] = useState(0);
+	const [lastLogoTapTime, setLastLogoTapTime] = useState(0);
 
-  return (
-    <View 
-      className="flex-1 bg-charcoal-50 dark:bg-charcoal-950"
-    >
-      {/* Header */}
-      <View 
-        className="flex-row items-center justify-between px-4 py-3 bg-persian-800 dark:bg-charcoal-800"
-        style={{ paddingTop: insets.top }}
-      >
-        <Text className="text-xl font-bold text-white dark:text-white">Settings</Text>
-        <Pressable onPress={() => router.back()} className="p-2">
-          <Ionicons name="close" size={28} color={headerCloseIconColor} />
-        </Pressable>
-      </View>
+	const headerCloseIconColor = effectiveTheme === 'dark' ? getColor('persian-100') : getColor('charcoal-50');
 
-      <ScrollView>
-      {/* Content */}
-      <View className="p-6">
-        <Text className="text-lg font-semibold text-charcoal-800 dark:text-charcoal-200 mb-4">Appearance</Text>
-        
-        <ThemeOptionButton 
-          title="Light Mode"
-          currentThemeSelection={theme}
-          buttonRepresents="light"
-          onPress={() => setTheme('light')}
-          iconName="sunny-outline"
-          effectiveTheme={effectiveTheme}
-        />
-        <ThemeOptionButton 
-          title="Dark Mode"
-          currentThemeSelection={theme}
-          buttonRepresents="dark"
-          onPress={() => setTheme('dark')}
-          iconName="moon-outline"
-          effectiveTheme={effectiveTheme}
-        />
-        <ThemeOptionButton 
-          title="System Default"
-          currentThemeSelection={theme}
-          buttonRepresents="system"
-          onPress={() => setTheme('system')}
-          iconName="cog-outline"
-          effectiveTheme={effectiveTheme}
-        />
-      </View>
+	const handleRefreshParks = async () => {
+		await fetchParks();
+		// Optionally, show a toast or alert: "Parks data refresh initiated."
+	};
 
-      {/* Data Management Section */}
-      <View className="p-6 border-t border-charcoal-200 dark:border-charcoal-700 mt-4">
-        <Text className="text-lg font-semibold text-charcoal-800 dark:text-charcoal-200 mb-4">Data Management</Text>
-        
-        <TouchableOpacity 
-          onPress={handleRefreshParks}
-          disabled={parksLoading}
-          className={`flex-row items-center justify-center p-4 rounded-lg shadow-sm mb-3 ${parksLoading ? (effectiveTheme === 'dark' ? 'bg-charcoal-600' : 'bg-charcoal-200') : (effectiveTheme === 'dark' ? 'bg-saffron-700' : 'bg-saffron-600')}`}
-        >
-          {parksLoading ? (
-            <ActivityIndicator size="small" color={effectiveTheme === 'dark' ? getColor('saffron-300') : getColor('saffron-800')} className="mr-2"/>
-          ) : (
-            <Ionicons name="refresh-circle-outline" size={28} color={effectiveTheme === 'dark' ? 'white' : 'white'} className="mr-2"/>
-          )}
-          <Text className={`ml-3 text-lg font-medium ${effectiveTheme === 'dark' ? 'text-white' : 'text-white'}`}>
-            {parksLoading ? 'Refreshing Parks Data...' : 'Force Refresh Parks Data'}
-          </Text>
-        </TouchableOpacity>
+	const handleRefreshFeatureFlags = async (beta: boolean) => {
+		await fetchFeatureFlags(beta);
+		// Optionally, show a toast or alert: "Feature flags refresh initiated."
+	};
 
-        <Text className="text-sm text-charcoal-600 dark:text-charcoal-400 text-center mt-2">
-          {formatLastFetchTime(lastFetch)} App data is auto refreshed every 7 days.
-        </Text>
-		<Text className="text-sm text-charcoal-600 dark:text-charcoal-400 text-center mt-2">
-          Network data is refreshed every Monday at 2AM Central Time.
-        </Text>
-      </View>
+	const handleLogoTap = () => {
+		const now = Date.now();
+		if (now - lastLogoTapTime > 1000) {
+			setLogoTapCount(1);
+		} else {
+			setLogoTapCount(prevCount => prevCount + 1);
+		}
+		setLastLogoTapTime(now);
 
-      {/* Support Section */}
-      <View className="p-6 border-t border-charcoal-200 dark:border-charcoal-700 mt-4">
-        <Text className="text-lg font-semibold text-charcoal-800 dark:text-charcoal-200 mb-4">Support</Text>
-        
-        <View className="flex-row items-center p-4 rounded-lg shadow-sm mb-3 bg-charcoal-100 dark:bg-charcoal-700">
-          <Ionicons 
-            name="mail-outline" 
-            size={24} 
-            color={getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600')} 
-          />
-          <View className="ml-4 flex-1">
-            <Text className="text-base font-medium text-charcoal-800 dark:text-charcoal-200">Contact Us</Text>
-            <TouchableOpacity onPress={() => Linking.openURL('mailto:nick@creativeendurancelab.com')}>
-              <Text className="text-base text-persian-600 dark:text-persian-400 underline">
-                nick@creativeendurancelab.com
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-      </ScrollView>
-    </View>
-  );
+		if (logoTapCount + 1 >= 5) {
+			const newVisibility = !developerMenuVisible;
+			setDeveloperMenuVisible(newVisibility);
+			setLogoTapCount(0);
+			if (newVisibility) {
+				// Scroll to the end when developer menu becomes visible
+				setTimeout(() => { // setTimeout to allow UI to update before scrolling
+					scrollViewRef.current?.scrollToEnd({ animated: true });
+				}, 100);
+			}
+		}
+	};
+
+	// SVG content for the logo
+	const logoSvgXml = `<svg width="300" viewBox="0 0 410 129" class="looka-1j8o68f"><defs id="SvgjsDefs1822"></defs><g id="SvgjsG1823" featurekey="rootContainer" transform="matrix(1,0,0,1,0,0)" fill="#004aac"><rect xmlns="http://www.w3.org/2000/svg" width="410" height="129" rx="10" ry="10"></rect></g><g id="SvgjsG1824" featurekey="symbolFeature-0" transform="matrix(0.9268778025492997,0,0,0.9268778025492997,0.6523522404367341,18.306018458284353)" fill="#ffffff"><g xmlns="http://www.w3.org/2000/svg"><path d="M28.157,21.837c0.472,0,0.942-0.18,1.303-0.54c0.72-0.719,0.72-1.887,0-2.605l-5.441-5.441c-0.72-0.72-1.886-0.72-2.605,0   c-0.72,0.719-0.72,1.887,0,2.605l5.441,5.441C27.214,21.657,27.686,21.837,28.157,21.837z"></path><path d="M78.428,13.25c-0.72-0.72-1.886-0.72-2.605,0l-5.441,5.441c-0.72,0.719-0.72,1.887,0,2.605   c0.36,0.36,0.832,0.54,1.303,0.54c0.472,0,0.943-0.18,1.303-0.54l5.441-5.441C79.148,15.137,79.148,13.969,78.428,13.25z"></path><path d="M40.01,12.415c0.258,0.772,0.977,1.262,1.749,1.262c0.192,0,0.389-0.031,0.582-0.096c0.965-0.321,1.487-1.364,1.166-2.33   L40.788,3.09c-0.321-0.965-1.361-1.487-2.33-1.166c-0.966,0.322-1.488,1.365-1.166,2.331L40.01,12.415z"></path><path d="M57.5,13.581c0.192,0.064,0.39,0.096,0.583,0.096c0.771,0,1.491-0.488,1.747-1.261l2.722-8.161   c0.321-0.966-0.199-2.009-1.165-2.331c-0.966-0.325-2.011,0.199-2.331,1.165l-2.721,8.161C56.014,12.216,56.534,13.26,57.5,13.581z   "></path><path d="M57.5,84.438l-16.324,5.438c-0.966,0.321-1.487,1.365-1.165,2.332c0.257,0.771,0.976,1.26,1.748,1.26   c0.192,0,0.389-0.031,0.582-0.096l16.325-5.439c0.964-0.321,1.486-1.365,1.164-2.332C59.51,84.637,58.464,84.116,57.5,84.438z"></path><path d="M54.448,90.895l-10.566,3.521c-0.965,0.322-1.487,1.365-1.165,2.332c0.258,0.771,0.976,1.26,1.748,1.26   c0.193,0,0.389-0.031,0.582-0.096l10.567-3.522c0.965-0.321,1.486-1.365,1.164-2.329C56.458,91.096,55.412,90.573,54.448,90.895z"></path><path d="M49.921,19.054c-12.355,0-23.606,11.251-23.606,23.605c0,8.688,3.6,14.449,7.081,20.021   c3.353,5.364,6.521,10.432,6.521,18.066c0,1.017,0.824,1.842,1.843,1.842h4.968l-5.551,1.851c-0.966,0.321-1.487,1.364-1.165,2.329   c0.257,0.772,0.976,1.26,1.748,1.26c0.192,0,0.389-0.029,0.582-0.094l16.325-5.441c0.021-0.007,0.039-0.02,0.061-0.026   c0.062-0.024,0.123-0.053,0.182-0.081c0.052-0.027,0.102-0.054,0.149-0.082c0.051-0.031,0.098-0.067,0.146-0.104   c0.048-0.038,0.095-0.074,0.14-0.115c0.042-0.04,0.08-0.084,0.118-0.127c0.038-0.045,0.077-0.089,0.111-0.137   c0.036-0.05,0.067-0.103,0.098-0.156c0.028-0.048,0.057-0.096,0.08-0.146c0.026-0.056,0.047-0.115,0.067-0.176   c0.018-0.053,0.037-0.107,0.051-0.163c0.014-0.058,0.022-0.115,0.03-0.175c0.01-0.062,0.018-0.125,0.02-0.189   c0.001-0.024,0.008-0.046,0.008-0.069c0-7.635,3.167-12.702,6.521-18.066c3.48-5.571,7.08-11.332,7.08-20.021   C73.526,30.305,62.275,19.054,49.921,19.054z M61.825,53.32c-5.175,7.761-5.234,18.256-5.234,18.361   c0,0.679-0.55,1.229-1.229,1.229c-0.68,0-1.229-0.55-1.229-1.229c0-0.425,0.055-9.784,4.488-17.814h-3.26   c-0.193,0-0.377-0.043-0.539-0.125l-1.083,2.167c-0.255,0.511-0.834,0.772-1.381,0.647c-0.555-0.132-0.946-0.626-0.946-1.197   v-0.237l-0.394,0.787c-0.256,0.511-0.823,0.774-1.382,0.647c-0.554-0.132-0.945-0.626-0.945-1.197v-0.237l-0.394,0.787   c-0.255,0.511-0.823,0.774-1.382,0.647c-0.554-0.132-0.945-0.626-0.945-1.197v-0.235l-0.392,0.785   c-0.254,0.506-0.822,0.774-1.381,0.645c-0.555-0.129-0.946-0.626-0.946-1.194v-1.492h-2.031c4.433,8.03,4.488,17.39,4.488,17.814   c0,0.679-0.55,1.229-1.228,1.229h-0.001c-0.678,0-1.228-0.55-1.229-1.227c0-0.105-0.072-10.619-5.235-18.363   c-0.251-0.377-0.274-0.861-0.061-1.26c0.214-0.4,0.63-0.65,1.083-0.65h5.441c0.192,0,0.376,0.046,0.537,0.125l1.082-2.165   c0.255-0.51,0.824-0.778,1.381-0.647c0.555,0.131,0.946,0.626,0.946,1.196v0.237l0.394-0.787c0.255-0.51,0.824-0.776,1.381-0.646   c0.555,0.131,0.946,0.626,0.946,1.196v0.237l0.394-0.787c0.254-0.51,0.828-0.778,1.381-0.646c0.555,0.131,0.947,0.626,0.947,1.196   v0.237l0.393-0.787c0.255-0.51,0.829-0.778,1.381-0.646c0.555,0.131,0.947,0.626,0.947,1.196v1.491h4.213   c0.453,0,0.869,0.25,1.083,0.65C62.101,52.459,62.076,52.943,61.825,53.32z M49.923,23.617c0,0,16.322,0,19.04,16.321   C68.925,39.945,66.245,29.058,49.923,23.617z"></path></g></g><g id="SvgjsG1825" featurekey="uKAeQw-0" transform="matrix(3.219553475065121,0,0,3.219553475065121,88.7843206684377,3.6865548283148257)" fill="#ffffff"><path d="M8.14 15.379999999999999 l0 -0.62 c0 -0.1 0.08 -0.18 0.18 -0.18 l2.28 0 c0.1 0 0.18 0.08 0.18 0.18 l0 1.26 c0 2.94 -1.58 4.18 -4.56 4.18 c-2.78 0 -4.6 -1.1 -4.6 -4.18 l0 -5.26 c0 -2.96 1.62 -4.14 4.6 -4.14 c2.82 0 4.56 1.08 4.56 4.14 l0 0.42 c0 0.1 -0.08 0.18 -0.18 0.18 l-2.3 0 c-0.1 0 -0.18 -0.08 -0.18 -0.18 l0 -0.32 c0 -1.1 -0.82 -1.56 -1.8 -1.56 l-0.24 0 c-0.66 0 -1.1 0.18 -1.4 0.58 c-0.28 0.38 -0.38 0.88 -0.38 1.54 l0 3.96 c0 1.74 0.98 2.12 1.78 2.12 l0.24 0 c1.26 0 1.78 -0.84 1.82 -2.12 z M6.18 7.859999999999999 c-2.14 0 -3.38 0.76 -3.38 3.2 l0 4.82 c0 2.22 1.14 3.04 3.38 3.04 c2.1 0 3.36 -0.76 3.36 -3.06 c0 -0.16 -0.24 -0.16 -0.24 0 c0 2.02 -1.1 2.84 -3.12 2.84 c-1.96 0 -3.16 -0.68 -3.16 -2.82 l0 -4.82 c0 -2.08 0.98 -2.98 3.16 -2.98 c2.84 0 2.94 1.8 2.94 2 c0 0.18 0.28 0.2 0.28 0 c0 -1.66 -1.68 -2.22 -3.22 -2.22 z M23.158 14.780000000000001 c-0.28 0.58 -0.68 1.02 -1.24 1.28 l1.68 3.7 c0.06 0.12 -0.02 0.24 -0.14 0.24 l-2.46 0 c-0.08 0 -0.12 -0.04 -0.14 -0.1 l-1.56 -3.4 l-1.02 0 l0 3.32 c0 0.1 -0.08 0.18 -0.18 0.18 l-2.3 0 c-0.08 0 -0.14 -0.08 -0.14 -0.18 l0 -12.84 c0 -0.1 0.06 -0.18 0.14 -0.18 l4.16 0 c2.22 0 3.56 1.26 3.56 3.6 l0 2.52 c0 0.7 -0.12 1.36 -0.36 1.86 z M20.898000000000003 12.3 l0 -1.3 c0 -1.4 -0.52 -1.54 -2.04 -1.54 l-0.58 0 l0 4.42 l0.58 0 c1.26 0 2 -0.02 2.04 -1.58 z M17.118000000000002 18.78 l0 -3.42 l2.88 0 l1.68 3.46 c0.04 0.1 0.28 0.06 0.22 -0.12 l-1.68 -3.4 c1.56 -0.22 2.1 -1.04 2.1 -2.52 l0 -2.5 c0 -2.2 -2 -2.38 -2.62 -2.38 l-2.7 0 c-0.04 0 -0.12 0.06 -0.12 0.12 l0 10.76 c0 0.14 0.24 0.14 0.24 0 z M22.078000000000003 10.28 l0 2.5 c0 2.04 -1.3 2.32 -2.56 2.32 l-2.4 0 l0 -6.94 l2.58 0 c2.16 0 2.38 1.46 2.38 2.12 z M28.716 20 c-0.1 0 -0.16 -0.08 -0.16 -0.18 l0 -12.84 c0 -0.1 0.06 -0.18 0.16 -0.18 l6.8 0 c0.1 0 0.18 0.08 0.18 0.18 l0 2.14 c0 0.1 -0.08 0.18 -0.18 0.18 l-4.32 0 l0 2.72 l3.36 0 c0.1 0 0.16 0.08 0.16 0.18 l0 2.18 c0 0.1 -0.06 0.18 -0.16 0.18 l-3.36 0 l0 2.94 l4.32 0 c0.1 0 0.18 0.08 0.18 0.18 l0 2.14 c0 0.1 -0.08 0.18 -0.18 0.18 l-6.8 0 z M29.716 8.06 l0 10.64 c0 0.12 0.08 0.16 0.16 0.16 l4.6 0 c0.18 0 0.14 -0.24 0 -0.24 l-4.5 0 l0 -5.22 l3.68 0 c0.12 0 0.12 -0.28 0 -0.28 l-3.68 0 l0 -4.96 l4.5 0 c0.14 0 0.18 -0.26 0 -0.26 l-4.6 0 c-0.08 0 -0.16 0.06 -0.16 0.16 z M43.074000000000005 6.92 c0.02 -0.06 0.06 -0.12 0.14 -0.12 l2.48 0 c0.08 0 0.12 0.06 0.14 0.12 l3.46 12.86 c0.02 0.12 -0.06 0.22 -0.18 0.22 l-2.28 0 c-0.06 0 -0.12 -0.04 -0.14 -0.12 l-0.78 -2.8 l-2.92 0 l-0.76 2.8 c-0.02 0.08 -0.06 0.12 -0.14 0.12 l-2.3 0 c-0.12 0 -0.2 -0.1 -0.18 -0.22 z M43.634 14.6 l1.66 0 l-0.86 -3.02 z M46.714 15.780000000000001 l0.92 3 c0.04 0.12 0.26 0.1 0.2 -0.06 l-3.2 -10.64 c-0.06 -0.26 -0.4 -0.28 -0.46 0 l-3.1 10.64 c-0.06 0.14 0.16 0.2 0.22 0.08 l0.88 -3.02 l4.54 0 z M42.234 15.52 l2.18 -7.36 l2.22 7.36 l-4.4 0 z M55.652 9.3 l-2.84 0 c-0.1 0 -0.18 -0.08 -0.18 -0.18 l0 -2.14 c0 -0.1 0.08 -0.18 0.18 -0.18 l8.34 0 c0.1 0 0.18 0.08 0.18 0.18 l0 2.14 c0 0.1 -0.08 0.18 -0.18 0.18 l-2.84 0 l0 10.52 c0 0.1 -0.08 0.18 -0.18 0.18 l-2.3 0 c-0.1 0 -0.18 -0.08 -0.18 -0.18 l0 -10.52 z M59.932 7.9 l-6.04 0 c-0.14 0 -0.14 0.26 0 0.26 l2.96 0 l0 10.6 c0 0.14 0.26 0.14 0.26 0 l0 -10.6 l2.82 0 c0.2 0 0.18 -0.26 0 -0.26 z M65.79 20 c-0.1 0 -0.16 -0.08 -0.16 -0.18 l0 -12.84 c0 -0.1 0.06 -0.18 0.16 -0.18 l2.28 0 c0.1 0 0.18 0.08 0.18 0.18 l0 12.84 c0 0.1 -0.08 0.18 -0.18 0.18 l-2.28 0 z M66.83 8 l0 10.78 c0 0.18 0.22 0.18 0.22 0 l0 -10.78 c0 -0.14 -0.22 -0.14 -0.22 0 z M75.128 6.92 l2.2 8.28 l2.26 -8.28 c0.04 -0.06 0.08 -0.12 0.16 -0.12 l2.28 0 c0.12 0 0.2 0.1 0.16 0.22 l-3.46 12.86 c-0.04 0.08 -0.08 0.12 -0.16 0.12 l-2.48 0 c-0.06 0 -0.12 -0.04 -0.14 -0.12 l-3.46 -12.86 c-0.02 -0.12 0.06 -0.22 0.18 -0.22 l2.3 0 c0.08 0 0.12 0.06 0.16 0.12 z M77.288 18.62 l-3.34 -10.66 c-0.06 -0.16 -0.28 -0.06 -0.22 0.06 l3.32 10.68 c0.08 0.3 0.4 0.32 0.5 0 l3.2 -10.68 c0.04 -0.12 -0.18 -0.2 -0.22 -0.06 z M86.626 20 c-0.1 0 -0.16 -0.08 -0.16 -0.18 l0 -12.84 c0 -0.1 0.06 -0.18 0.16 -0.18 l6.8 0 c0.1 0 0.18 0.08 0.18 0.18 l0 2.14 c0 0.1 -0.08 0.18 -0.18 0.18 l-4.32 0 l0 2.72 l3.36 0 c0.1 0 0.16 0.08 0.16 0.18 l0 2.18 c0 0.1 -0.06 0.18 -0.16 0.18 l-3.36 0 l0 2.94 l4.32 0 c0.1 0 0.18 0.08 0.18 0.18 l0 2.14 c0 0.1 -0.08 0.18 -0.18 0.18 l-6.8 0 z M87.626 8.06 l0 10.64 c0 0.12 0.08 0.16 0.16 0.16 l4.6 0 c0.18 0 0.14 -0.24 0 -0.24 l-4.5 0 l0 -5.22 l3.68 0 c0.12 0 0.12 -0.28 0 -0.28 l-3.68 0 l0 -4.96 l4.5 0 c0.14 0 0.18 -0.26 0 -0.26 l-4.6 0 c-0.08 0 -0.16 0.06 -0.16 0.16 z"></path></g><g id="SvgjsG1826" featurekey="uKAeQw-1" transform="matrix(1.8470826817404304,0,0,1.8470826817404304,90.52748456713557,66.77231197750254)" fill="#ffffff"><path d="M2.04 20 c-0.1 0 -0.16 -0.08 -0.16 -0.18 l0 -12.84 c0 -0.1 0.06 -0.18 0.16 -0.18 l6.8 0 c0.1 0 0.18 0.08 0.18 0.18 l0 2.14 c0 0.1 -0.08 0.18 -0.18 0.18 l-4.32 0 l0 2.72 l3.36 0 c0.1 0 0.16 0.08 0.16 0.18 l0 2.18 c0 0.1 -0.06 0.18 -0.16 0.18 l-3.36 0 l0 2.94 l4.32 0 c0.1 0 0.18 0.08 0.18 0.18 l0 2.14 c0 0.1 -0.08 0.18 -0.18 0.18 l-6.8 0 z M3.04 8.06 l0 10.64 c0 0.12 0.08 0.16 0.16 0.16 l4.6 0 c0.18 0 0.14 -0.24 0 -0.24 l-4.5 0 l0 -5.22 l3.68 0 c0.12 0 0.12 -0.28 0 -0.28 l-3.68 0 l0 -4.96 l4.5 0 c0.14 0 0.18 -0.26 0 -0.26 l-4.6 0 c-0.08 0 -0.16 0.06 -0.16 0.16 z M19.358 6.98 c0 -0.1 0.08 -0.18 0.18 -0.18 l2.3 0 c0.1 0 0.18 0.08 0.18 0.18 l0 12.84 c0 0.1 -0.08 0.18 -0.18 0.18 l-2.22 0 c-0.08 0 -0.16 -0.04 -0.18 -0.1 l-2.92 -6.58 l0 6.5 c0 0.1 -0.08 0.18 -0.18 0.18 l-2.28 0 c-0.1 0 -0.16 -0.08 -0.16 -0.18 l0 -12.84 c0 -0.1 0.06 -0.18 0.16 -0.18 l2.36 0 c0.08 0 0.12 0.06 0.14 0.1 l2.8 6.46 l0 -6.38 z M20.798000000000002 18.8 l0 -10.8 c0 -0.14 -0.26 -0.18 -0.26 0 l0 10.28 l-5.22 -10.32 c-0.06 -0.08 -0.22 -0.08 -0.22 0.04 l0 10.78 c0 0.18 0.24 0.18 0.24 0 l0 -10.26 l5.2 10.3 c0.08 0.14 0.26 0.1 0.26 -0.02 z M32.436 6.800000000000001 c1.36 0 2.38 0.38 3.06 1.12 c0.6 0.66 0.9 1.64 0.9 2.84 l0 5.3 c0 2.42 -1.4 3.94 -3.96 3.94 l-5 0 c-0.1 0 -0.16 -0.08 -0.16 -0.18 l0 -12.84 c0 -0.1 0.06 -0.18 0.16 -0.18 l5 0 z M33.776 15.46 l0 -4.1 c0 -1.26 -0.66 -2.06 -2.06 -2.06 l-1.8 0 l0 8.2 l1.8 0 c1.2 0 2.06 -0.78 2.06 -2.04 z M28.496000000000002 8.02 l0 10.76 c0 0.08 0.08 0.1 0.12 0.1 l3.26 0 c2.3 0 3.34 -1.38 3.34 -2.66 l0 -5.12 c0 -2.12 -1.12 -3.2 -3.4 -3.2 l-3.2 0 c-0.04 0 -0.12 0.02 -0.12 0.12 z M34.976 11.1 l0 5.12 c0 1.6 -1.6 2.44 -3.1 2.44 l-3.14 0 l0 -10.5 l3.08 0 c2.1 0 3.16 0.94 3.16 2.94 z M47.754000000000005 15.379999999999999 l0 -8.4 c0 -0.1 0.08 -0.18 0.18 -0.18 l2.28 0 c0.1 0 0.18 0.08 0.18 0.18 l0 9.04 c0 2.88 -1.58 4.18 -4.56 4.18 c-2.82 0 -4.58 -1.12 -4.58 -4.18 l0 -9.04 c0 -0.1 0.08 -0.18 0.18 -0.18 l2.3 0 c0.1 0 0.18 0.08 0.18 0.18 l0 8.4 c0 1.74 0.98 2.12 1.8 2.12 l0.24 0 c1.24 0 1.8 -0.84 1.8 -2.12 z M42.494 8.08 l0 7.78 c0 1.8 1.22 3.1 3.12 3.1 l0.5 0 c1.9 0 3.14 -1.36 3.14 -3.1 l0 -7.78 c0 -0.18 -0.24 -0.2 -0.24 0 l0 7.78 c0 1.64 -1.18 2.84 -2.9 2.84 l-0.5 0 c-1.68 0 -2.88 -1.08 -2.88 -2.84 l0 -7.78 c0 -0.18 -0.24 -0.18 -0.24 0 z M62.992000000000004 14.780000000000001 c-0.28 0.58 -0.68 1.02 -1.24 1.28 l1.68 3.7 c0.06 0.12 -0.02 0.24 -0.14 0.24 l-2.46 0 c-0.08 0 -0.12 -0.04 -0.14 -0.1 l-1.56 -3.4 l-1.02 0 l0 3.32 c0 0.1 -0.08 0.18 -0.18 0.18 l-2.3 0 c-0.08 0 -0.14 -0.08 -0.14 -0.18 l0 -12.84 c0 -0.1 0.06 -0.18 0.14 -0.18 l4.16 0 c2.22 0 3.56 1.26 3.56 3.6 l0 2.52 c0 0.7 -0.12 1.36 -0.36 1.86 z M60.732 12.3 l0 -1.3 c0 -1.4 -0.52 -1.54 -2.04 -1.54 l-0.58 0 l0 4.42 l0.58 0 c1.26 0 2 -0.02 2.04 -1.58 z M56.952 18.78 l0 -3.42 l2.88 0 l1.68 3.46 c0.04 0.1 0.28 0.06 0.22 -0.12 l-1.68 -3.4 c1.56 -0.22 2.1 -1.04 2.1 -2.52 l0 -2.5 c0 -2.2 -2 -2.38 -2.62 -2.38 l-2.7 0 c-0.04 0 -0.12 0.06 -0.12 0.12 l0 10.76 c0 0.14 0.24 0.14 0.24 0 z M61.912000000000006 10.28 l0 2.5 c0 2.04 -1.3 2.32 -2.56 2.32 l-2.4 0 l0 -6.94 l2.58 0 c2.16 0 2.38 1.46 2.38 2.12 z M70.89 6.92 c0.02 -0.06 0.06 -0.12 0.14 -0.12 l2.48 0 c0.08 0 0.12 0.06 0.14 0.12 l3.46 12.86 c0.02 0.12 -0.06 0.22 -0.18 0.22 l-2.28 0 c-0.06 0 -0.12 -0.04 -0.14 -0.12 l-0.78 -2.8 l-2.92 0 l-0.76 2.8 c-0.02 0.08 -0.06 0.12 -0.14 0.12 l-2.3 0 c-0.12 0 -0.2 -0.1 -0.18 -0.22 z M71.45 14.6 l1.66 0 l-0.86 -3.02 z M74.53 15.780000000000001 l0.92 3 c0.04 0.12 0.26 0.1 0.2 -0.06 l-3.2 -10.64 c-0.06 -0.26 -0.4 -0.28 -0.46 0 l-3.1 10.64 c-0.06 0.14 0.16 0.2 0.22 0.08 l0.88 -3.02 l4.54 0 z M70.05000000000001 15.52 l2.18 -7.36 l2.22 7.36 l-4.4 0 z M86.86800000000001 6.98 c0 -0.1 0.08 -0.18 0.18 -0.18 l2.3 0 c0.1 0 0.18 0.08 0.18 0.18 l0 12.84 c0 0.1 -0.08 0.18 -0.18 0.18 l-2.22 0 c-0.08 0 -0.16 -0.04 -0.18 -0.1 l-2.92 -6.58 l0 6.5 c0 0.1 -0.08 0.18 -0.18 0.18 l-2.28 0 c-0.1 0 -0.16 -0.08 -0.16 -0.18 l0 -12.84 c0 -0.1 0.06 -0.18 0.16 -0.18 l2.36 0 c0.08 0 0.12 0.06 0.14 0.1 l2.8 6.46 l0 -6.38 z M88.308 18.8 l0 -10.8 c0 -0.14 -0.26 -0.18 -0.26 0 l0 10.28 l-5.22 -10.32 c-0.06 -0.08 -0.22 -0.08 -0.22 0.04 l0 10.78 c0 0.18 0.24 0.18 0.24 0 l0 -10.26 l5.2 10.3 c0.08 0.14 0.26 0.1 0.26 -0.02 z M101.046 15.379999999999999 l0 -0.62 c0 -0.1 0.08 -0.18 0.18 -0.18 l2.28 0 c0.1 0 0.18 0.08 0.18 0.18 l0 1.26 c0 2.94 -1.58 4.18 -4.56 4.18 c-2.78 0 -4.6 -1.1 -4.6 -4.18 l0 -5.26 c0 -2.96 1.62 -4.14 4.6 -4.14 c2.82 0 4.56 1.08 4.56 4.14 l0 0.42 c0 0.1 -0.08 0.18 -0.18 0.18 l-2.3 0 c-0.1 0 -0.18 -0.08 -0.18 -0.18 l0 -0.32 c0 -1.1 -0.82 -1.56 -1.8 -1.56 l-0.24 0 c-0.66 0 -1.1 0.18 -1.4 0.58 c-0.28 0.38 -0.38 0.88 -0.38 1.54 l0 3.96 c0 1.74 0.98 2.12 1.78 2.12 l0.24 0 c1.26 0 1.78 -0.84 1.82 -2.12 z M99.08600000000001 7.859999999999999 c-2.14 0 -3.38 0.76 -3.38 3.2 l0 4.82 c0 2.22 1.14 3.04 3.38 3.04 c2.1 0 3.36 -0.76 3.36 -3.06 c0 -0.16 -0.24 -0.16 -0.24 0 c0 2.02 -1.1 2.84 -3.12 2.84 c-1.96 0 -3.16 -0.68 -3.16 -2.82 l0 -4.82 c0 -2.08 0.98 -2.98 3.16 -2.98 c2.84 0 2.94 1.8 2.94 2 c0 0.18 0.28 0.2 0.28 0 c0 -1.66 -1.68 -2.22 -3.22 -2.22 z M108.72400000000002 20 c-0.1 0 -0.16 -0.08 -0.16 -0.18 l0 -12.84 c0 -0.1 0.06 -0.18 0.16 -0.18 l6.8 0 c0.1 0 0.18 0.08 0.18 0.18 l0 2.14 c0 0.1 -0.08 0.18 -0.18 0.18 l-4.32 0 l0 2.72 l3.36 0 c0.1 0 0.16 0.08 0.16 0.18 l0 2.18 c0 0.1 -0.06 0.18 -0.16 0.18 l-3.36 0 l0 2.94 l4.32 0 c0.1 0 0.18 0.08 0.18 0.18 l0 2.14 c0 0.1 -0.08 0.18 -0.18 0.18 l-6.8 0 z M109.72400000000002 8.06 l0 10.64 c0 0.12 0.08 0.16 0.16 0.16 l4.6 0 c0.18 0 0.14 -0.24 0 -0.24 l-4.5 0 l0 -5.22 l3.68 0 c0.12 0 0.12 -0.28 0 -0.28 l-3.68 0 l0 -4.96 l4.5 0 c0.14 0 0.18 -0.26 0 -0.26 l-4.6 0 c-0.08 0 -0.16 0.06 -0.16 0.16 z M132 6.800000000000001 c0.1 0 0.18 0.08 0.18 0.18 l0 10.5 l4.32 0 c0.1 0 0.18 0.08 0.18 0.18 l0 2.16 c0 0.1 -0.08 0.18 -0.18 0.18 l-6.78 0 c-0.1 0 -0.16 -0.08 -0.16 -0.18 l0 -12.84 c0 -0.1 0.06 -0.18 0.16 -0.18 l2.28 0 z M130.76000000000002 8.02 l0 10.76 c0 0.04 0.04 0.1 0.12 0.1 l4.62 0 c0.16 0 0.16 -0.26 0 -0.26 l-4.52 0 l0 -10.6 c0 -0.14 -0.22 -0.16 -0.22 0 z M143.478 6.92 c0.02 -0.06 0.06 -0.12 0.14 -0.12 l2.48 0 c0.08 0 0.12 0.06 0.14 0.12 l3.46 12.86 c0.02 0.12 -0.06 0.22 -0.18 0.22 l-2.28 0 c-0.06 0 -0.12 -0.04 -0.14 -0.12 l-0.78 -2.8 l-2.92 0 l-0.76 2.8 c-0.02 0.08 -0.06 0.12 -0.14 0.12 l-2.3 0 c-0.12 0 -0.2 -0.1 -0.18 -0.22 z M144.038 14.6 l1.66 0 l-0.86 -3.02 z M147.11800000000002 15.780000000000001 l0.92 3 c0.04 0.12 0.26 0.1 0.2 -0.06 l-3.2 -10.64 c-0.06 -0.26 -0.4 -0.28 -0.46 0 l-3.1 10.64 c-0.06 0.14 0.16 0.2 0.22 0.08 l0.88 -3.02 l4.54 0 z M142.638 15.52 l2.18 -7.36 l2.22 7.36 l-4.4 0 z M161.536 10.22 c0 0.78 -0.12 1.46 -0.4 1.96 c0.76 0.72 1.08 1.88 1.08 3.5 c0 1.72 -0.36 2.94 -1.18 3.58 c-0.78 0.62 -1.88 0.74 -2.98 0.74 l-3.9 0 c-0.1 0 -0.16 -0.08 -0.16 -0.18 l0 -12.84 c0 -0.1 0.06 -0.18 0.16 -0.18 l3.2 0 c1.08 0 2.2 0.08 2.96 0.58 c0.94 0.6 1.22 1.68 1.22 2.84 z M156.63600000000002 9.42 l0 1.8 l1.22 0 c0.64 0 0.98 -0.2 0.98 -0.9 s-0.52 -0.9 -1.4 -0.9 l-0.8 0 z M157.39600000000002 17.38 c1.1 0 2.14 -0.48 2.14 -1.76 c0 -0.96 -0.68 -1.72 -1.7 -1.72 l-1.2 0 l0 3.48 l0.76 0 z M155.156 8.06 l0 10.66 c0 0.1 0.08 0.14 0.16 0.14 l2.68 0 c1.94 0 3.1 -0.98 3.1 -3.08 c0 -1.5 -0.34 -3.06 -1.9 -3.5 c0.92 -0.3 1.16 -1.22 1.16 -2.2 c0 -1.6 -0.9 -2.18 -2.52 -2.18 l-2.52 0 c-0.12 0 -0.16 0.06 -0.16 0.16 z M157.69600000000003 18.62 l-2.28 0 l0 -6.16 l2.82 0 c2.06 0 2.58 1.34 2.58 3.32 c0 2.02 -1.1 2.92 -3.12 2.84 z M160.116 10.08 c0 1.62 -0.68 2.12 -2.32 2.12 l-2.38 0 l0 -4.04 l2.42 0 c1.18 0 2.28 0.22 2.28 1.92 z"></path></g></svg>`;
+
+	return (
+		<View
+			className="flex-1 bg-charcoal-50 dark:bg-charcoal-950"
+		>
+			{/* Header */}
+			<View
+				className="flex-row items-center justify-between px-4 py-3 bg-persian-800 dark:bg-charcoal-800"
+				style={{ paddingTop: insets.top }}
+			>
+				<Text className="text-xl font-bold text-white dark:text-white">Settings</Text>
+				<Pressable onPress={() => router.back()} className="p-2">
+					<Ionicons name="close" size={28} color={headerCloseIconColor} />
+				</Pressable>
+			</View>
+
+			<ScrollView ref={scrollViewRef}>
+				{/* Content */}
+				<View className="p-6">
+					<Text className="text-lg font-semibold text-charcoal-800 dark:text-charcoal-200 mb-4">Appearance</Text>
+
+					<ThemeOptionButton
+						title="Light Mode"
+						currentThemeSelection={theme}
+						buttonRepresents="light"
+						onPress={() => setTheme('light')}
+						iconName="sunny-outline"
+						effectiveTheme={effectiveTheme}
+					/>
+					<ThemeOptionButton
+						title="Dark Mode"
+						currentThemeSelection={theme}
+						buttonRepresents="dark"
+						onPress={() => setTheme('dark')}
+						iconName="moon-outline"
+						effectiveTheme={effectiveTheme}
+					/>
+					<ThemeOptionButton
+						title="System Default"
+						currentThemeSelection={theme}
+						buttonRepresents="system"
+						onPress={() => setTheme('system')}
+						iconName="cog-outline"
+						effectiveTheme={effectiveTheme}
+					/>
+				</View>
+
+				{/* Data Management Section */}
+				<View className="p-6 border-t border-charcoal-200 dark:border-charcoal-700 mt-4">
+					<Text className="text-lg font-semibold text-charcoal-800 dark:text-charcoal-200 mb-4">Data Management</Text>
+
+					<TouchableOpacity
+						onPress={handleRefreshParks}
+						disabled={parksLoading}
+						className={`flex-row items-center justify-center p-4 rounded-lg shadow-sm mb-3 ${parksLoading ? (effectiveTheme === 'dark' ? 'bg-charcoal-600' : 'bg-charcoal-200') : (effectiveTheme === 'dark' ? 'bg-saffron-700' : 'bg-saffron-600')}`}
+					>
+						{parksLoading ? (
+							<ActivityIndicator size="small" color={effectiveTheme === 'dark' ? getColor('saffron-300') : getColor('saffron-800')} className="mr-2" />
+						) : (
+							<Ionicons name="refresh-circle-outline" size={28} color={effectiveTheme === 'dark' ? 'white' : 'white'} className="mr-2" />
+						)}
+						<Text className={`ml-3 text-lg font-medium ${effectiveTheme === 'dark' ? 'text-white' : 'text-white'}`}>
+							{parksLoading ? 'Refreshing Parks Data...' : 'Force Refresh Parks Data'}
+						</Text>
+					</TouchableOpacity>
+
+					<Text className="text-sm text-charcoal-600 dark:text-charcoal-400 text-center mt-2">
+						{formatLastFetchTime(lastFetch)} App data is auto refreshed every 7 days.
+					</Text>
+
+				</View>
+
+				{/* Support Section */}
+				<View className="p-6 border-t border-charcoal-200 dark:border-charcoal-700 mt-4">
+					<Text className="text-lg font-semibold text-charcoal-800 dark:text-charcoal-200 mb-4">Support</Text>
+
+					<View className="flex-row items-center p-4 rounded-lg shadow-sm mb-3 bg-charcoal-100 dark:bg-charcoal-700">
+						<Ionicons
+							name="mail-outline"
+							size={24}
+							color={getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600')}
+						/>
+						<View className="ml-4 flex-1">
+							<Text className="text-base font-medium text-charcoal-800 dark:text-charcoal-200">Contact Us</Text>
+							<TouchableOpacity onPress={() => Linking.openURL('mailto:nick@creativeendurancelab.com')}>
+								<Text className="text-base text-persian-600 dark:text-persian-400 underline">
+									nick@creativeendurancelab.com
+								</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
+				</View>
+
+				{/* New Logo Section for Developer Menu Trigger */}
+				<View className="items-center py-8 mt-4 border-t border-charcoal-200 dark:border-charcoal-700">
+				<Text className="text-xs text-charcoal-500 dark:text-charcoal-400 mt-2">
+						Designed & Developed by:
+					</Text>
+					<Pressable onPress={handleLogoTap} className="p-2">
+						<SvgXml xml={logoSvgXml} width={200} height={62} />
+					</Pressable>
+					<Text className="text-xs text-charcoal-500 dark:text-charcoal-400 mt-2">
+						© Creative Endurance Lab
+					</Text>
+
+					{/* Developer Menu Content - Conditionally Rendered */}
+					{developerMenuVisible && (
+						<>
+							<View className="w-full px-6 mt-4 border-t border-dashed border-charcoal-300 dark:border-charcoal-600 pt-4">
+								<Text className="text-lg font-semibold text-red-600 dark:text-red-400 mb-4">Developer Options</Text>
+								{/* Feature Flags Refresh Button */}
+								<TouchableOpacity
+									onPress={() => handleRefreshFeatureFlags(false)}
+									disabled={featureFlagsLoading}
+									className={`flex-row items-center justify-center p-4 rounded-lg shadow-sm mb-1 ${featureFlagsLoading ? (effectiveTheme === 'dark' ? 'bg-charcoal-600' : 'bg-charcoal-200') : (effectiveTheme === 'dark' ? 'bg-burnt-700' : 'bg-burnt-600')}`}
+								>
+									{featureFlagsLoading ? (
+										<ActivityIndicator size="small" color={effectiveTheme === 'dark' ? getColor('burnt-300') : getColor('burnt-800')} className="mr-2" />
+									) : (
+										<Ionicons name="cog-outline" size={28} color={effectiveTheme === 'dark' ? 'white' : 'white'} className="mr-2" />
+									)}
+									<Text className={`ml-3 text-lg font-medium ${effectiveTheme === 'dark' ? 'text-white' : 'text-white'}`}>
+										{featureFlagsLoading ? 'Refreshing Feature Flags...' : 'Force Refresh Feature Flags'}
+									</Text>
+								</TouchableOpacity>
+								<TouchableOpacity
+									onPress={() => handleRefreshFeatureFlags(true)}
+									disabled={featureFlagsLoading}
+									className={`flex-row my-4 items-center justify-center p-4 rounded-lg shadow-sm ${featureFlagsLoading ? (effectiveTheme === 'dark' ? 'bg-charcoal-600' : 'bg-charcoal-200') : (effectiveTheme === 'dark' ? 'bg-burnt-400' : 'bg-burnt-300')}`}
+								>
+									{featureFlagsLoading ? (
+										<ActivityIndicator size="small" color={effectiveTheme === 'dark' ? getColor('burnt-300') : getColor('burnt-800')} className="mr-2" />
+									) : (
+										<Ionicons name="flag-outline" size={24} color={effectiveTheme === 'dark' ? 'white' : 'white'} className="mr-2" />
+									)}
+									<Text className={`ml-3 text-lg font-medium ${effectiveTheme === 'dark' ? 'text-white' : 'text-white'}`}>
+										{featureFlagsLoading ? 'Refreshing Beta Feature Flags...' : 'Fetch Beta Feature Flags'}
+									</Text>
+								</TouchableOpacity>
+								{featureFlagsError && (
+									<Text className="text-sm text-red-600 dark:text-red-400 text-center mt-1">
+										Error refreshing feature flags: {featureFlagsError.message}
+									</Text>
+								)}
+							</View>
+
+							<Text className="text-sm text-charcoal-600 dark:text-charcoal-400 text-center mt-1 mb-2">
+								Feature flags beta data is only manually updated, feature flags are updated weekly after the last fetch.{featureFlagsLastFetchTime ? `Last fetched: ${new Date(featureFlagsLastFetchTime).toLocaleDateString()} ${new Date(featureFlagsLastFetchTime).toLocaleTimeString()}` : 'Never fetched.'}
+							</Text>
+						</>
+					)}
+				</View>
+			</ScrollView>
+		</View>
+	);
 } 
