@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { ActivityIndicator, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Linking, Pressable, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useParks } from '../contexts/ParksContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -14,7 +14,7 @@ const formatLastFetchTime = (timestamp: number | null): string => {
     return 'Not updated yet';
   }
   const date = new Date(timestamp);
-  return `Last updated: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+  return `In-app data was last updated: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 };
 
 const ThemeOptionButton = ({ title, currentThemeSelection, buttonRepresents, onPress, iconName, effectiveTheme }: ThemeOptionProps) => {
@@ -73,6 +73,7 @@ export default function SettingsScreen() {
         </Pressable>
       </View>
 
+      <ScrollView>
       {/* Content */}
       <View className="p-6">
         <Text className="text-lg font-semibold text-charcoal-800 dark:text-charcoal-200 mb-4">Appearance</Text>
@@ -118,15 +119,39 @@ export default function SettingsScreen() {
             <Ionicons name="refresh-circle-outline" size={28} color={effectiveTheme === 'dark' ? 'white' : 'white'} className="mr-2"/>
           )}
           <Text className={`ml-3 text-lg font-medium ${effectiveTheme === 'dark' ? 'text-white' : 'text-white'}`}>
-            {parksLoading ? 'Refreshing Parks Data...' : 'Refresh Parks Data'}
+            {parksLoading ? 'Refreshing Parks Data...' : 'Force Refresh Parks Data'}
           </Text>
         </TouchableOpacity>
 
         <Text className="text-sm text-charcoal-600 dark:text-charcoal-400 text-center mt-2">
-          {formatLastFetchTime(lastFetch)}
+          {formatLastFetchTime(lastFetch)} App data is auto refreshed every 7 days.
+        </Text>
+		<Text className="text-sm text-charcoal-600 dark:text-charcoal-400 text-center mt-2">
+          Network data is refreshed every Monday at 2AM Central Time.
         </Text>
       </View>
 
+      {/* Support Section */}
+      <View className="p-6 border-t border-charcoal-200 dark:border-charcoal-700 mt-4">
+        <Text className="text-lg font-semibold text-charcoal-800 dark:text-charcoal-200 mb-4">Support</Text>
+        
+        <View className="flex-row items-center p-4 rounded-lg shadow-sm mb-3 bg-charcoal-100 dark:bg-charcoal-700">
+          <Ionicons 
+            name="mail-outline" 
+            size={24} 
+            color={getColor(effectiveTheme === 'dark' ? 'charcoal-300' : 'charcoal-600')} 
+          />
+          <View className="ml-4 flex-1">
+            <Text className="text-base font-medium text-charcoal-800 dark:text-charcoal-200">Contact Us</Text>
+            <TouchableOpacity onPress={() => Linking.openURL('mailto:nick@creativeendurancelab.com')}>
+              <Text className="text-base text-persian-600 dark:text-persian-400 underline">
+                nick@creativeendurancelab.com
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+      </ScrollView>
     </View>
   );
 } 
