@@ -85,7 +85,12 @@ const AnimatedFavoriteCard = ({ park, index, onPress, onShare, activities }: Ani
 };
 
 export default function FavoritesList({ scrollEnabled = true }: FavoritesListProps) {
-  const { favorites, favoriteMessages, clearFavoriteMessages } = useFavorites();
+  const { 
+    favorites, 
+    favoriteMessages, 
+    clearFavoriteMessages, 
+    dismissFavoriteMessage
+  } = useFavorites();
   const router = useRouter();
   const { effectiveTheme } = useTheme();
   const { parks: PARKS, loading: parksLoading, error: parksError } = useParks();
@@ -155,11 +160,18 @@ export default function FavoritesList({ scrollEnabled = true }: FavoritesListPro
             Updates to your favorites:
           </Text>
           {favoriteMessages.map((message, index) => (
-            <Text key={index} className="text-xs text-yellow-700 dark:text-yellow-200 mb-1">- {message}</Text>
+            <View key={index} className="flex-row justify-between items-center mb-1">
+              <Text className="text-xs text-yellow-700 dark:text-yellow-200 mr-2 flex-1">- {message}</Text>
+              <TouchableOpacity onPress={() => dismissFavoriteMessage(message)} className="p-1 bg-yellow-200 dark:bg-yellow-600 rounded">
+                <Ionicons name="close-circle-outline" size={16} color={getColor(effectiveTheme === 'dark' ? 'yellow-100' : 'yellow-800')} />
+              </TouchableOpacity>
+            </View>
           ))}
-          <TouchableOpacity onPress={clearFavoriteMessages} className="mt-2 self-start bg-yellow-200 dark:bg-yellow-600 px-3 py-1 rounded">
-            <Text className="text-xs font-medium text-yellow-800 dark:text-yellow-100">Dismiss</Text>
-          </TouchableOpacity>
+          {favoriteMessages.length > 1 && (
+            <TouchableOpacity onPress={clearFavoriteMessages} className="mt-3 self-start bg-yellow-300 dark:bg-yellow-800 px-3 py-1.5 rounded-md">
+              <Text className="text-xs font-bold text-yellow-900 dark:text-yellow-200">Dismiss All Messages</Text>
+            </TouchableOpacity>
+          )}
         </View>
       )}
       <FlatList

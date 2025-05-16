@@ -13,6 +13,7 @@ export interface FavoritesContextType {
   isFavorite: (parkId: string) => boolean;
   favoriteMessages: string[];
   clearFavoriteMessages: () => void;
+  dismissFavoriteMessage: (message: string) => void;
 }
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
@@ -42,30 +43,62 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
       const currentParkNameInParksList = currentParksMap.get(fav.id);
 
       if (currentParkNameInParksList === undefined) {
-        discrepancyMessagesThisRun.push(`Your favorite park: "${fav.name}" (ID: ${fav.id}) was removed from our database.`);
+        discrepancyMessagesThisRun.push(`Your favorite park: "${fav.name}" (ID: ${fav.id}) was removed from our database. If this was unexpected, please let us know!`);
       } else if (currentParkNameInParksList !== fav.name) {
-        discrepancyMessagesThisRun.push(`The name of your favorite park "${fav.name}" (ID: ${fav.id}) has changed to "${currentParkNameInParksList}". We've updated it for you.`);
+        discrepancyMessagesThisRun.push(`The name of your favorite park "${fav.name}" (ID: ${fav.id}) has changed to "${currentParkNameInParksList}". We've updated it for you. If you notice any other discrepancies, please let us know!`);
         updatedFavoritesList[index] = { ...fav, name: currentParkNameInParksList };
         favoritesWereModified = true;
       }
     });
 
-    if (discrepancyMessagesThisRun.length > 0) {
-      setFavoriteMessages(currentGlobalMessages => {
-        const messagesToAdd = discrepancyMessagesThisRun.filter(
-          newMsg => !currentGlobalMessages.includes(newMsg)
-        );
-        if (messagesToAdd.length > 0) {
-          return [...currentGlobalMessages, ...messagesToAdd];
-        }
-        return currentGlobalMessages;
-      });
-    }
-
     if (favoritesWereModified) {
       setFavorites(updatedFavoritesList);
       AsyncStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(updatedFavoritesList));
     }
+
+    setFavoriteMessages(currentGlobalMessages => {
+      let nextGlobalMessages = [...currentGlobalMessages];
+      const reAddedMessagesThisRun: string[] = [];
+      const parksActuallyReAdded = new Set<string>();
+
+      const validAndFavoritedParkIds = new Set(
+        updatedFavoritesList.filter(fav => currentParksMap.has(fav.id)).map(fav => fav.id)
+      );
+
+      nextGlobalMessages = nextGlobalMessages.filter(msg => {
+        const match = msg.match(/Your favorite park: "(.*?)" \(ID: ([^)]+)\) was removed from our database\.?/);
+        if (match && match[1] && match[2]) {
+          const parkIdInMessage = match[2];
+          if (validAndFavoritedParkIds.has(parkIdInMessage)) {
+            parksActuallyReAdded.add(parkIdInMessage);
+            return false;
+          }
+        }
+        return true;
+      });
+
+      parksActuallyReAdded.forEach(parkId => {
+        const parkName = currentParksMap.get(parkId) || "Unknown Park";
+        reAddedMessagesThisRun.push(`Your favorite park: "${parkName}" (ID: ${parkId}) has been re-added to our database!`);
+      });
+
+      const allNewMessagesThisCycle = [...reAddedMessagesThisRun, ...discrepancyMessagesThisRun];
+
+      if (allNewMessagesThisCycle.length > 0) {
+        const messagesToAdd = allNewMessagesThisCycle.filter(
+          newMsg => !nextGlobalMessages.includes(newMsg)
+        );
+        if (messagesToAdd.length > 0) {
+          nextGlobalMessages = [...nextGlobalMessages, ...messagesToAdd];
+        }
+      }
+
+      if (nextGlobalMessages.length !== currentGlobalMessages.length || 
+          !nextGlobalMessages.every((msg, idx) => msg === currentGlobalMessages[idx])) {
+        return nextGlobalMessages;
+      }
+      return currentGlobalMessages;
+    });
 
   }, [parks, favorites, parksLoading]);
 
@@ -119,8 +152,22 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     setFavoriteMessages([]);
   };
 
+  // Function to dismiss a single message by its content
+  const dismissFavoriteMessage = (messageToDismiss: string) => {
+    setFavoriteMessages(currentMessages => 
+      currentMessages.filter(msg => msg !== messageToDismiss)
+    );
+  };
+
   return (
-    <FavoritesContext.Provider value={{ favorites, toggleFavorite, isFavorite, favoriteMessages, clearFavoriteMessages }}>
+    <FavoritesContext.Provider value={{ 
+      favorites, 
+      toggleFavorite, 
+      isFavorite, 
+      favoriteMessages, 
+      clearFavoriteMessages, 
+      dismissFavoriteMessage
+    }}>
       {children}
     </FavoritesContext.Provider>
   );
