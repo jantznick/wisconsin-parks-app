@@ -1,5 +1,5 @@
 import * as Location from 'expo-location';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import { useSelectedPark } from '../contexts/SelectedParkContext';
@@ -26,7 +26,7 @@ const USER_LOCATION_ZOOM_DELTA = {
   longitudeDelta: 0.25,
 };
 
-export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
+function WisconsinMapComponent({ parks = [] }: WisconsinMapProps) {
   const mapRef = useRef<MapView>(null);
   const { setSelectedPark } = useSelectedPark();
   const [currentMapRegion, setCurrentMapRegion] = useState<Region | undefined>(undefined);
@@ -126,4 +126,35 @@ export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
       </MapView>
     </View>
   );
-} 
+}
+
+const arePropsEqual = (prevProps: WisconsinMapProps, nextProps: WisconsinMapProps): boolean => {
+  // If the array references are the same, they are equal
+  if (prevProps.parks === nextProps.parks) {
+    return true;
+  }
+
+  // If parks is not defined or null in one but not the other
+  if (!prevProps.parks || !nextProps.parks) {
+    return false;
+  }
+
+  // If lengths are different, they are not equal
+  if (prevProps.parks.length !== nextProps.parks.length) {
+    return false;
+  }
+
+  // Check if all park IDs are the same and in the same order
+  // This assumes that if IDs and order are the same, the park objects are effectively the same for rendering purposes.
+  // If other park properties could change and require a re-render, this comparison would need to be more detailed.
+  for (let i = 0; i < prevProps.parks.length; i++) {
+    if (prevProps.parks[i].id !== nextProps.parks[i].id) {
+      return false;
+    }
+  }
+
+  // If all checks pass, props are considered equal for rendering purposes
+  return true;
+};
+
+export default memo(WisconsinMapComponent, arePropsEqual); 

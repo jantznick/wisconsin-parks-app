@@ -1,6 +1,6 @@
 import { getActivityName } from '@/utils/activities';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomHeader from '../../components/CustomHeader';
@@ -11,6 +11,17 @@ import { useParks } from '../../contexts/ParksContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Park } from '../../interfaces/Park.interface';
 import { getColor } from '../../utils/colors';
+
+// Helper function to compare arrays of parks by their IDs
+const areParkArraysEqual = (arr1?: Park[], arr2?: Park[]): boolean => {
+	if (arr1 === arr2) return true; // Same reference
+	if (!arr1 || !arr2) return false; // One is null/undefined
+	if (arr1.length !== arr2.length) return false; // Different lengths
+	for (let i = 0; i < arr1.length; i++) {
+		if (arr1[i].id !== arr2[i].id) return false; // Different park IDs
+	}
+	return true; // Arrays are considered equal
+};
 
 export default function ExploreScreen() {
 	const insets = useSafeAreaInsets();
@@ -45,6 +56,8 @@ export default function ExploreScreen() {
 		{key: 'free', label: 'Free Entry'},
 		{key: 'paid', label: 'Has Fee'}
 	];
+
+	const previousFilteredParksRef = useRef<Park[]>([]);
 
 	// Enhanced filtering logic
 	const filteredParksData = useMemo(() => {
@@ -81,6 +94,11 @@ export default function ExploreScreen() {
 			parksToFilter = parksToFilter.filter((park: Park) => park.isAccessible === true);
 		}
 
+		// Compare with the previous list and return the old reference if content is the same.
+		if (areParkArraysEqual(previousFilteredParksRef.current, parksToFilter)) {
+			return previousFilteredParksRef.current!; // Assert non-null as it's equal to parksToFilter which is an array
+		}
+		previousFilteredParksRef.current = parksToFilter;
 		return parksToFilter;
 	}, [INITIAL_PARKS, selectedCategories, selectedFacilities, feeFilter, dogFriendlyOnly, accessibleOnly]);
 
