@@ -2,7 +2,6 @@ import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { ImageBackground, Text, View } from 'react-native';
 import { useTheme } from '../contexts/ThemeContext';
-import { parkImageAssets } from '../data/image_assets';
 import { SharedParkHeaderProps } from '../interfaces/SharedParkHeader.interfaces';
 import { getColor } from '../utils/colors';
 import AnimatedPressable from './AnimatedPressable';
@@ -37,16 +36,6 @@ export default function SharedParkHeader({
     );
   }
 
-  let imageSource;
-  if (park.downloaded_image_path && parkImageAssets[park.downloaded_image_path]) {
-    imageSource = parkImageAssets[park.downloaded_image_path];
-  } else if (park.downloaded_image_path) {
-    console.warn(`SharedHeader: Image path "${park.downloaded_image_path}" not in assets. URI fallback.`);
-    imageSource = { uri: park.downloaded_image_path };
-  } else {
-    imageSource = null;
-  }
-
   const headerHeightStyle = leftIconName === 'arrow-back' ? 'h-56' : 'h-48';
   const parkNameStyle = leftIconName === 'arrow-back' ? 'text-3xl' : 'text-2xl';
   const showSubtitle = leftIconName === 'arrow-back';
@@ -63,9 +52,9 @@ export default function SharedParkHeader({
 
   return (
     <View className={containerClassName}>
-      {imageSource ? (
+      {park.downloaded_image_path ? (
         <ImageBackground
-          source={imageSource}
+          source={{ uri: `https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/${park.downloaded_image_path}` }}
           className={headerHeightStyle} // Dynamic height
           resizeMode="cover"
           onError={(e) => console.log('SharedHeader Image Error:', e.nativeEvent.error, park.id)}
