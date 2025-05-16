@@ -96,8 +96,8 @@ const ReservationsCard: React.FC<ReservationsCardProps> = ({ park, effectiveThem
         const searchTime = `${formatDateForUrl(now)}T${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}.${now.getMilliseconds().toString().padStart(3, '0')}`;
 
         const params = new URLSearchParams({
-            resourceLocationId: "-2147483648",
-            mapId: "-2147483494",
+            resourceLocationId: park.resourceLocationId,
+            mapId: park.mapId,
             searchTabGroupId: "0",
             bookingCategoryId: "0",
             startDate: startDateStr,

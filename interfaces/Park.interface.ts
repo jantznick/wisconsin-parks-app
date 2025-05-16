@@ -50,4 +50,6 @@ export interface Park {
   downloaded_image_path: string;
   info_url: string;
   recreation_url: string;
-} 
+  resourceLocationId?: string;
+  mapId?: string;
+}
