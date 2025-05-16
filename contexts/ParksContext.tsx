@@ -3,7 +3,7 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import { DATA_REFRESH_INTERVAL } from '../constants/config';
 import { Park } from '../interfaces/Park.interface';
 
-const PARKS_DATA_URL = 'https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/parks.json';
+const PARKS_DATA_URL = 'https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/parkswrongbuck.json';
 
 const ASYNC_STORAGE_PARKS_KEY = 'parksData';
 const ASYNC_STORAGE_LAST_FETCH_KEY = 'lastFetchTime';

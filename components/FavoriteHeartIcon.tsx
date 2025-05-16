@@ -7,7 +7,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { FavoriteHeartIconProps } from '../interfaces/FavoriteHeartIcon.interfaces';
 import { getColor } from '../utils/colors';
 
-export default function FavoriteHeartIcon({ parkId, size = 24 }: FavoriteHeartIconProps) {
+export default function FavoriteHeartIcon({ parkId, parkName, size = 24 }: FavoriteHeartIconProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const { effectiveTheme } = useTheme();
   const favorite = isFavorite(parkId);
@@ -33,7 +33,7 @@ export default function FavoriteHeartIcon({ parkId, size = 24 }: FavoriteHeartIc
   }, [favorite, heartScale]);
 
   const handlePress = async () => {
-    await toggleFavorite(parkId);
+    await toggleFavorite(parkId, parkName);
   };
 
   const iconColor = favorite

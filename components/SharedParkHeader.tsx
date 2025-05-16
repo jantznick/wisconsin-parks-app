@@ -84,7 +84,7 @@ export default function SharedParkHeader({
                   <Ionicons name="share-outline" size={imageHeaderIconSize} color={imageHeaderIconColor} />
                 </AnimatedPressable>
                 <View className="p-2">
-                  <FavoriteHeartIcon parkId={park.id} size={imageHeaderIconSize} />
+                  <FavoriteHeartIcon parkId={park.id} parkName={park.name} size={imageHeaderIconSize} />
                 </View>
               </View>
             </View>
@@ -119,7 +119,7 @@ export default function SharedParkHeader({
               <Ionicons name="share-outline" size={fallbackFavIconSize} color={fallbackShareIconColor} />
             </AnimatedPressable>
             <View className="p-2 ml-1">
-              <FavoriteHeartIcon parkId={park.id} size={fallbackFavIconSize} />
+              <FavoriteHeartIcon parkId={park.id} parkName={park.name} size={fallbackFavIconSize} />
             </View>
           </View>
         </View>

@@ -75,7 +75,7 @@ const AnimatedFavoriteCard = ({ park, index, onPress, onShare, activities }: Ani
               />
             </TouchableOpacity>
             <View className="p-2 items-center mt-1">
-                <FavoriteHeartIcon parkId={park.id} size={24} />
+                <FavoriteHeartIcon parkId={park.id} parkName={park.name} size={24} />
             </View>
           </View>
         </View>
@@ -85,7 +85,7 @@ const AnimatedFavoriteCard = ({ park, index, onPress, onShare, activities }: Ani
 };
 
 export default function FavoritesList({ scrollEnabled = true }: FavoritesListProps) {
-  const { favorites } = useFavorites();
+  const { favorites, favoriteMessages, clearFavoriteMessages } = useFavorites();
   const router = useRouter();
   const { effectiveTheme } = useTheme();
   const { parks: PARKS, loading: parksLoading, error: parksError } = useParks();
@@ -100,7 +100,7 @@ export default function FavoritesList({ scrollEnabled = true }: FavoritesListPro
     });
   };
   
-  const favoriteParks = PARKS && PARKS.length > 0 ? PARKS.filter(park => favorites.includes(park.id)) : [];
+  const favoriteParks = PARKS && PARKS.length > 0 ? PARKS.filter(park => favorites.some(fav => fav.id === park.id)) : [];
 
   if (parksLoading || activitiesLoading) {
     return (
@@ -148,21 +148,36 @@ export default function FavoritesList({ scrollEnabled = true }: FavoritesListPro
   }
 
   return (
-    <FlatList
-      data={favoriteParks}
-      renderItem={({ item, index }) => (
-        <AnimatedFavoriteCard 
-          park={item} 
-          index={index} 
-          onPress={() => router.push(`/park/${item.id}`)} 
-          onShare={handleShare}
-          activities={activities}
-        />
+    <View className="flex-1">
+      {favoriteMessages.length > 0 && (
+        <View className="p-4 m-3 bg-yellow-100 dark:bg-yellow-700 border border-yellow-300 dark:border-yellow-600 rounded-lg">
+          <Text className="text-sm font-semibold text-yellow-800 dark:text-yellow-100 mb-2">
+            Updates to your favorites:
+          </Text>
+          {favoriteMessages.map((message, index) => (
+            <Text key={index} className="text-xs text-yellow-700 dark:text-yellow-200 mb-1">- {message}</Text>
+          ))}
+          <TouchableOpacity onPress={clearFavoriteMessages} className="mt-2 self-start bg-yellow-200 dark:bg-yellow-600 px-3 py-1 rounded">
+            <Text className="text-xs font-medium text-yellow-800 dark:text-yellow-100">Dismiss</Text>
+          </TouchableOpacity>
+        </View>
       )}
-      keyExtractor={item => item.id}
-      contentContainerStyle={{ padding: 12 }}
-      className="flex-1"
-      scrollEnabled={scrollEnabled}
-    />
+      <FlatList
+        data={favoriteParks}
+        renderItem={({ item, index }) => (
+          <AnimatedFavoriteCard 
+            park={item} 
+            index={index} 
+            onPress={() => router.push(`/park/${item.id}`)} 
+            onShare={handleShare}
+            activities={activities}
+          />
+        )}
+        keyExtractor={item => item.id}
+        contentContainerStyle={{ padding: 12 }}
+        className="flex-1"
+        scrollEnabled={scrollEnabled}
+      />
+    </View>
   );
 } 
