@@ -143,64 +143,80 @@ export default function ParkDetailsScreen() {
 
 					<WeatherSection park={park} parkCoordinateIsValid={parkCoordinateIsValid} effectiveTheme={effectiveTheme} />
 
-					<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-sandy-600 dark:border-sandy-400">
-						<Text className="text-xl font-semibold text-sandy-600 dark:text-sandy-400 mb-2">Hours</Text>
-						<Text className="text-charcoal-700 dark:text-charcoal-300">{park.hours.open} – {park.hours.close}</Text>
-					</View>
+					{ (park.hours.open || park.hours.close) && (
+						<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-sandy-600 dark:border-sandy-400">
+							<Text className="text-xl font-semibold text-sandy-600 dark:text-sandy-400 mb-2">Hours</Text>
+							<Text className="text-charcoal-700 dark:text-charcoal-300">{park.hours.open} – {park.hours.close}</Text>
+						</View>
+					)}
 
-					<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-burnt-600 dark:border-burnt-400">
-						<Text className="text-xl font-semibold text-burnt-600 dark:text-burnt-400 mb-3">Activities</Text>
-						<View className="flex-row flex-wrap gap-2">
-							{park.activities.map((activity, index) => (
-								<View key={index} className="bg-burnt-100 dark:bg-charcoal-700 px-3 py-1.5 rounded-full shadow-sm">
-									<Text className="text-burnt-700 dark:text-burnt-300 font-medium text-sm">
-										{getActivityName(activity, activities)}
-									</Text>
-								</View>
+					{ park.activities && park.activities.length > 0 && (
+						<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-burnt-600 dark:border-burnt-400">
+							<Text className="text-xl font-semibold text-burnt-600 dark:text-burnt-400 mb-3">Activities</Text>
+							<View className="flex-row flex-wrap gap-2">
+								{park.activities.map((activity, index) => (
+									<View key={index} className="bg-burnt-100 dark:bg-charcoal-700 px-3 py-1.5 rounded-full shadow-sm">
+										<Text className="text-burnt-700 dark:text-burnt-300 font-medium text-sm">
+											{getActivityName(activity, activities)}
+										</Text>
+									</View>
+								))}
+							</View>
+						</View>
+					)}
+
+					{ park.facilities && park.facilities.length > 0 && (
+						<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-saffron-700 dark:border-saffron-400">
+							<Text className="text-xl font-semibold text-saffron-700 dark:text-saffron-400 mb-3">Facilities</Text>
+							<View className="flex-row flex-wrap gap-2">
+								{park.facilities.map((facility, index) => (
+									<View key={index} className="bg-saffron-100 dark:bg-charcoal-700 px-3 py-1.5 rounded-full shadow-sm">
+										<Text className="text-saffron-700 dark:text-saffron-300 font-medium text-sm">{facility}</Text>
+									</View>
+								))}
+							</View>
+						</View>
+					)}
+
+					{ (park.entranceFee.daily || park.entranceFee.annual) && (
+						<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-persian-700 dark:border-persian-500">
+							<Text className="text-xl font-semibold text-persian-700 dark:text-persian-400 mb-2">Entrance Fees</Text>
+							{park.entranceFee.daily && <Text className="text-charcoal-700 dark:text-charcoal-300">Daily: ${park.entranceFee.daily}</Text>}
+							{park.entranceFee.annual && <Text className="text-charcoal-700 dark:text-charcoal-300">Annual: ${park.entranceFee.annual}</Text>}
+						</View>
+					)}
+
+					{ (park.contact.phone || park.contact.email || park.contact.website) && (
+						<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-sandy-600 dark:border-sandy-400">
+							<Text className="text-xl font-semibold text-sandy-600 dark:text-sandy-400 mb-2">Contact</Text>
+							{park.contact.phone && <Text className="text-charcoal-700 dark:text-charcoal-300">{park.contact.phone}</Text>}
+							{park.contact.email && <Text className="text-charcoal-700 dark:text-charcoal-300">{park.contact.email}</Text>}
+							{park.contact.website && (
+								<Pressable onPress={() => Linking.openURL(park.contact.website)}>
+									<Text className="text-persian-700 dark:text-persian-400 underline font-medium">{park.contact.website}</Text>
+								</Pressable>
+							)}
+						</View>
+					)}
+
+					{ park.rules && park.rules.length > 0 && (
+						<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-burnt-600 dark:border-burnt-400">
+							<Text className="text-xl font-semibold text-burnt-600 dark:text-burnt-400 mb-2">Rules</Text>
+							{park.rules.map((rule, index) => (
+								<Text key={index} className="text-charcoal-700 dark:text-charcoal-300 mb-1">• {rule}</Text>
 							))}
 						</View>
-					</View>
+					)}
 
-					<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-saffron-700 dark:border-saffron-400">
-						<Text className="text-xl font-semibold text-saffron-700 dark:text-saffron-400 mb-3">Facilities</Text>
-						<View className="flex-row flex-wrap gap-2">
-							{park.facilities.map((facility, index) => (
-								<View key={index} className="bg-saffron-100 dark:bg-charcoal-700 px-3 py-1.5 rounded-full shadow-sm">
-									<Text className="text-saffron-700 dark:text-saffron-300 font-medium text-sm">{facility}</Text>
-								</View>
+					{ (park.seasonalInfo.bestTimeToVisit || (park.seasonalInfo.seasonalClosures && park.seasonalInfo.seasonalClosures.length > 0)) && (
+						<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-saffron-700 dark:border-saffron-400">
+							<Text className="text-xl font-semibold text-saffron-700 dark:text-saffron-400 mb-2">Seasonal Information</Text>
+							{park.seasonalInfo.bestTimeToVisit && <Text className="text-charcoal-700 dark:text-charcoal-300">Best Time to Visit: {park.seasonalInfo.bestTimeToVisit}</Text>}
+							{park.seasonalInfo.seasonalClosures && park.seasonalInfo.seasonalClosures.map((closure, index) => (
+								<Text key={index} className="text-charcoal-700 dark:text-charcoal-300">• {closure}</Text>
 							))}
 						</View>
-					</View>
-
-					<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-persian-700 dark:border-persian-500">
-						<Text className="text-xl font-semibold text-persian-700 dark:text-persian-400 mb-2">Entrance Fees</Text>
-						<Text className="text-charcoal-700 dark:text-charcoal-300">Daily: ${park.entranceFee.daily}</Text>
-						<Text className="text-charcoal-700 dark:text-charcoal-300">Annual: ${park.entranceFee.annual}</Text>
-					</View>
-
-					<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-sandy-600 dark:border-sandy-400">
-						<Text className="text-xl font-semibold text-sandy-600 dark:text-sandy-400 mb-2">Contact</Text>
-						<Text className="text-charcoal-700 dark:text-charcoal-300">{park.contact.phone}</Text>
-						<Text className="text-charcoal-700 dark:text-charcoal-300">{park.contact.email}</Text>
-						<Pressable onPress={() => Linking.openURL(park.contact.website)}>
-							<Text className="text-persian-700 dark:text-persian-400 underline font-medium">{park.contact.website}</Text>
-						</Pressable>
-					</View>
-
-					<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg mb-6 border-l-4 border-burnt-600 dark:border-burnt-400">
-						<Text className="text-xl font-semibold text-burnt-600 dark:text-burnt-400 mb-2">Rules</Text>
-						{park.rules.map((rule, index) => (
-							<Text key={index} className="text-charcoal-700 dark:text-charcoal-300 mb-1">• {rule}</Text>
-						))}
-					</View>
-
-					<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-saffron-700 dark:border-saffron-400">
-						<Text className="text-xl font-semibold text-saffron-700 dark:text-saffron-400 mb-2">Seasonal Information</Text>
-						<Text className="text-charcoal-700 dark:text-charcoal-300">Best Time to Visit: {park.seasonalInfo.bestTimeToVisit}</Text>
-						{park.seasonalInfo.seasonalClosures.map((closure, index) => (
-							<Text key={index} className="text-charcoal-700 dark:text-charcoal-300">• {closure}</Text>
-						))}
-					</View>
+					)}
 				</View>
 			</ScrollView>
 		</View>

@@ -47,72 +47,86 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
         <Text className="text-base text-charcoal-700 dark:text-charcoal-300 mb-4">{park.description}</Text>
 
         {/* Hours */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Hours</Text>
-          <Text className="text-charcoal-700 dark:text-charcoal-300">{park.hours.open} - {park.hours.close}</Text>
-        </View>
+        { (park.hours.open || park.hours.close) && (
+          <View className="mb-4">
+            <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Hours</Text>
+            <Text className="text-charcoal-700 dark:text-charcoal-300">{park.hours.open} - {park.hours.close}</Text>
+          </View>
+        )}
 
         {/* Activities */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Activities</Text>
-          {activitiesLoading && <ActivityIndicator />}
-          {activitiesError && <Text>Error loading activities.</Text>}
-          {!activitiesLoading && !activitiesError && activities && (
+        { park.activities && park.activities.length > 0 && (
+          <View className="mb-4">
+            <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Activities</Text>
+            {activitiesLoading && <ActivityIndicator />}
+            {activitiesError && <Text>Error loading activities.</Text>}
+            {!activitiesLoading && !activitiesError && activities && (
+              <View className="flex-row flex-wrap gap-2">
+                {park.activities.map((activityId, index) => (
+                  <View key={index} className="bg-persian-100 dark:bg-persian-800 px-3 py-1 rounded-full">
+                    <Text className="text-persian-800 dark:text-persian-200">
+                      {getActivityName(activityId, activities)}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+        )}
+
+        {/* Facilities */}
+        { park.facilities && park.facilities.length > 0 && (
+          <View className="mb-4">
+            <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Facilities</Text>
             <View className="flex-row flex-wrap gap-2">
-              {park.activities.map((activityId, index) => (
-                <View key={index} className="bg-persian-100 dark:bg-persian-800 px-3 py-1 rounded-full">
-                  <Text className="text-persian-800 dark:text-persian-200">
-                    {getActivityName(activityId, activities)}
-                  </Text>
+              {park.facilities.map((facility, index) => (
+                <View key={index} className="bg-saffron-100 dark:bg-saffron-800 px-3 py-1 rounded-full">
+                  <Text className="text-saffron-800 dark:text-saffron-200">{facility}</Text>
                 </View>
               ))}
             </View>
-          )}
-        </View>
-
-        {/* Facilities */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Facilities</Text>
-          <View className="flex-row flex-wrap gap-2">
-            {park.facilities.map((facility, index) => (
-              <View key={index} className="bg-saffron-100 dark:bg-saffron-800 px-3 py-1 rounded-full">
-                <Text className="text-saffron-800 dark:text-saffron-200">{facility}</Text>
-              </View>
-            ))}
           </View>
-        </View>
+        )}
 
         {/* Fees */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Entrance Fees</Text>
-          <Text className="text-charcoal-700 dark:text-charcoal-300">Daily: ${park.entranceFee.daily}</Text>
-          <Text className="text-charcoal-700 dark:text-charcoal-300">Annual: ${park.entranceFee.annual}</Text>
-        </View>
+        { (park.entranceFee.daily || park.entranceFee.annual) && (
+          <View className="mb-4">
+            <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Entrance Fees</Text>
+            {park.entranceFee.daily && <Text className="text-charcoal-700 dark:text-charcoal-300">Daily: ${park.entranceFee.daily}</Text>}
+            {park.entranceFee.annual && <Text className="text-charcoal-700 dark:text-charcoal-300">Annual: ${park.entranceFee.annual}</Text>}
+          </View>
+        )}
 
         {/* Contact */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Contact</Text>
-          <Text className="text-charcoal-700 dark:text-charcoal-300">{park.contact.phone}</Text>
-          <Text className="text-charcoal-700 dark:text-charcoal-300">{park.contact.email}</Text>
-          <Text className="text-persian-700 dark:text-persian-300">{park.contact.website}</Text>
-        </View>
+        { (park.contact.phone || park.contact.email || park.contact.website) && (
+          <View className="mb-4">
+            <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Contact</Text>
+            {park.contact.phone && <Text className="text-charcoal-700 dark:text-charcoal-300">{park.contact.phone}</Text>}
+            {park.contact.email && <Text className="text-charcoal-700 dark:text-charcoal-300">{park.contact.email}</Text>}
+            {park.contact.website && <Text className="text-persian-700 dark:text-persian-300">{park.contact.website}</Text>}
+          </View>
+        )}
 
         {/* Rules */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Rules</Text>
-          {park.rules.map((rule, index) => (
-            <Text key={index} className="text-charcoal-700 dark:text-charcoal-300 mb-1">• {rule}</Text>
-          ))}
-        </View>
+        { park.rules && park.rules.length > 0 && (
+          <View className="mb-4">
+            <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Rules</Text>
+            {park.rules.map((rule, index) => (
+              <Text key={index} className="text-charcoal-700 dark:text-charcoal-300 mb-1">• {rule}</Text>
+            ))}
+          </View>
+        )}
 
         {/* Seasonal Info */}
-        <View className="mb-4">
-          <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Seasonal Information</Text>
-          <Text className="text-charcoal-700 dark:text-charcoal-300">Best Time to Visit: {park.seasonalInfo.bestTimeToVisit}</Text>
-          {park.seasonalInfo.seasonalClosures.map((closure, index) => (
-            <Text key={index} className="text-charcoal-700 dark:text-charcoal-300">• {closure}</Text>
-          ))}
-        </View>
+        { (park.seasonalInfo.bestTimeToVisit || (park.seasonalInfo.seasonalClosures && park.seasonalInfo.seasonalClosures.length > 0)) && (
+          <View className="mb-4">
+            <Text className="text-lg font-semibold text-charcoal-900 dark:text-charcoal-100 mb-2">Seasonal Information</Text>
+            {park.seasonalInfo.bestTimeToVisit && <Text className="text-charcoal-700 dark:text-charcoal-300">Best Time to Visit: {park.seasonalInfo.bestTimeToVisit}</Text>}
+            {park.seasonalInfo.seasonalClosures && park.seasonalInfo.seasonalClosures.map((closure, index) => (
+              <Text key={index} className="text-charcoal-700 dark:text-charcoal-300">• {closure}</Text>
+            ))}
+          </View>
+        )}
       </ScrollView>
 
       {/* Footer */}
