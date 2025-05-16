@@ -108,19 +108,21 @@ export default function ParkDetailsSheet({ park, onClose }: ParkDetailsSheetProp
       </ScrollView>
 
       {/* Footer */}
-      <View className="p-6 border-t border-gray-200 dark:border-charcoal-700 flex-row items-center">
+      <View className="p-6 pt-3 border-t border-gray-200 dark:border-charcoal-700 w-full flex-row items-stretch justify-start">
         <AnimatedPressable
           onPress={handleOpenDirections}
-          className="bg-saffron-600 dark:bg-saffron-700 p-3 rounded-xl items-center justify-center aspect-square"
+          className="bg-saffron-600 dark:bg-saffron-700 p-3 rounded-xl items-center justify-center aspect-square flex-none"
         >
-          <Ionicons name="navigate-circle-outline" size={24} color="white" />
+          <Ionicons name="navigate" size={24} color="white" />
         </AnimatedPressable>
-        <AnimatedPressable
-          onPress={handleViewFullDetails}
-          className="bg-persian-800 dark:bg-persian-600 py-3 px-6 rounded-xl ml-3 flex-grow"
-        >
-          <Text className="text-white dark:text-persian-100 text-center font-semibold">Full Details</Text>
-        </AnimatedPressable>
+		<View className="flex-1 ml-3">
+			<AnimatedPressable
+			  onPress={handleViewFullDetails}
+			  className="bg-persian-800 dark:bg-persian-600 py-[15px] px-6 rounded-xl"
+			>
+			  <Text className="text-white dark:text-persian-100 text-center font-semibold">Full Details</Text>
+			</AnimatedPressable>
+		</View>
       </View>
     </View>
   );
