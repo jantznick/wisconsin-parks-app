@@ -1,8 +1,11 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { DATA_REFRESH_INTERVAL } from '../constants/config';
-import { Activity } from '../interfaces/Activity.interface'; // Corrected path
+import { ACTIVITIES_REFRESH_INTERVAL } from '../constants/config';
+import { Activity } from '../interfaces/Activity.interface';
 
 const ACTIVITIES_DATA_URL = 'https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/activities.json';
+const ASYNC_STORAGE_ACTIVITIES_KEY = 'activitiesData';
+const ASYNC_STORAGE_ACTIVITIES_LAST_FETCH_KEY = 'activitiesLastFetchTime';
 
 interface ActivitiesContextType {
   activities: Activity[];
@@ -17,7 +20,6 @@ export const ActivitiesProvider = ({ children }: { children: ReactNode }) => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
-  const [lastFetch, setLastFetch] = useState<number | null>(null);
 
   const fetchActivitiesData = async () => {
     setLoading(true);
@@ -29,7 +31,9 @@ export const ActivitiesProvider = ({ children }: { children: ReactNode }) => {
       }
       const data = await response.json();
       setActivities(data);
-      setLastFetch(Date.now());
+      const now = Date.now();
+      await AsyncStorage.setItem(ASYNC_STORAGE_ACTIVITIES_KEY, JSON.stringify(data));
+      await AsyncStorage.setItem(ASYNC_STORAGE_ACTIVITIES_LAST_FETCH_KEY, now.toString());
     } catch (e) {
       if (e instanceof Error) {
         setError(e);
@@ -43,11 +47,20 @@ export const ActivitiesProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const loadActivities = async () => {
-      if (lastFetch && (Date.now() - lastFetch < DATA_REFRESH_INTERVAL)) {
-        if (activities.length > 0) {
-          setLoading(false);
-          return;
+      try {
+        const storedLastFetch = await AsyncStorage.getItem(ASYNC_STORAGE_ACTIVITIES_LAST_FETCH_KEY);
+        const storedActivitiesData = await AsyncStorage.getItem(ASYNC_STORAGE_ACTIVITIES_KEY);
+
+        if (storedLastFetch && storedActivitiesData) {
+          const lastFetchTime = parseInt(storedLastFetch, 10);
+          if (Date.now() - lastFetchTime < ACTIVITIES_REFRESH_INTERVAL) {
+            setActivities(JSON.parse(storedActivitiesData));
+            setLoading(false);
+            return;
+          }
         }
+      } catch (e) {
+        console.error('Error loading activities data from AsyncStorage:', e);
       }
       await fetchActivitiesData();
     };
@@ -55,12 +68,8 @@ export const ActivitiesProvider = ({ children }: { children: ReactNode }) => {
     loadActivities();
   }, []); // Initial load
 
-  const fetchActivities = async () => {
-    await fetchActivitiesData();
-  };
-
   return (
-    <ActivitiesContext.Provider value={{ activities, loading, error, fetchActivities }}>
+    <ActivitiesContext.Provider value={{ activities, loading, error, fetchActivities: fetchActivitiesData }}>
       {children}
     </ActivitiesContext.Provider>
   );

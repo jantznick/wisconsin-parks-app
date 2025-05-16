@@ -1,8 +1,12 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { DATA_REFRESH_INTERVAL } from '../constants/config';
 import { Park } from '../interfaces/Park.interface';
 
-const PARKS_DATA_URL = 'https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/parks+copy.json';
+const PARKS_DATA_URL = 'https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/parks.json';
+
+const ASYNC_STORAGE_PARKS_KEY = 'parksData';
+const ASYNC_STORAGE_LAST_FETCH_KEY = 'lastFetchTime';
 
 interface ParksContextType {
   parks: Park[];
@@ -30,9 +34,11 @@ export const ParksProvider = ({ children }: { children: ReactNode }) => {
       }
       const data = await response.json();
       setParks(data);
-      setLastFetch(Date.now());
-      // Store in AsyncStorage or similar for persistence across app loads if needed
-      // For now, we'll keep it in memory for the session
+      const now = Date.now();
+      setLastFetch(now);
+      // Store in AsyncStorage
+      await AsyncStorage.setItem(ASYNC_STORAGE_PARKS_KEY, JSON.stringify(data));
+      await AsyncStorage.setItem(ASYNC_STORAGE_LAST_FETCH_KEY, now.toString());
     } catch (e) {
       if (e instanceof Error) {
         setError(e);
@@ -46,15 +52,23 @@ export const ParksProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const loadParks = async () => {
-      // In a real app, you'd retrieve lastFetch from AsyncStorage here
-      if (lastFetch && (Date.now() - lastFetch < DATA_REFRESH_INTERVAL)) {
-        // Data is fresh enough, potentially load from cache or assume it's in `parks` state
-        // For this implementation, if `parks` has data, we assume it's fine.
-        // A more robust solution would involve persisting and retrieving `parks` data too.
-        if (parks.length > 0) {
-          setLoading(false);
-          return;
+      try {
+        const storedLastFetch = await AsyncStorage.getItem(ASYNC_STORAGE_LAST_FETCH_KEY);
+        const storedParksData = await AsyncStorage.getItem(ASYNC_STORAGE_PARKS_KEY);
+
+        if (storedLastFetch && storedParksData) {
+          const lastFetchTime = parseInt(storedLastFetch, 10);
+          if (Date.now() - lastFetchTime < DATA_REFRESH_INTERVAL) {
+            setParks(JSON.parse(storedParksData));
+            setLastFetch(lastFetchTime);
+            setLoading(false);
+            return;
+          }
         }
+      } catch (e) {
+        // Could not load from async storage, or data is stale/invalid
+        console.error('Error loading parks data from AsyncStorage:', e);
+        // Proceed to fetch from network
       }
       await fetchParksData();
     };
@@ -62,13 +76,8 @@ export const ParksProvider = ({ children }: { children: ReactNode }) => {
     loadParks();
   }, []); // Initial load
 
-  // Function to be called to manually trigger fetch if needed, or by refresh logic
-  const fetchParks = async () => {
-    await fetchParksData();
-  };
-
   return (
-    <ParksContext.Provider value={{ parks, loading, error, fetchParks, lastFetch }}>
+    <ParksContext.Provider value={{ parks, loading, error, fetchParks: fetchParksData, lastFetch }}>
       {children}
     </ParksContext.Provider>
   );
