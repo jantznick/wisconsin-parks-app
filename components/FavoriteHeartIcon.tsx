@@ -38,7 +38,7 @@ export default function FavoriteHeartIcon({ parkId, size = 24 }: FavoriteHeartIc
 
   const iconColor = favorite
     ? getColor(effectiveTheme === 'dark' ? 'burnt-400' : 'burnt-500')
-    : getColor(effectiveTheme === 'dark' ? 'charcoal-400' : 'charcoal-600');
+    : getColor('charcoal-50');
 
   return (
     <Pressable onPress={handlePress} className="p-1">

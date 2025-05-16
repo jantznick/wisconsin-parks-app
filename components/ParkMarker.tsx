@@ -6,7 +6,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { ParkMarkerProps } from '../interfaces/ParkMarker.interfaces';
 import { getColor } from '../utils/colors';
 
-export default function ParkMarker({ park, onPress }: ParkMarkerProps) {
+const ParkMarkerComponent = ({ park, onPress }: ParkMarkerProps) => {
 	const { effectiveTheme } = useTheme();
 
 	const markerBgColor = getColor(effectiveTheme === 'dark' ? 'persian-500' : 'persian-600');
@@ -40,4 +40,6 @@ export default function ParkMarker({ park, onPress }: ParkMarkerProps) {
 			</View>
 		</Marker>
 	);
-} 
+}
+
+export default React.memo(ParkMarkerComponent); 

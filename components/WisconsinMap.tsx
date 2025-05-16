@@ -1,5 +1,5 @@
 import * as Location from 'expo-location';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import { useSelectedPark } from '../contexts/SelectedParkContext';
@@ -67,7 +67,7 @@ export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
     })();
   }, []);
 
-  const handleMarkerPress = (park: Park) => {
+  const handleMarkerPress = useCallback((park: Park) => {
     if (mapRef.current) {
       // Check for valid coordinates before animating
       if (typeof park.coordinate?.latitude !== 'number' || 
@@ -88,7 +88,7 @@ export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
       }, 500);
     }
     setSelectedPark(park);
-  };
+  }, [setSelectedPark]);
 
   // Display a loading indicator or a message while region is being determined
   if (!currentMapRegion) {
@@ -108,8 +108,8 @@ export default function WisconsinMap({ parks = [] }: WisconsinMapProps) {
         ref={mapRef}
         provider={PROVIDER_GOOGLE}
         className="flex-1"
-        initialRegion={currentMapRegion} // Use the dynamic region
-        showsUserLocation // This will show the blue dot for user's location
+        initialRegion={currentMapRegion}
+        showsUserLocation
         showsCompass
         showsScale
         showsMyLocationButton
