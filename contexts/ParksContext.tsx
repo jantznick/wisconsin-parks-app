@@ -9,6 +9,7 @@ interface ParksContextType {
   loading: boolean;
   error: Error | null;
   fetchParks: () => Promise<void>;
+  lastFetch: number | null;
 }
 
 const ParksContext = createContext<ParksContextType | undefined>(undefined);
@@ -67,7 +68,7 @@ export const ParksProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <ParksContext.Provider value={{ parks, loading, error, fetchParks }}>
+    <ParksContext.Provider value={{ parks, loading, error, fetchParks, lastFetch }}>
       {children}
     </ParksContext.Provider>
   );

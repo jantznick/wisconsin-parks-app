@@ -7,8 +7,8 @@ import { useTheme } from '../contexts/ThemeContext';
 import { FavoriteHeartIconProps } from '../interfaces/FavoriteHeartIcon.interfaces';
 import { getColor } from '../utils/colors';
 
-export default function FavoriteHeartIcon({ parkId, size = 24 }: FavoriteHeartIconProps) {
-  const { isFavorite, toggleFavorite } = useFavorites();
+export default function FavoriteHeartIcon({ parkId, parkName, size = 24 }: FavoriteHeartIconProps) {
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites();
   const { effectiveTheme } = useTheme();
   const favorite = isFavorite(parkId);
 
@@ -33,7 +33,15 @@ export default function FavoriteHeartIcon({ parkId, size = 24 }: FavoriteHeartIc
   }, [favorite, heartScale]);
 
   const handlePress = async () => {
-    await toggleFavorite(parkId);
+    if (favorite) {
+      await removeFavorite(parkId);
+    } else {
+      if (parkName) {
+        await addFavorite(parkId, parkName);
+      } else {
+        console.warn('FavoriteHeartIcon: parkName is required to add a favorite but was not provided.');
+      }
+    }
   };
 
   const iconColor = favorite
