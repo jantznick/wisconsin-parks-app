@@ -15,7 +15,7 @@ const ParkMarkerComponent = ({ park, onPress }: ParkMarkerProps) => {
 
 	// Return null if coordinates are not valid numbers
 	if (typeof park.coordinate?.latitude !== 'number' || typeof park.coordinate?.longitude !== 'number') {
-		console.warn(`ParkMarker: Park "${park.name}" has invalid coordinates. Not rendering marker.`);
+		console.log(`ParkMarker: Park "${park.name}" has invalid coordinates. Not rendering marker.`);
 		return null;
 	}
 

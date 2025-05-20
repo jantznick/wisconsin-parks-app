@@ -2,7 +2,7 @@
   "expo": {
     "name": "Family Parks Finder",
     "slug": "family-parks-finder",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/icon.png",
     "scheme": "familyparksfinder",
@@ -17,14 +17,21 @@
       "config": {
         "googleMapsApiKey": "process.env.GOOGLE_MAPS_API_KEY"
       },
-      "buildNumber": "1.0.2"
+      "buildNumber": "1.0.3"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "package": "com.nickjantz.familyparksfinder"
     },
     "web": {
       "bundler": "metro",
