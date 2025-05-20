@@ -4,11 +4,15 @@
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
+	"ios:build": "node ./scripts/increment-version.js",
+	"postios:build": "eas build --platform ios --profile preview && expo upload:ios",
+	"android:build": "npm run increment && eas build --platform android --profile preview",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "increment": "node ./scripts/increment-version.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
@@ -17,6 +21,7 @@
     "@react-navigation/bottom-tabs": "^7.3.10",
     "@react-navigation/elements": "^2.3.8",
     "@react-navigation/native": "^7.1.6",
+    "commander": "^14.0.0",
     "expo": "~53.0.9",
     "expo-blur": "~14.1.4",
     "expo-constants": "~17.1.6",
