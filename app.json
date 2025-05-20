@@ -1,52 +1,58 @@
 {
-  "expo": {
-    "name": "wisconsin-parks-app",
-    "slug": "wisconsin-parks-app",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/icon.png",
-    "scheme": "wisconsinparksapp",
-    "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.nickjantz.familyparksapp",
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
-    },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ]
-    ],
-    "experiments": {
-      "typedRoutes": true
-    },
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "f6217173-2e20-4f6c-8b30-dca43a692b29"
-      }
-    }
-  }
+	"expo": {
+		"name": "wisconsin-parks-app",
+		"slug": "wisconsin-parks-app",
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"icon": "https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/icon.png",
+		"scheme": "wisconsinparksapp",
+		"userInterfaceStyle": "automatic",
+		"newArchEnabled": true,
+		"ios": {
+			"supportsTablet": true,
+			"bundleIdentifier": "com.nickjantz.familyparksapp",
+			"infoPlist": {
+				"ITSAppUsesNonExemptEncryption": false
+			}
+		},
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/adaptive-icon.png",
+				"backgroundColor": "#ffffff"
+			},
+			"edgeToEdgeEnabled": true
+		},
+		"web": {
+			"bundler": "metro",
+			"output": "static",
+			"favicon": "./assets/images/favicon.png"
+		},
+		"plugins": [
+			"expo-router",
+			[
+				"expo-splash-screen",
+				{
+					"image": "https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/splash-icon.png",
+					"imageWidth": 200,
+					"resizeMode": "contain",
+					"backgroundColor": "#ffffff"
+				}
+			],
+			[
+				"expo-location",
+				{
+					"locationWhenInUsePermission": "Family Parks Finder uses your location to show you nearby parks."
+				}
+			]
+		],
+		"experiments": {
+			"typedRoutes": true
+		},
+		"extra": {
+			"router": {},
+			"eas": {
+				"projectId": "f6217173-2e20-4f6c-8b30-dca43a692b29"
+			}
+		}
+	}
 }
