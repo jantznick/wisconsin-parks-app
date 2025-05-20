@@ -7,13 +7,19 @@ const program = new Command();
 program
   .option('--major', 'Increment major version')
   .option('--minor', 'Increment minor version')
-  .option('--patch', 'Increment patch version');
+  .option('--patch', 'Increment patch version')
+  .option('--nopatch', 'Do not increment patch version');
 
 program.parse(process.argv);
 
 const options = program.opts();
 
 const appJsonPath = path.join(__dirname, '../app.json');
+
+if (options.nopatch) {
+	console.log('Not patching build version. Exiting.');
+	process.exit(0);
+}
 
 fs.readFile(appJsonPath, 'utf8', (err, data) => {
   if (err) {

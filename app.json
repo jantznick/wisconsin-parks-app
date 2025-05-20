@@ -14,9 +14,9 @@
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
-	  "config": {
-	 "googleMapsApiKey": "process.env.GOOGLE_MAPS_API_KEY"
-	  },
+      "config": {
+        "googleMapsApiKey": "process.env.GOOGLE_MAPS_API_KEY"
+      },
       "buildNumber": "1.0.2"
     },
     "android": {
@@ -55,7 +55,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "f6217173-2e20-4f6c-8b30-dca43a692b29"
+        "projectId": "0a429a79-a3a2-4de0-a032-3c5ae32c8387"
       }
     }
   }
