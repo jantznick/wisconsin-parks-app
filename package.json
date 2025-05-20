@@ -5,8 +5,8 @@
   "scripts": {
     "start": "expo start",
 	"ios:build": "node ./scripts/increment-version.js",
-	"postios:build": "eas build --platform ios --profile preview && expo upload:ios",
-	"android:build": "npm run increment && eas build --platform android --profile preview",
+	"postios:build": "eas build --platform ios && expo upload:ios",
+	"android:build": "npm run increment && eas build --platform android",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
