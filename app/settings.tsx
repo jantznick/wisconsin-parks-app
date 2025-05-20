@@ -22,8 +22,7 @@ const formatLastFetchTime = (timestamp: number | null): string => {
 };
 
 const ThemeOptionButton = ({ title, currentThemeSelection, buttonRepresents, onPress, iconName, effectiveTheme }: ThemeOptionProps) => {
-	const isSelected = (buttonRepresents === 'system' && currentThemeSelection === null) ||
-		(buttonRepresents !== 'system' && currentThemeSelection === buttonRepresents);
+	const isSelected = currentThemeSelection === buttonRepresents;
 
 	const bgColor = isSelected
 		? (effectiveTheme === 'dark' ? 'bg-persian-600' : 'bg-persian-500')
@@ -41,7 +40,7 @@ const ThemeOptionButton = ({ title, currentThemeSelection, buttonRepresents, onP
 			className={`flex-row items-center p-4 rounded-lg shadow-sm mb-3 ${bgColor}`}
 		>
 			<Ionicons name={iconName} size={24} color={iconColor} />
-			<Text className={`ml-4 text-lg font-medium ${textColor}`}>{title}</Text>
+			<Text className={`ml-4 mr-2 text-lg font-medium ${textColor}`}>{title}</Text>
 			{isSelected && (
 				<Ionicons name="checkmark-circle" size={24} color={getColor(effectiveTheme === 'dark' ? 'persian-50' : 'persian-100')} className="ml-auto" />
 			)}
