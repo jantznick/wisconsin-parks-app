@@ -2,7 +2,7 @@
   "expo": {
     "name": "Family Parks Finder",
     "slug": "family-parks-finder",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/icon.png",
     "scheme": "familyparksfinder",
@@ -17,7 +17,7 @@
       "config": {
         "googleMapsApiKey": "process.env.GOOGLE_MAPS_API_KEY"
       },
-      "buildNumber": "1.0.3"
+      "buildNumber": "1.0.4"
     },
     "android": {
       "adaptiveIcon": {
