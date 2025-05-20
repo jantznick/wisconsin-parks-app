@@ -4,17 +4,20 @@
     "slug": "wisconsin-parks-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "../assets/images/icon.png",
+    "icon": "https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/icon.png",
     "scheme": "wisconsinparksapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.nickjantz.familyparksapp"
+      "bundleIdentifier": "com.nickjantz.familyparksapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "../assets/images/adaptive-icon.png",
+        "foregroundImage": "https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
@@ -29,7 +32,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "../assets/images/splash-icon.png",
+          "image": "https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
