@@ -170,7 +170,10 @@ export default function SettingsScreen() {
 					</TouchableOpacity>
 
 					<Text className="text-sm text-charcoal-600 dark:text-charcoal-400 text-center mt-2">
-						{formatLastFetchTime(lastFetch)} App data is auto refreshed every 7 days.
+						{formatLastFetchTime(lastFetch)}
+					</Text>
+					<Text className="text-sm text-charcoal-600 dark:text-charcoal-400 text-center mt-1 mb-2">
+						App data is auto updated 7 days after last refresh.
 					</Text>
 
 				</View>
@@ -198,7 +201,7 @@ export default function SettingsScreen() {
 
 				{/* New Logo Section for Developer Menu Trigger */}
 				<View className="items-center py-8 mt-4 border-t border-charcoal-200 dark:border-charcoal-700">
-				<Text className="text-xs text-charcoal-500 dark:text-charcoal-400 mt-2">
+					<Text className="text-xs text-charcoal-500 dark:text-charcoal-400 mt-2">
 						Designed & Developed by:
 					</Text>
 					<Pressable onPress={handleLogoTap} className="p-2">
@@ -228,6 +231,12 @@ export default function SettingsScreen() {
 										{featureFlagsLoading ? 'Refreshing Feature Flags...' : 'Force Refresh Feature Flags'}
 									</Text>
 								</TouchableOpacity>
+								<Text className="text-sm text-charcoal-600 dark:text-charcoal-400 text-center mt-2">
+								{featureFlagsLastFetchTime ? `Last fetched: ${new Date(featureFlagsLastFetchTime).toLocaleDateString()} ${new Date(featureFlagsLastFetchTime).toLocaleTimeString()}` : 'Never fetched.'}
+								</Text>
+								<Text className="text-sm text-charcoal-600 dark:text-charcoal-400 text-center mt-1 mb-2">
+									Feature flags are auto updated 7 days after last refresh.
+								</Text>
 								<TouchableOpacity
 									onPress={() => handleRefreshFeatureFlags(true)}
 									disabled={featureFlagsLoading}
@@ -250,7 +259,7 @@ export default function SettingsScreen() {
 							</View>
 
 							<Text className="text-sm text-charcoal-600 dark:text-charcoal-400 text-center mt-1 mb-2">
-								Feature flags beta data is only manually updated, feature flags are updated weekly after the last fetch.{featureFlagsLastFetchTime ? `Last fetched: ${new Date(featureFlagsLastFetchTime).toLocaleDateString()} ${new Date(featureFlagsLastFetchTime).toLocaleTimeString()}` : 'Never fetched.'}
+								Feature flags beta data is only manually updated.
 							</Text>
 						</>
 					)}
