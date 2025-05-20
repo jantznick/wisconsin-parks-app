@@ -13,15 +13,21 @@ const ParkMarkerComponent = ({ park, onPress }: ParkMarkerProps) => {
 	const markerBorderColor = getColor(effectiveTheme === 'dark' ? 'persian-400' : 'persian-700');
 	const iconColor = getColor(effectiveTheme === 'dark' ? 'persian-100' : 'white');
 
-	// Return null if coordinates are not valid numbers
-	if (typeof park.coordinate?.latitude !== 'number' || typeof park.coordinate?.longitude !== 'number') {
-		console.log(`ParkMarker: Park "${park.name}" has invalid coordinates. Not rendering marker.`);
+	let coordinateProp: any;
+
+	if (typeof park.coordinate?.latitude === 'number' && typeof park.coordinate?.longitude === 'number') {
+		coordinateProp = park.coordinate as { latitude: number; longitude: number };
+	} else if (park.address && park.address.trim() !== '') {
+		console.log(`ParkMarker: Park "${park.name}" using address fallback: "${park.address}".`);
+		coordinateProp = park.address;
+	} else {
+		console.log(`ParkMarker: Park "${park.name}" has invalid coordinates and no address. Not rendering marker.`);
 		return null;
 	}
 
 	return (
 		<Marker
-			coordinate={park.coordinate as { latitude: number; longitude: number; }}
+			coordinate={coordinateProp}
 			title={park.name}
 			description={park.description}
 			onPress={onPress}

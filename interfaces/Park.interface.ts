@@ -52,4 +52,5 @@ export interface Park {
   recreation_url: string;
   resourceLocationId?: string;
   mapId?: string;
+  address?: string;
 }
