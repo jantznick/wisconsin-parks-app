@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Park {
+  id                    String        @id @default(uuid())
+  name                  String
+  description           String?
+  activities            Int[]
+  facilities            String[] // Assuming facilities are strings, adjust if they are more complex
+  rules                 String[]
+  isDogFriendly         Boolean?
+  isAccessible          Boolean?
+  image_from_listing    String?
+  downloaded_image_path String?
+  info_url              String?
+  recreation_url        String?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  coordinate   Coordinate?
+  hours        Hours?
+  contact      Contact?
+  entranceFee  EntranceFee?
+  parking      Parking?
+  seasonalInfo SeasonalInfo?
+}
+
+model Coordinate {
+  id        String  @id @default(uuid())
+  latitude  Float?
+  longitude Float?
+  park      Park    @relation(fields: [parkId], references: [id])
+  parkId    String  @unique // relation scalar field (used in the `@relation` attribute above)
+}
+
+model Hours {
+  id               String  @id @default(uuid())
+  open             String?
+  close            String?
+  text_description String?
+  park             Park    @relation(fields: [parkId], references: [id])
+  parkId           String  @unique
+}
+
+model Contact {
+  id      String  @id @default(uuid())
+  phone   String?
+  email   String?
+  website String?
+  park    Park    @relation(fields: [parkId], references: [id])
+  parkId  String  @unique
+}
+
+model EntranceFee {
+  id               String  @id @default(uuid())
+  daily            Float?
+  annual           Float?
+  text_description String?
+  park             Park    @relation(fields: [parkId], references: [id])
+  parkId           String  @unique
+}
+
+model Parking {
+  id          String   @id @default(uuid())
+  totalSpaces Int?
+  isFree      Boolean?
+  park        Park     @relation(fields: [parkId], references: [id])
+  parkId      String   @unique
+}
+
+model SeasonalInfo {
+  id                String   @id @default(uuid())
+  bestTimeToVisit   String?
+  seasonalClosures  String[]
+  park              Park     @relation(fields: [parkId], references: [id])
+  parkId            String   @unique
+}
