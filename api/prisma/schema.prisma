@@ -88,3 +88,18 @@ model SeasonalInfo {
   park              Park     @relation(fields: [parkId], references: [id])
   parkId            String   @unique
 }
+
+// --- App Attest Models ---
+
+model AppAttestChallenge {
+  challenge String   @id
+  createdAt DateTime @default(now())
+}
+
+model AppAttestation {
+  keyId     String   @id
+  publicKey String
+  signCount BigInt   // Use BigInt for potentially large sign counts
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

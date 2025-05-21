@@ -48,6 +48,16 @@ export type Parking = $Result.DefaultSelection<Prisma.$ParkingPayload>
  * 
  */
 export type SeasonalInfo = $Result.DefaultSelection<Prisma.$SeasonalInfoPayload>
+/**
+ * Model AppAttestChallenge
+ * 
+ */
+export type AppAttestChallenge = $Result.DefaultSelection<Prisma.$AppAttestChallengePayload>
+/**
+ * Model AppAttestation
+ * 
+ */
+export type AppAttestation = $Result.DefaultSelection<Prisma.$AppAttestationPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -243,6 +253,26 @@ export class PrismaClient<
     * ```
     */
   get seasonalInfo(): Prisma.SeasonalInfoDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.appAttestChallenge`: Exposes CRUD operations for the **AppAttestChallenge** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AppAttestChallenges
+    * const appAttestChallenges = await prisma.appAttestChallenge.findMany()
+    * ```
+    */
+  get appAttestChallenge(): Prisma.AppAttestChallengeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.appAttestation`: Exposes CRUD operations for the **AppAttestation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AppAttestations
+    * const appAttestations = await prisma.appAttestation.findMany()
+    * ```
+    */
+  get appAttestation(): Prisma.AppAttestationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -689,7 +719,9 @@ export namespace Prisma {
     Contact: 'Contact',
     EntranceFee: 'EntranceFee',
     Parking: 'Parking',
-    SeasonalInfo: 'SeasonalInfo'
+    SeasonalInfo: 'SeasonalInfo',
+    AppAttestChallenge: 'AppAttestChallenge',
+    AppAttestation: 'AppAttestation'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -708,7 +740,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "park" | "coordinate" | "hours" | "contact" | "entranceFee" | "parking" | "seasonalInfo"
+      modelProps: "park" | "coordinate" | "hours" | "contact" | "entranceFee" | "parking" | "seasonalInfo" | "appAttestChallenge" | "appAttestation"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1230,6 +1262,154 @@ export namespace Prisma {
           }
         }
       }
+      AppAttestChallenge: {
+        payload: Prisma.$AppAttestChallengePayload<ExtArgs>
+        fields: Prisma.AppAttestChallengeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AppAttestChallengeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestChallengePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AppAttestChallengeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestChallengePayload>
+          }
+          findFirst: {
+            args: Prisma.AppAttestChallengeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestChallengePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AppAttestChallengeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestChallengePayload>
+          }
+          findMany: {
+            args: Prisma.AppAttestChallengeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestChallengePayload>[]
+          }
+          create: {
+            args: Prisma.AppAttestChallengeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestChallengePayload>
+          }
+          createMany: {
+            args: Prisma.AppAttestChallengeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AppAttestChallengeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestChallengePayload>[]
+          }
+          delete: {
+            args: Prisma.AppAttestChallengeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestChallengePayload>
+          }
+          update: {
+            args: Prisma.AppAttestChallengeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestChallengePayload>
+          }
+          deleteMany: {
+            args: Prisma.AppAttestChallengeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AppAttestChallengeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AppAttestChallengeUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestChallengePayload>[]
+          }
+          upsert: {
+            args: Prisma.AppAttestChallengeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestChallengePayload>
+          }
+          aggregate: {
+            args: Prisma.AppAttestChallengeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAppAttestChallenge>
+          }
+          groupBy: {
+            args: Prisma.AppAttestChallengeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AppAttestChallengeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AppAttestChallengeCountArgs<ExtArgs>
+            result: $Utils.Optional<AppAttestChallengeCountAggregateOutputType> | number
+          }
+        }
+      }
+      AppAttestation: {
+        payload: Prisma.$AppAttestationPayload<ExtArgs>
+        fields: Prisma.AppAttestationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AppAttestationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AppAttestationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestationPayload>
+          }
+          findFirst: {
+            args: Prisma.AppAttestationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AppAttestationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestationPayload>
+          }
+          findMany: {
+            args: Prisma.AppAttestationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestationPayload>[]
+          }
+          create: {
+            args: Prisma.AppAttestationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestationPayload>
+          }
+          createMany: {
+            args: Prisma.AppAttestationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AppAttestationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestationPayload>[]
+          }
+          delete: {
+            args: Prisma.AppAttestationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestationPayload>
+          }
+          update: {
+            args: Prisma.AppAttestationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestationPayload>
+          }
+          deleteMany: {
+            args: Prisma.AppAttestationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AppAttestationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AppAttestationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestationPayload>[]
+          }
+          upsert: {
+            args: Prisma.AppAttestationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AppAttestationPayload>
+          }
+          aggregate: {
+            args: Prisma.AppAttestationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAppAttestation>
+          }
+          groupBy: {
+            args: Prisma.AppAttestationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AppAttestationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AppAttestationCountArgs<ExtArgs>
+            result: $Utils.Optional<AppAttestationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1321,6 +1501,8 @@ export namespace Prisma {
     entranceFee?: EntranceFeeOmit
     parking?: ParkingOmit
     seasonalInfo?: SeasonalInfoOmit
+    appAttestChallenge?: AppAttestChallengeOmit
+    appAttestation?: AppAttestationOmit
   }
 
   /* Types for Logging */
@@ -9148,6 +9330,1991 @@ export namespace Prisma {
 
 
   /**
+   * Model AppAttestChallenge
+   */
+
+  export type AggregateAppAttestChallenge = {
+    _count: AppAttestChallengeCountAggregateOutputType | null
+    _min: AppAttestChallengeMinAggregateOutputType | null
+    _max: AppAttestChallengeMaxAggregateOutputType | null
+  }
+
+  export type AppAttestChallengeMinAggregateOutputType = {
+    challenge: string | null
+    createdAt: Date | null
+  }
+
+  export type AppAttestChallengeMaxAggregateOutputType = {
+    challenge: string | null
+    createdAt: Date | null
+  }
+
+  export type AppAttestChallengeCountAggregateOutputType = {
+    challenge: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AppAttestChallengeMinAggregateInputType = {
+    challenge?: true
+    createdAt?: true
+  }
+
+  export type AppAttestChallengeMaxAggregateInputType = {
+    challenge?: true
+    createdAt?: true
+  }
+
+  export type AppAttestChallengeCountAggregateInputType = {
+    challenge?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AppAttestChallengeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppAttestChallenge to aggregate.
+     */
+    where?: AppAttestChallengeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppAttestChallenges to fetch.
+     */
+    orderBy?: AppAttestChallengeOrderByWithRelationInput | AppAttestChallengeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AppAttestChallengeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppAttestChallenges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppAttestChallenges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AppAttestChallenges
+    **/
+    _count?: true | AppAttestChallengeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AppAttestChallengeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AppAttestChallengeMaxAggregateInputType
+  }
+
+  export type GetAppAttestChallengeAggregateType<T extends AppAttestChallengeAggregateArgs> = {
+        [P in keyof T & keyof AggregateAppAttestChallenge]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAppAttestChallenge[P]>
+      : GetScalarType<T[P], AggregateAppAttestChallenge[P]>
+  }
+
+
+
+
+  export type AppAttestChallengeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppAttestChallengeWhereInput
+    orderBy?: AppAttestChallengeOrderByWithAggregationInput | AppAttestChallengeOrderByWithAggregationInput[]
+    by: AppAttestChallengeScalarFieldEnum[] | AppAttestChallengeScalarFieldEnum
+    having?: AppAttestChallengeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AppAttestChallengeCountAggregateInputType | true
+    _min?: AppAttestChallengeMinAggregateInputType
+    _max?: AppAttestChallengeMaxAggregateInputType
+  }
+
+  export type AppAttestChallengeGroupByOutputType = {
+    challenge: string
+    createdAt: Date
+    _count: AppAttestChallengeCountAggregateOutputType | null
+    _min: AppAttestChallengeMinAggregateOutputType | null
+    _max: AppAttestChallengeMaxAggregateOutputType | null
+  }
+
+  type GetAppAttestChallengeGroupByPayload<T extends AppAttestChallengeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AppAttestChallengeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AppAttestChallengeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AppAttestChallengeGroupByOutputType[P]>
+            : GetScalarType<T[P], AppAttestChallengeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AppAttestChallengeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    challenge?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["appAttestChallenge"]>
+
+  export type AppAttestChallengeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    challenge?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["appAttestChallenge"]>
+
+  export type AppAttestChallengeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    challenge?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["appAttestChallenge"]>
+
+  export type AppAttestChallengeSelectScalar = {
+    challenge?: boolean
+    createdAt?: boolean
+  }
+
+  export type AppAttestChallengeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"challenge" | "createdAt", ExtArgs["result"]["appAttestChallenge"]>
+
+  export type $AppAttestChallengePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AppAttestChallenge"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      challenge: string
+      createdAt: Date
+    }, ExtArgs["result"]["appAttestChallenge"]>
+    composites: {}
+  }
+
+  type AppAttestChallengeGetPayload<S extends boolean | null | undefined | AppAttestChallengeDefaultArgs> = $Result.GetResult<Prisma.$AppAttestChallengePayload, S>
+
+  type AppAttestChallengeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AppAttestChallengeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AppAttestChallengeCountAggregateInputType | true
+    }
+
+  export interface AppAttestChallengeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AppAttestChallenge'], meta: { name: 'AppAttestChallenge' } }
+    /**
+     * Find zero or one AppAttestChallenge that matches the filter.
+     * @param {AppAttestChallengeFindUniqueArgs} args - Arguments to find a AppAttestChallenge
+     * @example
+     * // Get one AppAttestChallenge
+     * const appAttestChallenge = await prisma.appAttestChallenge.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AppAttestChallengeFindUniqueArgs>(args: SelectSubset<T, AppAttestChallengeFindUniqueArgs<ExtArgs>>): Prisma__AppAttestChallengeClient<$Result.GetResult<Prisma.$AppAttestChallengePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AppAttestChallenge that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AppAttestChallengeFindUniqueOrThrowArgs} args - Arguments to find a AppAttestChallenge
+     * @example
+     * // Get one AppAttestChallenge
+     * const appAttestChallenge = await prisma.appAttestChallenge.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AppAttestChallengeFindUniqueOrThrowArgs>(args: SelectSubset<T, AppAttestChallengeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AppAttestChallengeClient<$Result.GetResult<Prisma.$AppAttestChallengePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AppAttestChallenge that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestChallengeFindFirstArgs} args - Arguments to find a AppAttestChallenge
+     * @example
+     * // Get one AppAttestChallenge
+     * const appAttestChallenge = await prisma.appAttestChallenge.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AppAttestChallengeFindFirstArgs>(args?: SelectSubset<T, AppAttestChallengeFindFirstArgs<ExtArgs>>): Prisma__AppAttestChallengeClient<$Result.GetResult<Prisma.$AppAttestChallengePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AppAttestChallenge that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestChallengeFindFirstOrThrowArgs} args - Arguments to find a AppAttestChallenge
+     * @example
+     * // Get one AppAttestChallenge
+     * const appAttestChallenge = await prisma.appAttestChallenge.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AppAttestChallengeFindFirstOrThrowArgs>(args?: SelectSubset<T, AppAttestChallengeFindFirstOrThrowArgs<ExtArgs>>): Prisma__AppAttestChallengeClient<$Result.GetResult<Prisma.$AppAttestChallengePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AppAttestChallenges that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestChallengeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AppAttestChallenges
+     * const appAttestChallenges = await prisma.appAttestChallenge.findMany()
+     * 
+     * // Get first 10 AppAttestChallenges
+     * const appAttestChallenges = await prisma.appAttestChallenge.findMany({ take: 10 })
+     * 
+     * // Only select the `challenge`
+     * const appAttestChallengeWithChallengeOnly = await prisma.appAttestChallenge.findMany({ select: { challenge: true } })
+     * 
+     */
+    findMany<T extends AppAttestChallengeFindManyArgs>(args?: SelectSubset<T, AppAttestChallengeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppAttestChallengePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AppAttestChallenge.
+     * @param {AppAttestChallengeCreateArgs} args - Arguments to create a AppAttestChallenge.
+     * @example
+     * // Create one AppAttestChallenge
+     * const AppAttestChallenge = await prisma.appAttestChallenge.create({
+     *   data: {
+     *     // ... data to create a AppAttestChallenge
+     *   }
+     * })
+     * 
+     */
+    create<T extends AppAttestChallengeCreateArgs>(args: SelectSubset<T, AppAttestChallengeCreateArgs<ExtArgs>>): Prisma__AppAttestChallengeClient<$Result.GetResult<Prisma.$AppAttestChallengePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AppAttestChallenges.
+     * @param {AppAttestChallengeCreateManyArgs} args - Arguments to create many AppAttestChallenges.
+     * @example
+     * // Create many AppAttestChallenges
+     * const appAttestChallenge = await prisma.appAttestChallenge.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AppAttestChallengeCreateManyArgs>(args?: SelectSubset<T, AppAttestChallengeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AppAttestChallenges and returns the data saved in the database.
+     * @param {AppAttestChallengeCreateManyAndReturnArgs} args - Arguments to create many AppAttestChallenges.
+     * @example
+     * // Create many AppAttestChallenges
+     * const appAttestChallenge = await prisma.appAttestChallenge.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AppAttestChallenges and only return the `challenge`
+     * const appAttestChallengeWithChallengeOnly = await prisma.appAttestChallenge.createManyAndReturn({
+     *   select: { challenge: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AppAttestChallengeCreateManyAndReturnArgs>(args?: SelectSubset<T, AppAttestChallengeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppAttestChallengePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AppAttestChallenge.
+     * @param {AppAttestChallengeDeleteArgs} args - Arguments to delete one AppAttestChallenge.
+     * @example
+     * // Delete one AppAttestChallenge
+     * const AppAttestChallenge = await prisma.appAttestChallenge.delete({
+     *   where: {
+     *     // ... filter to delete one AppAttestChallenge
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AppAttestChallengeDeleteArgs>(args: SelectSubset<T, AppAttestChallengeDeleteArgs<ExtArgs>>): Prisma__AppAttestChallengeClient<$Result.GetResult<Prisma.$AppAttestChallengePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AppAttestChallenge.
+     * @param {AppAttestChallengeUpdateArgs} args - Arguments to update one AppAttestChallenge.
+     * @example
+     * // Update one AppAttestChallenge
+     * const appAttestChallenge = await prisma.appAttestChallenge.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AppAttestChallengeUpdateArgs>(args: SelectSubset<T, AppAttestChallengeUpdateArgs<ExtArgs>>): Prisma__AppAttestChallengeClient<$Result.GetResult<Prisma.$AppAttestChallengePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AppAttestChallenges.
+     * @param {AppAttestChallengeDeleteManyArgs} args - Arguments to filter AppAttestChallenges to delete.
+     * @example
+     * // Delete a few AppAttestChallenges
+     * const { count } = await prisma.appAttestChallenge.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AppAttestChallengeDeleteManyArgs>(args?: SelectSubset<T, AppAttestChallengeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppAttestChallenges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestChallengeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AppAttestChallenges
+     * const appAttestChallenge = await prisma.appAttestChallenge.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AppAttestChallengeUpdateManyArgs>(args: SelectSubset<T, AppAttestChallengeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppAttestChallenges and returns the data updated in the database.
+     * @param {AppAttestChallengeUpdateManyAndReturnArgs} args - Arguments to update many AppAttestChallenges.
+     * @example
+     * // Update many AppAttestChallenges
+     * const appAttestChallenge = await prisma.appAttestChallenge.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AppAttestChallenges and only return the `challenge`
+     * const appAttestChallengeWithChallengeOnly = await prisma.appAttestChallenge.updateManyAndReturn({
+     *   select: { challenge: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AppAttestChallengeUpdateManyAndReturnArgs>(args: SelectSubset<T, AppAttestChallengeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppAttestChallengePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AppAttestChallenge.
+     * @param {AppAttestChallengeUpsertArgs} args - Arguments to update or create a AppAttestChallenge.
+     * @example
+     * // Update or create a AppAttestChallenge
+     * const appAttestChallenge = await prisma.appAttestChallenge.upsert({
+     *   create: {
+     *     // ... data to create a AppAttestChallenge
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AppAttestChallenge we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AppAttestChallengeUpsertArgs>(args: SelectSubset<T, AppAttestChallengeUpsertArgs<ExtArgs>>): Prisma__AppAttestChallengeClient<$Result.GetResult<Prisma.$AppAttestChallengePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AppAttestChallenges.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestChallengeCountArgs} args - Arguments to filter AppAttestChallenges to count.
+     * @example
+     * // Count the number of AppAttestChallenges
+     * const count = await prisma.appAttestChallenge.count({
+     *   where: {
+     *     // ... the filter for the AppAttestChallenges we want to count
+     *   }
+     * })
+    **/
+    count<T extends AppAttestChallengeCountArgs>(
+      args?: Subset<T, AppAttestChallengeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AppAttestChallengeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AppAttestChallenge.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestChallengeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AppAttestChallengeAggregateArgs>(args: Subset<T, AppAttestChallengeAggregateArgs>): Prisma.PrismaPromise<GetAppAttestChallengeAggregateType<T>>
+
+    /**
+     * Group by AppAttestChallenge.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestChallengeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AppAttestChallengeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AppAttestChallengeGroupByArgs['orderBy'] }
+        : { orderBy?: AppAttestChallengeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AppAttestChallengeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAppAttestChallengeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AppAttestChallenge model
+   */
+  readonly fields: AppAttestChallengeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AppAttestChallenge.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AppAttestChallengeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AppAttestChallenge model
+   */
+  interface AppAttestChallengeFieldRefs {
+    readonly challenge: FieldRef<"AppAttestChallenge", 'String'>
+    readonly createdAt: FieldRef<"AppAttestChallenge", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AppAttestChallenge findUnique
+   */
+  export type AppAttestChallengeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestChallenge
+     */
+    select?: AppAttestChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestChallenge
+     */
+    omit?: AppAttestChallengeOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAttestChallenge to fetch.
+     */
+    where: AppAttestChallengeWhereUniqueInput
+  }
+
+  /**
+   * AppAttestChallenge findUniqueOrThrow
+   */
+  export type AppAttestChallengeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestChallenge
+     */
+    select?: AppAttestChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestChallenge
+     */
+    omit?: AppAttestChallengeOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAttestChallenge to fetch.
+     */
+    where: AppAttestChallengeWhereUniqueInput
+  }
+
+  /**
+   * AppAttestChallenge findFirst
+   */
+  export type AppAttestChallengeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestChallenge
+     */
+    select?: AppAttestChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestChallenge
+     */
+    omit?: AppAttestChallengeOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAttestChallenge to fetch.
+     */
+    where?: AppAttestChallengeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppAttestChallenges to fetch.
+     */
+    orderBy?: AppAttestChallengeOrderByWithRelationInput | AppAttestChallengeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppAttestChallenges.
+     */
+    cursor?: AppAttestChallengeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppAttestChallenges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppAttestChallenges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppAttestChallenges.
+     */
+    distinct?: AppAttestChallengeScalarFieldEnum | AppAttestChallengeScalarFieldEnum[]
+  }
+
+  /**
+   * AppAttestChallenge findFirstOrThrow
+   */
+  export type AppAttestChallengeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestChallenge
+     */
+    select?: AppAttestChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestChallenge
+     */
+    omit?: AppAttestChallengeOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAttestChallenge to fetch.
+     */
+    where?: AppAttestChallengeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppAttestChallenges to fetch.
+     */
+    orderBy?: AppAttestChallengeOrderByWithRelationInput | AppAttestChallengeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppAttestChallenges.
+     */
+    cursor?: AppAttestChallengeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppAttestChallenges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppAttestChallenges.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppAttestChallenges.
+     */
+    distinct?: AppAttestChallengeScalarFieldEnum | AppAttestChallengeScalarFieldEnum[]
+  }
+
+  /**
+   * AppAttestChallenge findMany
+   */
+  export type AppAttestChallengeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestChallenge
+     */
+    select?: AppAttestChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestChallenge
+     */
+    omit?: AppAttestChallengeOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAttestChallenges to fetch.
+     */
+    where?: AppAttestChallengeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppAttestChallenges to fetch.
+     */
+    orderBy?: AppAttestChallengeOrderByWithRelationInput | AppAttestChallengeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AppAttestChallenges.
+     */
+    cursor?: AppAttestChallengeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppAttestChallenges from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppAttestChallenges.
+     */
+    skip?: number
+    distinct?: AppAttestChallengeScalarFieldEnum | AppAttestChallengeScalarFieldEnum[]
+  }
+
+  /**
+   * AppAttestChallenge create
+   */
+  export type AppAttestChallengeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestChallenge
+     */
+    select?: AppAttestChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestChallenge
+     */
+    omit?: AppAttestChallengeOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AppAttestChallenge.
+     */
+    data: XOR<AppAttestChallengeCreateInput, AppAttestChallengeUncheckedCreateInput>
+  }
+
+  /**
+   * AppAttestChallenge createMany
+   */
+  export type AppAttestChallengeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AppAttestChallenges.
+     */
+    data: AppAttestChallengeCreateManyInput | AppAttestChallengeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AppAttestChallenge createManyAndReturn
+   */
+  export type AppAttestChallengeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestChallenge
+     */
+    select?: AppAttestChallengeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestChallenge
+     */
+    omit?: AppAttestChallengeOmit<ExtArgs> | null
+    /**
+     * The data used to create many AppAttestChallenges.
+     */
+    data: AppAttestChallengeCreateManyInput | AppAttestChallengeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AppAttestChallenge update
+   */
+  export type AppAttestChallengeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestChallenge
+     */
+    select?: AppAttestChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestChallenge
+     */
+    omit?: AppAttestChallengeOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AppAttestChallenge.
+     */
+    data: XOR<AppAttestChallengeUpdateInput, AppAttestChallengeUncheckedUpdateInput>
+    /**
+     * Choose, which AppAttestChallenge to update.
+     */
+    where: AppAttestChallengeWhereUniqueInput
+  }
+
+  /**
+   * AppAttestChallenge updateMany
+   */
+  export type AppAttestChallengeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AppAttestChallenges.
+     */
+    data: XOR<AppAttestChallengeUpdateManyMutationInput, AppAttestChallengeUncheckedUpdateManyInput>
+    /**
+     * Filter which AppAttestChallenges to update
+     */
+    where?: AppAttestChallengeWhereInput
+    /**
+     * Limit how many AppAttestChallenges to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppAttestChallenge updateManyAndReturn
+   */
+  export type AppAttestChallengeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestChallenge
+     */
+    select?: AppAttestChallengeSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestChallenge
+     */
+    omit?: AppAttestChallengeOmit<ExtArgs> | null
+    /**
+     * The data used to update AppAttestChallenges.
+     */
+    data: XOR<AppAttestChallengeUpdateManyMutationInput, AppAttestChallengeUncheckedUpdateManyInput>
+    /**
+     * Filter which AppAttestChallenges to update
+     */
+    where?: AppAttestChallengeWhereInput
+    /**
+     * Limit how many AppAttestChallenges to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppAttestChallenge upsert
+   */
+  export type AppAttestChallengeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestChallenge
+     */
+    select?: AppAttestChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestChallenge
+     */
+    omit?: AppAttestChallengeOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AppAttestChallenge to update in case it exists.
+     */
+    where: AppAttestChallengeWhereUniqueInput
+    /**
+     * In case the AppAttestChallenge found by the `where` argument doesn't exist, create a new AppAttestChallenge with this data.
+     */
+    create: XOR<AppAttestChallengeCreateInput, AppAttestChallengeUncheckedCreateInput>
+    /**
+     * In case the AppAttestChallenge was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AppAttestChallengeUpdateInput, AppAttestChallengeUncheckedUpdateInput>
+  }
+
+  /**
+   * AppAttestChallenge delete
+   */
+  export type AppAttestChallengeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestChallenge
+     */
+    select?: AppAttestChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestChallenge
+     */
+    omit?: AppAttestChallengeOmit<ExtArgs> | null
+    /**
+     * Filter which AppAttestChallenge to delete.
+     */
+    where: AppAttestChallengeWhereUniqueInput
+  }
+
+  /**
+   * AppAttestChallenge deleteMany
+   */
+  export type AppAttestChallengeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppAttestChallenges to delete
+     */
+    where?: AppAttestChallengeWhereInput
+    /**
+     * Limit how many AppAttestChallenges to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppAttestChallenge without action
+   */
+  export type AppAttestChallengeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestChallenge
+     */
+    select?: AppAttestChallengeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestChallenge
+     */
+    omit?: AppAttestChallengeOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AppAttestation
+   */
+
+  export type AggregateAppAttestation = {
+    _count: AppAttestationCountAggregateOutputType | null
+    _avg: AppAttestationAvgAggregateOutputType | null
+    _sum: AppAttestationSumAggregateOutputType | null
+    _min: AppAttestationMinAggregateOutputType | null
+    _max: AppAttestationMaxAggregateOutputType | null
+  }
+
+  export type AppAttestationAvgAggregateOutputType = {
+    signCount: number | null
+  }
+
+  export type AppAttestationSumAggregateOutputType = {
+    signCount: bigint | null
+  }
+
+  export type AppAttestationMinAggregateOutputType = {
+    keyId: string | null
+    publicKey: string | null
+    signCount: bigint | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AppAttestationMaxAggregateOutputType = {
+    keyId: string | null
+    publicKey: string | null
+    signCount: bigint | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AppAttestationCountAggregateOutputType = {
+    keyId: number
+    publicKey: number
+    signCount: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AppAttestationAvgAggregateInputType = {
+    signCount?: true
+  }
+
+  export type AppAttestationSumAggregateInputType = {
+    signCount?: true
+  }
+
+  export type AppAttestationMinAggregateInputType = {
+    keyId?: true
+    publicKey?: true
+    signCount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AppAttestationMaxAggregateInputType = {
+    keyId?: true
+    publicKey?: true
+    signCount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AppAttestationCountAggregateInputType = {
+    keyId?: true
+    publicKey?: true
+    signCount?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AppAttestationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppAttestation to aggregate.
+     */
+    where?: AppAttestationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppAttestations to fetch.
+     */
+    orderBy?: AppAttestationOrderByWithRelationInput | AppAttestationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AppAttestationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppAttestations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppAttestations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AppAttestations
+    **/
+    _count?: true | AppAttestationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AppAttestationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AppAttestationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AppAttestationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AppAttestationMaxAggregateInputType
+  }
+
+  export type GetAppAttestationAggregateType<T extends AppAttestationAggregateArgs> = {
+        [P in keyof T & keyof AggregateAppAttestation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAppAttestation[P]>
+      : GetScalarType<T[P], AggregateAppAttestation[P]>
+  }
+
+
+
+
+  export type AppAttestationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AppAttestationWhereInput
+    orderBy?: AppAttestationOrderByWithAggregationInput | AppAttestationOrderByWithAggregationInput[]
+    by: AppAttestationScalarFieldEnum[] | AppAttestationScalarFieldEnum
+    having?: AppAttestationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AppAttestationCountAggregateInputType | true
+    _avg?: AppAttestationAvgAggregateInputType
+    _sum?: AppAttestationSumAggregateInputType
+    _min?: AppAttestationMinAggregateInputType
+    _max?: AppAttestationMaxAggregateInputType
+  }
+
+  export type AppAttestationGroupByOutputType = {
+    keyId: string
+    publicKey: string
+    signCount: bigint
+    createdAt: Date
+    updatedAt: Date
+    _count: AppAttestationCountAggregateOutputType | null
+    _avg: AppAttestationAvgAggregateOutputType | null
+    _sum: AppAttestationSumAggregateOutputType | null
+    _min: AppAttestationMinAggregateOutputType | null
+    _max: AppAttestationMaxAggregateOutputType | null
+  }
+
+  type GetAppAttestationGroupByPayload<T extends AppAttestationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AppAttestationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AppAttestationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AppAttestationGroupByOutputType[P]>
+            : GetScalarType<T[P], AppAttestationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AppAttestationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    keyId?: boolean
+    publicKey?: boolean
+    signCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appAttestation"]>
+
+  export type AppAttestationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    keyId?: boolean
+    publicKey?: boolean
+    signCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appAttestation"]>
+
+  export type AppAttestationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    keyId?: boolean
+    publicKey?: boolean
+    signCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["appAttestation"]>
+
+  export type AppAttestationSelectScalar = {
+    keyId?: boolean
+    publicKey?: boolean
+    signCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AppAttestationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"keyId" | "publicKey" | "signCount" | "createdAt" | "updatedAt", ExtArgs["result"]["appAttestation"]>
+
+  export type $AppAttestationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AppAttestation"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      keyId: string
+      publicKey: string
+      signCount: bigint
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["appAttestation"]>
+    composites: {}
+  }
+
+  type AppAttestationGetPayload<S extends boolean | null | undefined | AppAttestationDefaultArgs> = $Result.GetResult<Prisma.$AppAttestationPayload, S>
+
+  type AppAttestationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AppAttestationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AppAttestationCountAggregateInputType | true
+    }
+
+  export interface AppAttestationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AppAttestation'], meta: { name: 'AppAttestation' } }
+    /**
+     * Find zero or one AppAttestation that matches the filter.
+     * @param {AppAttestationFindUniqueArgs} args - Arguments to find a AppAttestation
+     * @example
+     * // Get one AppAttestation
+     * const appAttestation = await prisma.appAttestation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AppAttestationFindUniqueArgs>(args: SelectSubset<T, AppAttestationFindUniqueArgs<ExtArgs>>): Prisma__AppAttestationClient<$Result.GetResult<Prisma.$AppAttestationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AppAttestation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AppAttestationFindUniqueOrThrowArgs} args - Arguments to find a AppAttestation
+     * @example
+     * // Get one AppAttestation
+     * const appAttestation = await prisma.appAttestation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AppAttestationFindUniqueOrThrowArgs>(args: SelectSubset<T, AppAttestationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AppAttestationClient<$Result.GetResult<Prisma.$AppAttestationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AppAttestation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestationFindFirstArgs} args - Arguments to find a AppAttestation
+     * @example
+     * // Get one AppAttestation
+     * const appAttestation = await prisma.appAttestation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AppAttestationFindFirstArgs>(args?: SelectSubset<T, AppAttestationFindFirstArgs<ExtArgs>>): Prisma__AppAttestationClient<$Result.GetResult<Prisma.$AppAttestationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AppAttestation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestationFindFirstOrThrowArgs} args - Arguments to find a AppAttestation
+     * @example
+     * // Get one AppAttestation
+     * const appAttestation = await prisma.appAttestation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AppAttestationFindFirstOrThrowArgs>(args?: SelectSubset<T, AppAttestationFindFirstOrThrowArgs<ExtArgs>>): Prisma__AppAttestationClient<$Result.GetResult<Prisma.$AppAttestationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AppAttestations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AppAttestations
+     * const appAttestations = await prisma.appAttestation.findMany()
+     * 
+     * // Get first 10 AppAttestations
+     * const appAttestations = await prisma.appAttestation.findMany({ take: 10 })
+     * 
+     * // Only select the `keyId`
+     * const appAttestationWithKeyIdOnly = await prisma.appAttestation.findMany({ select: { keyId: true } })
+     * 
+     */
+    findMany<T extends AppAttestationFindManyArgs>(args?: SelectSubset<T, AppAttestationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppAttestationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AppAttestation.
+     * @param {AppAttestationCreateArgs} args - Arguments to create a AppAttestation.
+     * @example
+     * // Create one AppAttestation
+     * const AppAttestation = await prisma.appAttestation.create({
+     *   data: {
+     *     // ... data to create a AppAttestation
+     *   }
+     * })
+     * 
+     */
+    create<T extends AppAttestationCreateArgs>(args: SelectSubset<T, AppAttestationCreateArgs<ExtArgs>>): Prisma__AppAttestationClient<$Result.GetResult<Prisma.$AppAttestationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AppAttestations.
+     * @param {AppAttestationCreateManyArgs} args - Arguments to create many AppAttestations.
+     * @example
+     * // Create many AppAttestations
+     * const appAttestation = await prisma.appAttestation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AppAttestationCreateManyArgs>(args?: SelectSubset<T, AppAttestationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AppAttestations and returns the data saved in the database.
+     * @param {AppAttestationCreateManyAndReturnArgs} args - Arguments to create many AppAttestations.
+     * @example
+     * // Create many AppAttestations
+     * const appAttestation = await prisma.appAttestation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AppAttestations and only return the `keyId`
+     * const appAttestationWithKeyIdOnly = await prisma.appAttestation.createManyAndReturn({
+     *   select: { keyId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AppAttestationCreateManyAndReturnArgs>(args?: SelectSubset<T, AppAttestationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppAttestationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AppAttestation.
+     * @param {AppAttestationDeleteArgs} args - Arguments to delete one AppAttestation.
+     * @example
+     * // Delete one AppAttestation
+     * const AppAttestation = await prisma.appAttestation.delete({
+     *   where: {
+     *     // ... filter to delete one AppAttestation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AppAttestationDeleteArgs>(args: SelectSubset<T, AppAttestationDeleteArgs<ExtArgs>>): Prisma__AppAttestationClient<$Result.GetResult<Prisma.$AppAttestationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AppAttestation.
+     * @param {AppAttestationUpdateArgs} args - Arguments to update one AppAttestation.
+     * @example
+     * // Update one AppAttestation
+     * const appAttestation = await prisma.appAttestation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AppAttestationUpdateArgs>(args: SelectSubset<T, AppAttestationUpdateArgs<ExtArgs>>): Prisma__AppAttestationClient<$Result.GetResult<Prisma.$AppAttestationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AppAttestations.
+     * @param {AppAttestationDeleteManyArgs} args - Arguments to filter AppAttestations to delete.
+     * @example
+     * // Delete a few AppAttestations
+     * const { count } = await prisma.appAttestation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AppAttestationDeleteManyArgs>(args?: SelectSubset<T, AppAttestationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppAttestations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AppAttestations
+     * const appAttestation = await prisma.appAttestation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AppAttestationUpdateManyArgs>(args: SelectSubset<T, AppAttestationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AppAttestations and returns the data updated in the database.
+     * @param {AppAttestationUpdateManyAndReturnArgs} args - Arguments to update many AppAttestations.
+     * @example
+     * // Update many AppAttestations
+     * const appAttestation = await prisma.appAttestation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AppAttestations and only return the `keyId`
+     * const appAttestationWithKeyIdOnly = await prisma.appAttestation.updateManyAndReturn({
+     *   select: { keyId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AppAttestationUpdateManyAndReturnArgs>(args: SelectSubset<T, AppAttestationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppAttestationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AppAttestation.
+     * @param {AppAttestationUpsertArgs} args - Arguments to update or create a AppAttestation.
+     * @example
+     * // Update or create a AppAttestation
+     * const appAttestation = await prisma.appAttestation.upsert({
+     *   create: {
+     *     // ... data to create a AppAttestation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AppAttestation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AppAttestationUpsertArgs>(args: SelectSubset<T, AppAttestationUpsertArgs<ExtArgs>>): Prisma__AppAttestationClient<$Result.GetResult<Prisma.$AppAttestationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AppAttestations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestationCountArgs} args - Arguments to filter AppAttestations to count.
+     * @example
+     * // Count the number of AppAttestations
+     * const count = await prisma.appAttestation.count({
+     *   where: {
+     *     // ... the filter for the AppAttestations we want to count
+     *   }
+     * })
+    **/
+    count<T extends AppAttestationCountArgs>(
+      args?: Subset<T, AppAttestationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AppAttestationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AppAttestation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AppAttestationAggregateArgs>(args: Subset<T, AppAttestationAggregateArgs>): Prisma.PrismaPromise<GetAppAttestationAggregateType<T>>
+
+    /**
+     * Group by AppAttestation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AppAttestationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AppAttestationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AppAttestationGroupByArgs['orderBy'] }
+        : { orderBy?: AppAttestationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AppAttestationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAppAttestationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AppAttestation model
+   */
+  readonly fields: AppAttestationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AppAttestation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AppAttestationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AppAttestation model
+   */
+  interface AppAttestationFieldRefs {
+    readonly keyId: FieldRef<"AppAttestation", 'String'>
+    readonly publicKey: FieldRef<"AppAttestation", 'String'>
+    readonly signCount: FieldRef<"AppAttestation", 'BigInt'>
+    readonly createdAt: FieldRef<"AppAttestation", 'DateTime'>
+    readonly updatedAt: FieldRef<"AppAttestation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AppAttestation findUnique
+   */
+  export type AppAttestationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestation
+     */
+    select?: AppAttestationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestation
+     */
+    omit?: AppAttestationOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAttestation to fetch.
+     */
+    where: AppAttestationWhereUniqueInput
+  }
+
+  /**
+   * AppAttestation findUniqueOrThrow
+   */
+  export type AppAttestationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestation
+     */
+    select?: AppAttestationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestation
+     */
+    omit?: AppAttestationOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAttestation to fetch.
+     */
+    where: AppAttestationWhereUniqueInput
+  }
+
+  /**
+   * AppAttestation findFirst
+   */
+  export type AppAttestationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestation
+     */
+    select?: AppAttestationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestation
+     */
+    omit?: AppAttestationOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAttestation to fetch.
+     */
+    where?: AppAttestationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppAttestations to fetch.
+     */
+    orderBy?: AppAttestationOrderByWithRelationInput | AppAttestationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppAttestations.
+     */
+    cursor?: AppAttestationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppAttestations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppAttestations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppAttestations.
+     */
+    distinct?: AppAttestationScalarFieldEnum | AppAttestationScalarFieldEnum[]
+  }
+
+  /**
+   * AppAttestation findFirstOrThrow
+   */
+  export type AppAttestationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestation
+     */
+    select?: AppAttestationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestation
+     */
+    omit?: AppAttestationOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAttestation to fetch.
+     */
+    where?: AppAttestationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppAttestations to fetch.
+     */
+    orderBy?: AppAttestationOrderByWithRelationInput | AppAttestationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AppAttestations.
+     */
+    cursor?: AppAttestationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppAttestations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppAttestations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AppAttestations.
+     */
+    distinct?: AppAttestationScalarFieldEnum | AppAttestationScalarFieldEnum[]
+  }
+
+  /**
+   * AppAttestation findMany
+   */
+  export type AppAttestationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestation
+     */
+    select?: AppAttestationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestation
+     */
+    omit?: AppAttestationOmit<ExtArgs> | null
+    /**
+     * Filter, which AppAttestations to fetch.
+     */
+    where?: AppAttestationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AppAttestations to fetch.
+     */
+    orderBy?: AppAttestationOrderByWithRelationInput | AppAttestationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AppAttestations.
+     */
+    cursor?: AppAttestationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AppAttestations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AppAttestations.
+     */
+    skip?: number
+    distinct?: AppAttestationScalarFieldEnum | AppAttestationScalarFieldEnum[]
+  }
+
+  /**
+   * AppAttestation create
+   */
+  export type AppAttestationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestation
+     */
+    select?: AppAttestationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestation
+     */
+    omit?: AppAttestationOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AppAttestation.
+     */
+    data: XOR<AppAttestationCreateInput, AppAttestationUncheckedCreateInput>
+  }
+
+  /**
+   * AppAttestation createMany
+   */
+  export type AppAttestationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AppAttestations.
+     */
+    data: AppAttestationCreateManyInput | AppAttestationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AppAttestation createManyAndReturn
+   */
+  export type AppAttestationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestation
+     */
+    select?: AppAttestationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestation
+     */
+    omit?: AppAttestationOmit<ExtArgs> | null
+    /**
+     * The data used to create many AppAttestations.
+     */
+    data: AppAttestationCreateManyInput | AppAttestationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AppAttestation update
+   */
+  export type AppAttestationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestation
+     */
+    select?: AppAttestationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestation
+     */
+    omit?: AppAttestationOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AppAttestation.
+     */
+    data: XOR<AppAttestationUpdateInput, AppAttestationUncheckedUpdateInput>
+    /**
+     * Choose, which AppAttestation to update.
+     */
+    where: AppAttestationWhereUniqueInput
+  }
+
+  /**
+   * AppAttestation updateMany
+   */
+  export type AppAttestationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AppAttestations.
+     */
+    data: XOR<AppAttestationUpdateManyMutationInput, AppAttestationUncheckedUpdateManyInput>
+    /**
+     * Filter which AppAttestations to update
+     */
+    where?: AppAttestationWhereInput
+    /**
+     * Limit how many AppAttestations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppAttestation updateManyAndReturn
+   */
+  export type AppAttestationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestation
+     */
+    select?: AppAttestationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestation
+     */
+    omit?: AppAttestationOmit<ExtArgs> | null
+    /**
+     * The data used to update AppAttestations.
+     */
+    data: XOR<AppAttestationUpdateManyMutationInput, AppAttestationUncheckedUpdateManyInput>
+    /**
+     * Filter which AppAttestations to update
+     */
+    where?: AppAttestationWhereInput
+    /**
+     * Limit how many AppAttestations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppAttestation upsert
+   */
+  export type AppAttestationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestation
+     */
+    select?: AppAttestationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestation
+     */
+    omit?: AppAttestationOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AppAttestation to update in case it exists.
+     */
+    where: AppAttestationWhereUniqueInput
+    /**
+     * In case the AppAttestation found by the `where` argument doesn't exist, create a new AppAttestation with this data.
+     */
+    create: XOR<AppAttestationCreateInput, AppAttestationUncheckedCreateInput>
+    /**
+     * In case the AppAttestation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AppAttestationUpdateInput, AppAttestationUncheckedUpdateInput>
+  }
+
+  /**
+   * AppAttestation delete
+   */
+  export type AppAttestationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestation
+     */
+    select?: AppAttestationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestation
+     */
+    omit?: AppAttestationOmit<ExtArgs> | null
+    /**
+     * Filter which AppAttestation to delete.
+     */
+    where: AppAttestationWhereUniqueInput
+  }
+
+  /**
+   * AppAttestation deleteMany
+   */
+  export type AppAttestationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AppAttestations to delete
+     */
+    where?: AppAttestationWhereInput
+    /**
+     * Limit how many AppAttestations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AppAttestation without action
+   */
+  export type AppAttestationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AppAttestation
+     */
+    select?: AppAttestationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AppAttestation
+     */
+    omit?: AppAttestationOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -9244,6 +11411,25 @@ export namespace Prisma {
   export type SeasonalInfoScalarFieldEnum = (typeof SeasonalInfoScalarFieldEnum)[keyof typeof SeasonalInfoScalarFieldEnum]
 
 
+  export const AppAttestChallengeScalarFieldEnum: {
+    challenge: 'challenge',
+    createdAt: 'createdAt'
+  };
+
+  export type AppAttestChallengeScalarFieldEnum = (typeof AppAttestChallengeScalarFieldEnum)[keyof typeof AppAttestChallengeScalarFieldEnum]
+
+
+  export const AppAttestationScalarFieldEnum: {
+    keyId: 'keyId',
+    publicKey: 'publicKey',
+    signCount: 'signCount',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AppAttestationScalarFieldEnum = (typeof AppAttestationScalarFieldEnum)[keyof typeof AppAttestationScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -9333,6 +11519,20 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BigInt'
+   */
+  export type BigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt'>
+    
+
+
+  /**
+   * Reference to a field of type 'BigInt[]'
+   */
+  export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
     
   /**
    * Deep Input Types
@@ -9775,6 +11975,97 @@ export namespace Prisma {
     bestTimeToVisit?: StringNullableWithAggregatesFilter<"SeasonalInfo"> | string | null
     seasonalClosures?: StringNullableListFilter<"SeasonalInfo">
     parkId?: StringWithAggregatesFilter<"SeasonalInfo"> | string
+  }
+
+  export type AppAttestChallengeWhereInput = {
+    AND?: AppAttestChallengeWhereInput | AppAttestChallengeWhereInput[]
+    OR?: AppAttestChallengeWhereInput[]
+    NOT?: AppAttestChallengeWhereInput | AppAttestChallengeWhereInput[]
+    challenge?: StringFilter<"AppAttestChallenge"> | string
+    createdAt?: DateTimeFilter<"AppAttestChallenge"> | Date | string
+  }
+
+  export type AppAttestChallengeOrderByWithRelationInput = {
+    challenge?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AppAttestChallengeWhereUniqueInput = Prisma.AtLeast<{
+    challenge?: string
+    AND?: AppAttestChallengeWhereInput | AppAttestChallengeWhereInput[]
+    OR?: AppAttestChallengeWhereInput[]
+    NOT?: AppAttestChallengeWhereInput | AppAttestChallengeWhereInput[]
+    createdAt?: DateTimeFilter<"AppAttestChallenge"> | Date | string
+  }, "challenge">
+
+  export type AppAttestChallengeOrderByWithAggregationInput = {
+    challenge?: SortOrder
+    createdAt?: SortOrder
+    _count?: AppAttestChallengeCountOrderByAggregateInput
+    _max?: AppAttestChallengeMaxOrderByAggregateInput
+    _min?: AppAttestChallengeMinOrderByAggregateInput
+  }
+
+  export type AppAttestChallengeScalarWhereWithAggregatesInput = {
+    AND?: AppAttestChallengeScalarWhereWithAggregatesInput | AppAttestChallengeScalarWhereWithAggregatesInput[]
+    OR?: AppAttestChallengeScalarWhereWithAggregatesInput[]
+    NOT?: AppAttestChallengeScalarWhereWithAggregatesInput | AppAttestChallengeScalarWhereWithAggregatesInput[]
+    challenge?: StringWithAggregatesFilter<"AppAttestChallenge"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AppAttestChallenge"> | Date | string
+  }
+
+  export type AppAttestationWhereInput = {
+    AND?: AppAttestationWhereInput | AppAttestationWhereInput[]
+    OR?: AppAttestationWhereInput[]
+    NOT?: AppAttestationWhereInput | AppAttestationWhereInput[]
+    keyId?: StringFilter<"AppAttestation"> | string
+    publicKey?: StringFilter<"AppAttestation"> | string
+    signCount?: BigIntFilter<"AppAttestation"> | bigint | number
+    createdAt?: DateTimeFilter<"AppAttestation"> | Date | string
+    updatedAt?: DateTimeFilter<"AppAttestation"> | Date | string
+  }
+
+  export type AppAttestationOrderByWithRelationInput = {
+    keyId?: SortOrder
+    publicKey?: SortOrder
+    signCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppAttestationWhereUniqueInput = Prisma.AtLeast<{
+    keyId?: string
+    AND?: AppAttestationWhereInput | AppAttestationWhereInput[]
+    OR?: AppAttestationWhereInput[]
+    NOT?: AppAttestationWhereInput | AppAttestationWhereInput[]
+    publicKey?: StringFilter<"AppAttestation"> | string
+    signCount?: BigIntFilter<"AppAttestation"> | bigint | number
+    createdAt?: DateTimeFilter<"AppAttestation"> | Date | string
+    updatedAt?: DateTimeFilter<"AppAttestation"> | Date | string
+  }, "keyId">
+
+  export type AppAttestationOrderByWithAggregationInput = {
+    keyId?: SortOrder
+    publicKey?: SortOrder
+    signCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AppAttestationCountOrderByAggregateInput
+    _avg?: AppAttestationAvgOrderByAggregateInput
+    _max?: AppAttestationMaxOrderByAggregateInput
+    _min?: AppAttestationMinOrderByAggregateInput
+    _sum?: AppAttestationSumOrderByAggregateInput
+  }
+
+  export type AppAttestationScalarWhereWithAggregatesInput = {
+    AND?: AppAttestationScalarWhereWithAggregatesInput | AppAttestationScalarWhereWithAggregatesInput[]
+    OR?: AppAttestationScalarWhereWithAggregatesInput[]
+    NOT?: AppAttestationScalarWhereWithAggregatesInput | AppAttestationScalarWhereWithAggregatesInput[]
+    keyId?: StringWithAggregatesFilter<"AppAttestation"> | string
+    publicKey?: StringWithAggregatesFilter<"AppAttestation"> | string
+    signCount?: BigIntWithAggregatesFilter<"AppAttestation"> | bigint | number
+    createdAt?: DateTimeWithAggregatesFilter<"AppAttestation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AppAttestation"> | Date | string
   }
 
   export type ParkCreateInput = {
@@ -10229,6 +12520,97 @@ export namespace Prisma {
     parkId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type AppAttestChallengeCreateInput = {
+    challenge: string
+    createdAt?: Date | string
+  }
+
+  export type AppAttestChallengeUncheckedCreateInput = {
+    challenge: string
+    createdAt?: Date | string
+  }
+
+  export type AppAttestChallengeUpdateInput = {
+    challenge?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppAttestChallengeUncheckedUpdateInput = {
+    challenge?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppAttestChallengeCreateManyInput = {
+    challenge: string
+    createdAt?: Date | string
+  }
+
+  export type AppAttestChallengeUpdateManyMutationInput = {
+    challenge?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppAttestChallengeUncheckedUpdateManyInput = {
+    challenge?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppAttestationCreateInput = {
+    keyId: string
+    publicKey: string
+    signCount: bigint | number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AppAttestationUncheckedCreateInput = {
+    keyId: string
+    publicKey: string
+    signCount: bigint | number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AppAttestationUpdateInput = {
+    keyId?: StringFieldUpdateOperationsInput | string
+    publicKey?: StringFieldUpdateOperationsInput | string
+    signCount?: BigIntFieldUpdateOperationsInput | bigint | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppAttestationUncheckedUpdateInput = {
+    keyId?: StringFieldUpdateOperationsInput | string
+    publicKey?: StringFieldUpdateOperationsInput | string
+    signCount?: BigIntFieldUpdateOperationsInput | bigint | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppAttestationCreateManyInput = {
+    keyId: string
+    publicKey: string
+    signCount: bigint | number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AppAttestationUpdateManyMutationInput = {
+    keyId?: StringFieldUpdateOperationsInput | string
+    publicKey?: StringFieldUpdateOperationsInput | string
+    signCount?: BigIntFieldUpdateOperationsInput | bigint | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AppAttestationUncheckedUpdateManyInput = {
+    keyId?: StringFieldUpdateOperationsInput | string
+    publicKey?: StringFieldUpdateOperationsInput | string
+    signCount?: BigIntFieldUpdateOperationsInput | bigint | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -10657,6 +13039,80 @@ export namespace Prisma {
     parkId?: SortOrder
   }
 
+  export type AppAttestChallengeCountOrderByAggregateInput = {
+    challenge?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AppAttestChallengeMaxOrderByAggregateInput = {
+    challenge?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AppAttestChallengeMinOrderByAggregateInput = {
+    challenge?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BigIntFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+  }
+
+  export type AppAttestationCountOrderByAggregateInput = {
+    keyId?: SortOrder
+    publicKey?: SortOrder
+    signCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppAttestationAvgOrderByAggregateInput = {
+    signCount?: SortOrder
+  }
+
+  export type AppAttestationMaxOrderByAggregateInput = {
+    keyId?: SortOrder
+    publicKey?: SortOrder
+    signCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppAttestationMinOrderByAggregateInput = {
+    keyId?: SortOrder
+    publicKey?: SortOrder
+    signCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AppAttestationSumOrderByAggregateInput = {
+    signCount?: SortOrder
+  }
+
+  export type BigIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedBigIntFilter<$PrismaModel>
+    _min?: NestedBigIntFilter<$PrismaModel>
+    _max?: NestedBigIntFilter<$PrismaModel>
+  }
+
   export type ParkCreateactivitiesInput = {
     set: number[]
   }
@@ -11001,6 +13457,14 @@ export namespace Prisma {
     update?: XOR<XOR<ParkUpdateToOneWithWhereWithoutSeasonalInfoInput, ParkUpdateWithoutSeasonalInfoInput>, ParkUncheckedUpdateWithoutSeasonalInfoInput>
   }
 
+  export type BigIntFieldUpdateOperationsInput = {
+    set?: bigint | number
+    increment?: bigint | number
+    decrement?: bigint | number
+    multiply?: bigint | number
+    divide?: bigint | number
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -11164,6 +13628,44 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedBigIntFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntFilter<$PrismaModel> | bigint | number
+  }
+
+  export type NestedBigIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    in?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    notIn?: bigint[] | number[] | ListBigIntFieldRefInput<$PrismaModel>
+    lt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    lte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
+    not?: NestedBigIntWithAggregatesFilter<$PrismaModel> | bigint | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedBigIntFilter<$PrismaModel>
+    _min?: NestedBigIntFilter<$PrismaModel>
+    _max?: NestedBigIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type CoordinateCreateWithoutParkInput = {

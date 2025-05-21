@@ -182,6 +182,19 @@ exports.Prisma.SeasonalInfoScalarFieldEnum = {
   parkId: 'parkId'
 };
 
+exports.Prisma.AppAttestChallengeScalarFieldEnum = {
+  challenge: 'challenge',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AppAttestationScalarFieldEnum = {
+  keyId: 'keyId',
+  publicKey: 'publicKey',
+  signCount: 'signCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -205,7 +218,9 @@ exports.Prisma.ModelName = {
   Contact: 'Contact',
   EntranceFee: 'EntranceFee',
   Parking: 'Parking',
-  SeasonalInfo: 'SeasonalInfo'
+  SeasonalInfo: 'SeasonalInfo',
+  AppAttestChallenge: 'AppAttestChallenge',
+  AppAttestation: 'AppAttestation'
 };
 
 /**
