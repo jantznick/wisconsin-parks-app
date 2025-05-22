@@ -1,8 +1,8 @@
-# Wisconsin State Parks Finder 🌲
+# Family Parks Finder 🌲
 
 ## Features
 
-*   **Explore Parks**: Browse a comprehensive list of Wisconsin state parks.
+*   **Explore Parks**: Browse a comprehensive list of Family parks.
 *   **Park Details**: Get detailed information for each park, including:
     *   Description and location (with an interactive map)
     *   Activities available (hiking, biking, swimming, etc.)
@@ -11,7 +11,7 @@
     *   Park rules and seasonal information
 *   **Interactive Map**: View parks on a map, see your current location, and get directions.
 *   **Weather Forecast**: Check the current weather and upcoming forecast for each park.
-*   **Reservations**: Easily access the official Wisconsin State Park reservation system to plan your stay.
+*   **Reservations**: Easily access the official reservation system to plan your stay via external links.
 *   **Favorites**: Keep a list of your favorite parks for quick access.
 *   **Share Parks**: Share park information with friends and family.
 *   **Customizable Theme**: Choose between light, dark, or system default themes for the app's appearance.
@@ -25,12 +25,12 @@ The park information, including details about activities, facilities, and more, 
 
 ## Data Scraping
 
-The `data_scraping` directory contains scripts to gather and process information about Wisconsin State Parks.
+The `data_scraping` directory contains scripts to gather and process information about Family Parks.
 
 ### Scripts
 
 *   **`park_scraper.py`**:
-    *   This script scrapes detailed information about Wisconsin state parks from the official Department of Natural Resources (DNR) website (`dnr.wisconsin.gov`).
+    *   This script scrapes detailed information about Family parks from the official Department of Natural Resources (DNR) website (`dnr.wisconsin.gov`).
     *   It gathers data such as park names, descriptions, geographical coordinates, operating hours, contact information, and a list of raw activity strings found on each park's page.
     *   It can download a primary image for each park and save it locally in the `images` directory (created if not present).
     *   If an OpenAI API key is configured (via the `OPENAI_API_KEY` environment variable), the script can leverage a Large Language Model (LLM) for:
@@ -82,4 +82,8 @@ You can install them using:
 This is an [Expo](https://expo.dev) project.
 
 1.  Install dependencies: `npm install`
-2.  Start the app: `npx expo start`
+2.  Start the app: `npm run start`
+
+Color Palette:
+https://coolors.co/palette/264653-2a9d8f-e9c46a-f4a261-e76f51
+

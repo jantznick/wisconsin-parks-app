@@ -14,11 +14,16 @@
   "description": "",
   "dependencies": {
     "@prisma/client": "^6.8.2",
+    "@types/json-stable-stringify": "^1.1.0",
+    "expo-crypto": "^14.1.4",
+    "expo-secure-store": "^14.2.3",
     "express": "^5.1.0",
+    "json-stable-stringify": "^1.3.0",
     "node-app-attest": "^0.0.6",
     "node-fetch": "^2.7.0",
     "pg": "^8.16.0",
     "prisma": "^6.8.2",
+    "react-native-ios-appattest": "^1.0.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {

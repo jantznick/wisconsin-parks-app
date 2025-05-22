@@ -26,7 +26,7 @@ const USER_LOCATION_ZOOM_DELTA = {
   longitudeDelta: 0.25,
 };
 
-function WisconsinMapComponent({ parks = [] }: WisconsinMapProps) {
+function WisconsinMapComponent({ parks = [], onRegionChangeComplete }: WisconsinMapProps) {
   const mapRef = useRef<MapView>(null);
   const { setSelectedPark } = useSelectedPark();
   const [currentMapRegion, setCurrentMapRegion] = useState<Region | undefined>(undefined);
@@ -113,6 +113,7 @@ function WisconsinMapComponent({ parks = [] }: WisconsinMapProps) {
         showsCompass
         showsScale
         showsMyLocationButton
+        onRegionChangeComplete={onRegionChangeComplete}
       >
         {parks.map((park) => {
           return (

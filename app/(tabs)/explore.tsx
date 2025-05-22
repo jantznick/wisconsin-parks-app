@@ -1,55 +1,119 @@
 import { getActivityName } from '@/utils/activities';
 import { Ionicons } from '@expo/vector-icons';
-import React, { useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+	ActivityIndicator,
+	Alert,
+	Platform,
+	Pressable,
+	ScrollView,
+	Text,
+	View,
+} from 'react-native';
+import { Region } from 'react-native-maps';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomHeader from '../../components/CustomHeader';
 import WisconsinMap from '../../components/WisconsinMap';
 import { useActivities } from '../../contexts/ActivitiesContext';
 import { useFeatureFlags } from '../../contexts/FeatureFlagsContext';
-import { useParks } from '../../contexts/ParksContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import { Park } from '../../interfaces/Park.interface';
 import { getColor } from '../../utils/colors';
 
+// App Attest and related imports
+import * as Crypto from 'expo-crypto';
+import * as SecureStore from 'expo-secure-store';
+import stringify from 'json-stable-stringify';
+import * as AppAttest from 'react-native-ios-appattest';
+
+const KEY_ID_STORAGE_KEY = 'appAttestKeyId';
+
+// Define a type for map boundaries
+interface MapBounds {
+	minLat: number;
+	minLng: number;
+	maxLat: number;
+	maxLng: number;
+}
+
+// API URL - consider moving to a config file
+const API_BASE_URL = 'http://localhost:3000'; // Replace with your actual API base URL if different
+
+// Debounce function
+function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
+	let timeout: ReturnType<typeof setTimeout> | null = null;
+
+	const debounced = (...args: Parameters<F>) => {
+		if (timeout !== null) {
+			clearTimeout(timeout);
+			timeout = null;
+		}
+		timeout = setTimeout(() => func(...args), waitFor);
+	};
+
+	return debounced as (...args: Parameters<F>) => ReturnType<F>;
+}
+
 // Helper function to compare arrays of parks by their IDs
 const areParkArraysEqual = (arr1?: Park[], arr2?: Park[]): boolean => {
-	if (arr1 === arr2) return true; // Same reference
-	if (!arr1 || !arr2) return false; // One is null/undefined
-	if (arr1.length !== arr2.length) return false; // Different lengths
-	for (let i = 0; i < arr1.length; i++) {
-		if (arr1[i].id !== arr2[i].id) return false; // Different park IDs
+	if (arr1 === arr2) return true; 
+	if (!arr1 || !arr2) return false; 
+	if (arr1.length !== arr2.length) return false; 
+	
+	const ids1 = new Set(arr1.map(p => p.id));
+	const ids2 = new Set(arr2.map(p => p.id));
+	if (ids1.size !== ids2.size) return false; 
+	for (const id of ids1) {
+		if (!ids2.has(id)) return false; 
 	}
-	return true; // Arrays are considered equal
+	return true; 
 };
+
+// Helper to compute SHA256 and return Base64
+async function sha256base64(message: string): Promise<string> {
+    const digest = await Crypto.digestStringAsync(
+        Crypto.CryptoDigestAlgorithm.SHA256,
+        message,
+        { encoding: Crypto.CryptoEncoding.BASE64 }
+    );
+    return digest;
+}
 
 export default function ExploreScreen() {
 	const insets = useSafeAreaInsets();
 	const { effectiveTheme } = useTheme();
-	const { parks: INITIAL_PARKS, loading: parksLoading, error: parksError } = useParks();
 	const { activities, loading: activitiesLoading, error: activitiesError } = useActivities();
 	const { featureFlags } = useFeatureFlags();
+
+	// App Attest State
+	const [appAttestKeyId, setAppAttestKeyId] = useState<string | null>(null);
+	const [isAttestationInProgress, setIsAttestationInProgress] = useState<boolean>(false);
+	const [attestationError, setAttestationError] = useState<string | null>(null);
+
+	// State for dynamically fetched parks based on map viewport
+	const [mapViewportParks, setMapViewportParks] = useState<Park[]>([]);
+	const [isMapParksLoading, setIsMapParksLoading] = useState<boolean>(false);
+	const [mapParksError, setMapParksError] = useState<string | null>(null);
+	const [currentMapBounds, setCurrentMapBounds] = useState<MapBounds | null>(null);
+
 	const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 	const [selectedFacilities, setSelectedFacilities] = useState<string[]>([]);
 	const [feeFilter, setFeeFilter] = useState<'any' | 'free' | 'paid'>('any');
 	const [dogFriendlyOnly, setDogFriendlyOnly] = useState<boolean>(false);
 	const [accessibleOnly, setAccessibleOnly] = useState<boolean>(false);
-	// State for collapsible sections
 	const [activitiesExpanded, setActivitiesExpanded] = useState(false);
-	const [showAllActivitiesButton, setShowAllActivitiesButton] = useState(false); // New state for toggling all activities view
+	const [showAllActivitiesButton, setShowAllActivitiesButton] = useState(false); 
 	const [facilitiesExpanded, setFacilitiesExpanded] = useState(false);
 	const [feeExpanded, setFeeExpanded] = useState(false);
 	const [amenitiesExpanded, setAmenitiesExpanded] = useState(false);
 
-	// Calculate active filter counts for display on headers
 	const activeCategoryFiltersCount = selectedCategories.length;
 	const activeFacilityFiltersCount = selectedFacilities.length;
 	const activeFeeFilterCount = feeFilter !== 'any' ? 1 : 0;
 	const activeAmenityFiltersCount = (dogFriendlyOnly ? 1 : 0) + (accessibleOnly ? 1 : 0);
 
-	// Get unique activities & facilities from all parks
-	const categories = useMemo(() => [...new Set(INITIAL_PARKS.flatMap(park => park.activities || []))].filter(Boolean).sort((a,b) => a - b), [INITIAL_PARKS]);
-	const facilities = useMemo(() => [...new Set(INITIAL_PARKS.flatMap(park => park.facilities || []))].filter(Boolean).sort(), [INITIAL_PARKS]);
+	const categories = useMemo(() => [...new Set(mapViewportParks.flatMap(park => park.activities || []))].filter(Boolean).sort((a,b) => a - b), [mapViewportParks]);
+	const facilities = useMemo(() => [...new Set(mapViewportParks.flatMap(park => park.facilities || []))].filter(Boolean).sort(), [mapViewportParks]);
 
 	const FEE_OPTIONS = [
 		{key: 'any', label: 'All Fees'},
@@ -59,55 +123,225 @@ export default function ExploreScreen() {
 
 	const previousFilteredParksRef = useRef<Park[]>([]);
 
-	// Enhanced filtering logic
-	const filteredParksData = useMemo(() => {
-		let parksToFilter: Park[] = INITIAL_PARKS || [];
+	const handleInitialAttestation = useCallback(async () => {
+		if (Platform.OS !== 'ios') {
+			setAttestationError('App Attest is only supported on iOS.');
+			return null;
+		}
+		setIsAttestationInProgress(true);
+		setAttestationError(null);
+		try {
+			const supported = await AppAttest.attestationSupported();
+			if (!supported) {
+				throw new Error('App Attest not supported on this device/OS version.');
+			}
 
-		// Filter by selected categories (park must have at least one)
+			console.log('App Attest supported, generating keys...');
+			const newKeyId = await AppAttest.generateKeys();
+			console.log('Generated App Attest Key ID:', newKeyId);
+
+			// Fetch challenge from server
+			console.log('Fetching challenge from server...');
+			const challengeResponse = await fetch(`${API_BASE_URL}/attest/challenge`, { method: 'POST' });
+			if (!challengeResponse.ok) {
+				throw new Error(`Failed to fetch challenge: ${challengeResponse.status}`);
+			}
+			const { challenge: serverChallenge } = await challengeResponse.json();
+			console.log('Received server challenge:', serverChallenge);
+
+			const challengeHashBase64 = await sha256base64(serverChallenge);
+			console.log('Challenge hash (Base64) for attestKeys:', challengeHashBase64);
+
+			console.log('Attesting keys with Apple...');
+			const attestationBase64 = await AppAttest.attestKeys(newKeyId, challengeHashBase64);
+			console.log('Received attestation object (Base64)');
+
+			// Send attestation to server for verification
+			console.log('Sending attestation to server for verification...');
+			const verifyResponse = await fetch(`${API_BASE_URL}/attest/verify`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: stringify({
+					keyId: newKeyId,
+					attestation: attestationBase64,
+					challenge: serverChallenge, // Original server challenge
+				}),
+			});
+
+			if (!verifyResponse.ok) {
+				const errorBody = await verifyResponse.text();
+				console.error('Server verification failed:', errorBody);
+				throw new Error(`Server verification failed: ${verifyResponse.status} - ${errorBody}`);
+			}
+
+			console.log('Server verified attestation successfully!');
+			await SecureStore.setItemAsync(KEY_ID_STORAGE_KEY, newKeyId);
+			setAppAttestKeyId(newKeyId);
+			return newKeyId;
+		} catch (error: any) {
+			console.error('Initial attestation process failed:', error);
+			setAttestationError(error.message || 'An unknown error occurred during attestation.');
+			Alert.alert("Attestation Error", error.message || "Could not initialize app security features.");
+            return null;
+		} finally {
+			setIsAttestationInProgress(false);
+		}
+	}, []);
+
+	useEffect(() => {
+		const loadKeyOrAttest = async () => {
+			if (Platform.OS !== 'ios') return;
+			const storedKeyId = await SecureStore.getItemAsync(KEY_ID_STORAGE_KEY);
+			if (storedKeyId) {
+				console.log('Found stored App Attest Key ID:', storedKeyId);
+				setAppAttestKeyId(storedKeyId);
+			} else {
+				console.log('No stored Key ID found, starting initial attestation...');
+				await handleInitialAttestation();
+			}
+		};
+		loadKeyOrAttest();
+	}, [handleInitialAttestation]);
+
+	const fetchParksForRegion = useCallback(async (bounds: MapBounds) => {
+		if (!bounds) return;
+
+		if (Platform.OS !== 'ios') {
+			console.warn("App Attest not applicable on this platform. Fetching parks without assertion.");
+			// Fallback or different fetch logic for non-iOS if needed, or show error.
+			// For now, let's just proceed with a basic fetch for dev purposes if API allows.
+		} else if (!appAttestKeyId) {
+			console.warn('App Attest Key ID not available. Parks fetch will be skipped or delayed.');
+			setMapParksError('App security key not ready. Please wait or restart the app.');
+            if (!isAttestationInProgress) {
+                console.log("Attempting to re-initiate attestation from fetchParksForRegion as keyId is missing.");
+                handleInitialAttestation(); // Attempt to get key if missing and not already trying
+            }
+			return;
+		}
+
+		setIsMapParksLoading(true);
+		setMapParksError(null);
+		console.log('Fetching parks for bounds:', bounds);
+
+		try {
+			const clientRequestChallenge = `client-parks-challenge-${Date.now()}-${Math.random()}`;
+			const requestBodyForParksAPI = {
+				minLat: bounds.minLat,
+				minLng: bounds.minLng,
+				maxLat: bounds.maxLat,
+				maxLng: bounds.maxLng,
+				challenge: clientRequestChallenge, 
+			};
+
+			const stringifiedBody = stringify(requestBodyForParksAPI);
+			const clientDataHashBase64 = await sha256base64(stringifiedBody);
+
+			let headers: HeadersInit = {
+				'Content-Type': 'application/json',
+			};
+
+            if (Platform.OS === 'ios' && appAttestKeyId) {
+                console.log('Generating assertion for parks request...');
+                const assertionBase64 = await AppAttest.attestRequestData(
+                    clientDataHashBase64,
+                    appAttestKeyId
+                );
+                console.log('Assertion generated.');
+
+                const appAttestHeaderValue = Buffer.from(
+                    stringify({
+                        keyId: appAttestKeyId,
+                        assertion: assertionBase64,
+                        challenge: clientRequestChallenge, // The challenge included in the hashed body
+                        requestPayloadSHA256: clientDataHashBase64,
+                    })
+                ).toString('base64');
+
+                headers['X-App-Attest-Assertion'] = appAttestHeaderValue;
+            }
+
+			const response = await fetch(`${API_BASE_URL}/parks`, {
+				method: 'POST',
+				headers: headers,
+				body: stringifiedBody, // Already stringified for hashing
+			});
+
+			if (!response.ok) {
+				const errorData = await response.json().catch(() => ({ message: 'Failed to fetch parks and parse error' }));
+				console.error('API Error during parks fetch:', response.status, errorData);
+				throw new Error(errorData.error || `HTTP error ${response.status}`);
+			}
+
+			const result = await response.json();
+			const fetchedParks = Array.isArray(result.data) ? result.data : [];
+			console.log('Fetched parks:', fetchedParks.length);
+			setMapViewportParks(fetchedParks);
+		} catch (error: any) {
+			console.error('Error fetching parks for region:', error);
+			setMapParksError(error.message || 'An unknown error occurred');
+			setMapViewportParks([]); 
+		} finally {
+			setIsMapParksLoading(false);
+		}
+	}, [appAttestKeyId, isAttestationInProgress, handleInitialAttestation]);
+
+	const debouncedFetchParksForRegion = useMemo(
+		() => debounce(fetchParksForRegion, 1000), 
+		[fetchParksForRegion]
+	);
+	
+	const handleRegionChangeComplete = (region: Region) => {
+		const bounds: MapBounds = {
+			minLat: region.latitude - region.latitudeDelta / 2,
+			maxLat: region.latitude + region.latitudeDelta / 2,
+			minLng: region.longitude - region.longitudeDelta / 2,
+			maxLng: region.longitude + region.longitudeDelta / 2,
+		};
+		setCurrentMapBounds(bounds); 
+		debouncedFetchParksForRegion(bounds);
+	};
+
+	const filteredParksData = useMemo(() => {
+		let parksToFilter: Park[] = mapViewportParks || []; 
+
 		if (selectedCategories.length > 0) {
 			parksToFilter = parksToFilter.filter((park: Park) =>
 				selectedCategories.some(category => park.activities?.includes(category))
 			);
 		}
 
-		// Filter by selected facilities (park must have all selected)
 		if (selectedFacilities.length > 0) {
 			parksToFilter = parksToFilter.filter((park: Park) =>
 				selectedFacilities.every(facility => park.facilities?.includes(facility))
 			);
 		}
 
-		// Filter by entrance fee
 		if (feeFilter === 'free') {
 			parksToFilter = parksToFilter.filter((park: Park) => !park.entranceFee || park.entranceFee.daily === 0 || park.entranceFee.daily === null);
 		} else if (feeFilter === 'paid') {
 			parksToFilter = parksToFilter.filter((park: Park) => park.entranceFee && typeof park.entranceFee.daily === 'number' && park.entranceFee.daily > 0);
 		}
 
-		// Filter by dog-friendly
 		if (dogFriendlyOnly) {
 			parksToFilter = parksToFilter.filter((park: Park) => park.isDogFriendly === true);
 		}
 
-		// Filter by accessible
 		if (accessibleOnly) {
 			parksToFilter = parksToFilter.filter((park: Park) => park.isAccessible === true);
 		}
 
-		// Compare with the previous list and return the old reference if content is the same.
 		if (areParkArraysEqual(previousFilteredParksRef.current, parksToFilter)) {
-			return previousFilteredParksRef.current!; // Assert non-null as it's equal to parksToFilter which is an array
+			return previousFilteredParksRef.current!;
 		}
 		previousFilteredParksRef.current = parksToFilter;
 		return parksToFilter;
-	}, [INITIAL_PARKS, selectedCategories, selectedFacilities, feeFilter, dogFriendlyOnly, accessibleOnly]);
+	}, [mapViewportParks, selectedCategories, selectedFacilities, feeFilter, dogFriendlyOnly, accessibleOnly]);
 
-	// Calculate park counts for each category, considering other active filters
 	const getCategoryCount = (category: number) => {
 		return filteredParksData.filter((park: Park) => park.activities?.includes(category)).length;
 	};
 
-	// Calculate park counts for each facility, considering other active filters
 	const getFacilityCount = (facility: string) => {
 		return filteredParksData.filter((park: Park) => park.facilities?.includes(facility)).length;
 	};
@@ -150,34 +384,51 @@ export default function ExploreScreen() {
 
 	const areAnyFiltersActive = selectedCategories.length > 0 || selectedFacilities.length > 0 || feeFilter !== 'any' || dogFriendlyOnly || accessibleOnly;
 
-	if (parksLoading || activitiesLoading) {
+	const isInitialLoading = activitiesLoading || (Platform.OS === 'ios' && isAttestationInProgress && !appAttestKeyId);
+
+	if (isInitialLoading) {
 		return (
 			<View className="flex-1 justify-center items-center">
 				<ActivityIndicator size="large" />
-				<Text>Loading data...</Text>
+				<Text>Loading initial data{Platform.OS === 'ios' && isAttestationInProgress && !appAttestKeyId ? ' (Securing app...)': '...'}</Text>
 			</View>
 		);
 	}
 
-	if (parksError || activitiesError) {
+	if (activitiesError || (Platform.OS === 'ios' && attestationError && !appAttestKeyId)) {
 		return (
-			<View className="flex-1 justify-center items-center">
-				<Text>Error loading data: {parksError?.message || activitiesError?.message}</Text>
+			<View className="flex-1 justify-center items-center p-4">
+				<Text className="text-red-500 text-center">
+                    Error: {activitiesError?.message || attestationError}
+                    {Platform.OS === 'ios' && attestationError && " App security features could not be initialized. Some functionalities might be limited or insecure."}
+                </Text>
 			</View>
 		);
 	}
+
+	// UI to inform user if attestation failed but activities loaded (edge case)
+	// This is a bit redundant given the above, but can be a specific banner.
+	const AttestationStatusBanner = () => {
+		if (Platform.OS === 'ios' && attestationError && !appAttestKeyId && !isAttestationInProgress) {
+			return (
+				<View className="p-2 bg-red-100 border-l-4 border-red-500 mb-2">
+					<Text className="text-red-700">Warning: App security features failed to initialize. Data requests may not be secure.</Text>
+				</View>
+			);
+		}
+		return null;
+	};
 
 	return (
 		<View className="flex-1 bg-charcoal-50 dark:bg-charcoal-950">
-			{/* Use CustomHeader */}
 			<CustomHeader title="Explore" subtitle="Find Your Next Adventure" />
-
-			{/* Content Wrapper with bottom padding */}
 			<View className="flex-1" style={{ paddingBottom: insets.bottom + 75 }}>
 				<ScrollView className="flex-1">
+                	<AttestationStatusBanner />
 					<View className="p-6">
-						{/* Filters Section Title / Clear All Button */}
-						<View className="flex-row justify-between items-center mb-3">
+						{/* Filters Section */}
+                        {/* ... existing filter UI ... */}
+                        <View className="flex-row justify-between items-center mb-3">
 							<Text className="text-2xl font-bold text-persian-800 dark:text-persian-300">Filters</Text>
 							{areAnyFiltersActive && (
 								<Pressable onPress={clearAllFilters}>
@@ -186,7 +437,6 @@ export default function ExploreScreen() {
 							)}
 						</View>
 
-						{/* Categories Section (now Activities) */}
 						{featureFlags?.explorePage?.filterBy?.activities && (
 						<View className="bg-white dark:bg-charcoal-800 rounded-xl shadow-lg mb-6 border-l-4 border-saffron-700 dark:border-saffron-400 overflow-hidden">
 							<Pressable 
@@ -282,8 +532,7 @@ export default function ExploreScreen() {
 											})}
 										</ScrollView>
 									)}
-									{/* Toggle button for showing all activities */}
-									{categories.length > 5 && ( // Only show if there are enough items to warrant expanding
+									{categories.length > 5 && ( 
 										<Pressable 
 											onPress={() => setShowAllActivitiesButton(!showAllActivitiesButton)} 
 											className="py-2 mt-2 flex-row items-center justify-center"
@@ -300,7 +549,7 @@ export default function ExploreScreen() {
 						)}
 
 						{/* Facilities Section */}
-						{featureFlags?.explorePage?.filterBy?.facilities && (
+                        {featureFlags?.explorePage?.filterBy?.facilities && (
 						<View className="bg-white dark:bg-charcoal-800 rounded-xl shadow-lg mb-6 border-l-4 border-burnt-600 dark:border-burnt-400 overflow-hidden">
 							<Pressable 
 								onPress={() => setFacilitiesExpanded(!facilitiesExpanded)}
@@ -427,12 +676,23 @@ export default function ExploreScreen() {
 						</View>
 						)}
 
-						{/* Nearby Parks Section */}
+						{/* Parks in View Section */}
 						<View className="bg-white dark:bg-charcoal-800 rounded-xl p-4 shadow-lg border-l-4 border-sandy-600 dark:border-sandy-400">
-							<Text className="text-xl font-semibold text-sandy-600 dark:text-sandy-400">Nearby Parks</Text>
-							<Text className="text-sandy-700 dark:text-sandy-300 mt-1 mb-3 font-medium">Discover parks in your area</Text>
+							<Text className="text-xl font-semibold text-sandy-600 dark:text-sandy-400">Parks in View</Text>
+							<Text className="text-sandy-700 dark:text-sandy-300 mt-1 mb-3 font-medium">
+								{isMapParksLoading ? 'Loading parks...' : `Showing ${filteredParksData.length} parks based on map and filters.`}
+							</Text>
+							{mapParksError && <Text className="text-red-500 mb-2">Error: {mapParksError}</Text>}
+                            {Platform.OS === 'ios' && !appAttestKeyId && !isAttestationInProgress && 
+                                <Text className="text-orange-500 mb-2">
+                                    App security features are initializing. Park data may be delayed.
+                                </Text>
+                            }
 							<View style={{ height: 300, width: '100%', marginBottom: 16 }}>
-								<WisconsinMap parks={filteredParksData} />
+								<WisconsinMap
+									parks={filteredParksData}
+									onRegionChangeComplete={handleRegionChangeComplete} 
+								/>
 							</View>
 						</View>
 					</View>
