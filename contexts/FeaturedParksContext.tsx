@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { FeaturedParkInfo } from '../interfaces/FeaturedParkInfo.interface';
 
-const FEATURED_PARKS_INFO_URL = 'https://raw.githubusercontent.com/jantznick/wisconsin-parks-app/refs/heads/main/data/featuredParks.json';
+const FEATURED_PARKS_INFO_URL = 'https://raw.githubusercontent.com/jantznick/wisconsin-parks-app/refs/heads/reset/data/featuredParks.json';
 
 const ASYNC_STORAGE_FEATURED_PARKS_INFO_KEY = 'featuredParksInfoData';
 const ASYNC_STORAGE_LAST_FEATURED_INFO_FETCH_KEY = 'lastFeaturedInfoFetchTime';
