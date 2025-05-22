@@ -56,7 +56,7 @@
         <h1 class="text-4xl font-bold text-gray-800 mb-8 text-center">Privacy Policy</h1>
 
         <div class="bg-white p-8 rounded-lg shadow-lg">
-            <p><strong>Last Updated:</strong> <span id="lastUpdated"></span></p>
+            <p><strong>Last Updated:</strong> <span id="lastUpdated">May 21st, 2025</span></p>
 
             <p>Creative Endurance Lab ("us", "we", or "our") operates the Family Park Finder mobile application (the "Service"). This page informs you of our policies regarding how we handle data when you use our Service and the choices you have associated with that data. Our core principle is to protect your privacy and collect as little information as possible.</p>
 
@@ -121,7 +121,12 @@
     </footer>
 
     <script>
-        document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
     </script>
 
 </body>
