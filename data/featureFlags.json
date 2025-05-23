@@ -1,0 +1,16 @@
+{
+	"explorePage": {
+		"filterBy": {
+			"facilities": false,
+			"activities": true,
+			"entertainment": false,
+			"other": {
+				"dogFriendly": false,
+				"accessible": false
+			}
+		}
+	},
+	"parkDetailsPage": {
+		"reservations": false
+	}
+}
