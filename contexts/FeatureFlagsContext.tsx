@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 
-const FEATURE_FLAGS_DATA_URL = 'https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/featureFlags.json';
-const FEATURE_FLAGS_BETA_URL = 'https://wisconsin-state-parks-finder.s3.us-east-1.amazonaws.com/featureFlagsBeta.json';
+const FEATURE_FLAGS_DATA_URL = 'https://raw.githubusercontent.com/jantznick/wisconsin-parks-app/refs/heads/reset/data/featureFlags.json';
+const FEATURE_FLAGS_BETA_URL = 'https://raw.githubusercontent.com/jantznick/wisconsin-parks-app/refs/heads/reset/data/featuredFlagsBeta.json';
 const ASYNC_STORAGE_FEATURE_FLAGS_KEY = 'featureFlagsData';
 const ASYNC_STORAGE_FEATURE_FLAGS_LAST_FETCH_KEY = 'featureFlagsLastFetchTime';
 const FEATURE_FLAGS_REFRESH_INTERVAL = 7 * 24 * 60 * 60 * 1000; // Re-added: 7 days in milliseconds
